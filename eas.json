@@ -1,0 +1,25 @@
+{
+  "cli": {
+    "version": ">= 5.9.3"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {
+      "ios":{
+        "appleId":"eidcarosse@gmail.com",
+        "ascAppId":"6475070488",
+        "appleTeamId":"64Z736VMNC"
+
+      }
+    }
+  }
+}

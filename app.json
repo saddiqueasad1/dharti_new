@@ -1,0 +1,104 @@
+{
+    "expo": {
+        "name": "Eidcarosse.ch",
+        "slug": "Eidcarosse",
+
+        "version": "1.0.3",
+        "permissions": [
+            "INTERNET",
+            "CAMERA",
+            "CAMERA_ROLL",
+            "MEDIA_LIBRARY",
+            "READ_EXTERNAL_STORAGE",
+            "WRITE_EXTERNAL_STORAGE",
+            "RECORD_AUDIO",
+            "READ_PHONE_STATE",
+            "READ_CONTACTS",
+            "LOCATION",
+            "ACCESS_COARSE_LOCATION",
+            "ACCESS_FINE_LOCATION",
+            "RECEIVE_BOOT_COMPLETED",
+            "android.permission.INTERNET",
+            "POST_NOTIFICATIONS"
+        ],
+        "orientation": "portrait",
+        "icon": "./assets/icon.jpeg",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#FF0100"
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "config": {
+                "usesNonExemptEncryption": false
+              },
+            "bitcode": false,
+            "supportsTablet": true,
+            "infoPlist": {
+                "UIStatusBarHidden": true,
+                "UIViewControllerBasedStatusBarAppearance": false,
+                "NSCameraUsageDescription": "Eidcarosse uses the camera to capture and upload user profile image and Listing Image to the server.",
+                "NSPhotoLibraryUsageDescription": "Eidcarosse needs access to the photo library to select and upload user profile image and Listing Image to the server.",
+                "NSPhotoLibraryAddUsageDescription": "Eidcarosse needs access to the photo library to select and upload user profile image and Listing Image to the server.",
+                "NSLocationWhenInUseUsageDescription": "Eidcarosse usages device location on listing information, Listing search Data and User information.",
+                "NSLocationAlwaysAndWhenInUseUsageDescription": "Eidcarosse usages device location on listing information, Listing search Data and User information.",
+                "NSLocationAlwaysUsageDescription": "Eidcarosse uses device location on listing information, Listing search Data and User information.",
+                "NSMicrophoneUsageDescription": "Eidcarosse uses your microphone while taking video of your product for uploading in listing information."
+            },
+            "bundleIdentifier": "com.eidcarosse.Eidcarosse",
+            "buildNumber": "6"
+        },
+        "androidStatusBar": {
+            "hidden": true
+        },
+        "android": {
+            "config": {
+                "googleMaps": {
+                    "apiKey": "AIzaSyC9nSGumZ7_6Xs0pd6HBiU_paZT7mmH5UI"
+                }
+            },
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/icon.jpeg",
+                "backgroundColor": "#ffffff"
+            },
+            "package": "com.eidcarosse.Eidcarossech",
+            "versionCode": 2
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "plugins": [
+            [
+                "expo-secure-store",
+                {
+                  "faceIDPermission": "Allow Eidcarosse.ch to access your Face ID biometric data."
+                }
+              ],
+            [
+                "expo-build-properties",
+                {
+                    "android": {
+                        "compileSdkVersion": 33,
+                        "targetSdkVersion": 33,
+                        "buildToolsVersion": "30.0.2"
+                    },
+                    "ios": {
+                        "deploymentTarget": "13.0"
+                    }
+                }
+            ],
+            [
+                "expo-image-picker",
+                {
+                    "photosPermission": "Eidcarosse needs access to the photo library to select and upload user profile image and Listing Image to the server.",
+                    "cameraPermission": "Eidcarosse uses the camera to capture and upload user profile image and Listing Image to the server."
+                }
+            ]
+        ],
+        "extra": {
+          
+        }
+    }
+}
