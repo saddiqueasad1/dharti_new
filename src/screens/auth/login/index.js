@@ -112,19 +112,27 @@ export default function Login({ navigation, route }) {
   const login = async (data) => {
     try {
       dispatch(setAppLoader(true));
-      let res = await loginApi(data);
-      if (!res?.success) {
+      console.log("-----");
+      const APIData = { username: data.email, password: data.password };
+      console.log(APIData);
+  
+      let res = await loginApi(APIData);
+      console.log("watimggggg...");
+      console.log(res);
+      // Adjusting for new response structure:
+      if (!res?.jwt_token) { // Assuming success is determined by presence of jwt_token
         dispatch(setAppLoader(false));
-        console.log(res?.message);
+        console.log(res?.message); // Adjust if the API provides a specific error message key
         errorMessage(
-          t(`flashmsg.${res?.message}`),
+          t(`flashmsg.error`), // Adjusted due to change in API response
           t("flashmsg.authentication")
         );
-      } else if (res?.success) {
-        if (!res?.data?.userDetails?.verified) {
+      } else {
+        const userDetails = res?.user; // Extracting user details from the new response
+        if (!userDetails?.phone_verified) {
           dispatch(setAppLoader(false));
           infoMessage("Account not verified");
-          navigation.navigate(ScreenNames.VERIFY, { data: res?.data });
+          navigation.navigate(ScreenNames.VERIFY, { data: userDetails });
         } else {
           if (check) {
             setRememberMe("save");
@@ -134,25 +142,24 @@ export default function Login({ navigation, route }) {
             save({});
           }
           dispatch(setIsLoggedIn(true));
-          dispatch(setUserMeta(res?.data?.userDetails));
-          dispatch(setToken(res?.data?.token));
-          dispatch(setAdsFav(res?.data?.userDetails?.favAdIds));
-
+          dispatch(setUserMeta(userDetails)); // Assuming setUserMeta expects user details
+          dispatch(setToken(res?.jwt_token)); // Adjust to use jwt_token
+          // Assuming setAdsFav and other state updates are still relevant, adjust if needed
+          dispatch(setAdsFav(userDetails?.favAdIds)); // This needs adjustment if favAdIds is still relevant or present
+  
           setAuthData(data);
-          setAuthAllData(res?.data?.userDetails);
+          setAuthAllData(userDetails); 
           dispatch(setAppLoader(false));
           successMessage("", t(`flashmsg.sussessloginmsg`));
-          navigation.navigate(ScreenNames.BUTTOM);
+          navigation.navigate(ScreenNames.BUTTOM); 
         }
-      } else {
-        errorMessage(t(`flashmsg.wrong`), t("flashmsg.error")),
-          dispatch(setAppLoader(false));
       }
     } catch (error) {
       console.log(error);
       dispatch(setAppLoader(false));
     }
   };
+  
   async function handleRemberMe() {
     setCheck(!check);
   }

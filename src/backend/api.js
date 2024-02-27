@@ -1,30 +1,66 @@
-import { BaseUrl, BaseUrl1 } from "../utills/Constants";
+import { BaseUrl, BaseUrl1, Apikey } from "../utills/Constants";
 import { ApiManager } from "./ApiManager";
 
+
+
+var myHeaders = new Headers();
+myHeaders.append("Accept", "application/json");
+myHeaders.append("X-API-KEY", Apikey);
+var requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow",
+};
+
 export const getDataofHomePage = async () => {
-  return fetch(BaseUrl1 + "ad/fetchTopAds", {
-    method: "GET",
-    credentials: "include",
-  })
+  try {
+    const response = await fetch(BaseUrl + "listings", requestOptions);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json(); // This reads and parses the JSON response body
+    return data.data; // Return the parsed data
+  } catch (error) {
+    console.error("Error fetching home data:", error);
+    alert("Home data API crashed");
+    throw error; // Re-throw the error so that it can be caught by the caller
+  }
+};
+
+
+export const getAllData = async (query_Params) => {
+  // Construct query parameters
+  const queryParams = new URLSearchParams({
+    search: query_Params?.search || "",
+    locations: query_Params?.locations ? query_Params?.locations.join(",") : "",
+    categories: query_Params?.categories
+      ? query_Params?.categories.join(",")
+      : "",
+    page: query_Params?.page,
+    custom_fields: JSON.stringify(query_Params?.custom_fields || {}),
+    price_range: query_Params?.price_range
+      ? JSON.stringify(query_Params?.price_range)
+      : "",
+    listing_type: query_Params?.listing_type || "",
+  });
+
+  const endpoint = "listings";
+  // Create the complete URL
+  const apiUrl = `${BaseUrl}${endpoint}?${queryParams.toString()}`;
+
+  return fetch(apiUrl, requestOptions)
     .then(async (response) => {
+
       let data = await response.json();
       return data?.data;
     })
     .catch((error) => {
-      // Handle errors
-      throw error; // Re-throw the error so that it can be caught by the caller
+      // Handle errors here
+      console.error("Error fetching data:", error);
+      return [];
     });
 };
 
-export const getAllData = async (queryParams) => {
-  try {
-    const response = await ApiManager.get(`ad/`, queryParams);
-    return response?.data;
-  } catch (error) {
-    console.log(error);
-    return []; // or some default value as needed
-  }
-};
 export const getAllDataByLocation = async (queryParams) => {
   try {
     const response = await ApiManager.get(`ad/location`, queryParams);

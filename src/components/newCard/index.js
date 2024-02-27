@@ -37,7 +37,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
   const [img, setimg] = useState(data?.images || []);
   const [modal, setModal] = useState(false);
   useEffect(() => {
-    if (isInArray(data._id, favAdIds)) {
+    if (isInArray(data.listing_id, favAdIds)) {
       setFav(true);
     } else {
       setFav(false);
@@ -58,8 +58,8 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
     if (!loginuser) {
       infoMessage(t(`flashmsg.loginfavorite`), t(`flashmsg.authentication`));
     } else {
-      let fav = await toggleFavorite(data._id, loginuser._id);
-      if (isInArray(data._id, fav)) {
+      let fav = await toggleFavorite(data.listing_id, loginuser._id);
+      if (isInArray(data.listing_id, fav)) {
         setFav(true);
       } else {
         setFav(false);
@@ -96,9 +96,9 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
                   size={height(2)}
                 />
                 <Text numberOfLines={1} style={styles.categorytext}>
-                  {/* {data?.category}
-                   */}
-                  {t(`category.${data?.category}`)}
+                
+                  {/* {t(`category.${data?.category}`)} */}
+                  {`category`}
                 </Text>
               </View>
             </View>
@@ -191,16 +191,14 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
             }}
           >
             <Image
-              source={{ uri: img[0] }}
+              source={{ uri: data?.images[0]?.src }}
               resizeMode="cover"
               style={{
                 width: width(90),
                 height: height(22),
                 marginTop: height(1),
                 borderRadius: height(2),
-                // alignSelf: "center",
               }}
-              // style={{ flex: 1, resizeMode: "cover" }}
             />
           </Pressable>
           {/*    ))}
@@ -213,21 +211,21 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
             navigation.navigate(ScreenNames.DETAIL, data);
           }}
         >
-          {!isNullOrNullOrEmpty(data?.price) && (
+          {!isNullOrNullOrEmpty(data?.raw_price) && (
             <View style={styles.detailinerview}>
-              {checkPrice(data?.price) ? (
+              {checkPrice(data?.raw_price) ? (
                 <View>
                   <Text numberOfLines={1} style={styles.chf}>
-                    CHF {formatPrice(data?.price)}
+                    CHF {formatPrice(data?.raw_price)}
                   </Text>
                   <Text numberOfLines={1} style={styles.eur}>
-                    EUR {formatPriceE(Math.round(data?.price * 1.06))}
+                    EUR {formatPriceE(Math.round(data?.raw_price * 1.06))}
                   </Text>
                 </View>
               ) : (
                 <View style={styles.cfpview}>
                   <Text numberOfLines={1} style={styles.cfp}>
-                    {t(`addPost.${data?.price}`)}
+                    {t(`addPost.${data?.raw_price}`)}
                   </Text>
                 </View>
               )}
@@ -250,14 +248,14 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
               />
               <Text numberOfLines={1} style={styles.categorytext}>
                 {GlobalMethods.calculateTimeDifference(
-                  data?.createdAt,
+                  data?.date_created.date,
                   language
                 )}
               </Text>
             </View>
             <AntDesign name="eye" color={"grey"} size={height(1.5)}>
               {" "}
-              {data?.views}
+              {data?.view_count}
             </AntDesign>
             {/* <Text style={{ fontSize: width(3), color: "grey" }}>
             
@@ -271,7 +269,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
         <View style={styles.categoryview}>
           <Entypo name="location-pin" color={"grey"} size={height(2)} />
           <Text numberOfLines={2} style={styles.categorytext}>
-            {data?.address}
+            {data?.contact.address}
           </Text>
         </View>
         {!(data?.userId?._id === loginuser?._id) ? (
@@ -283,7 +281,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
             }}
           >
             <TouchableOpacity
-              disabled={data?.phone ? false : true}
+              disabled={data?.contact.phone ? false : true}
               onPress={() => {
                 if (!loginuser) {
                   infoMessage(
@@ -298,7 +296,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
               <Ionicons
                 size={height(2.5)}
                 name="call"
-                color={data?.phone ? "grey" : "lightgrey"}
+                color={data?.contact.phone ? "grey" : "lightgrey"}
               />
             </TouchableOpacity>
             <TouchableOpacity
@@ -312,7 +310,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
                   map && onPresshide();
                   navigation.navigate(ScreenNames.CHAT, {
                     userRoom: null,
-                    usr: data?.userId,
+                    usr: data?.author_id,
                     userItem: data,
                   });
                 }
