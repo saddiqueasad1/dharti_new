@@ -51,7 +51,7 @@ export default function Detail({ navigation, route }) {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (isInArray(data?._id, favAdIds)) {
+    if (isInArray(data?.listing_id, favAdIds)) {
       setFav(true);
     } else {
       setFav(false);
@@ -72,8 +72,8 @@ export default function Detail({ navigation, route }) {
     if (!loginuser) {
       infoMessage(t(`flashmsg.loginfavorite`), t(`flashmsg.authentication`));
     } else {
-      let fav = await toggleFavorite(data?._id, loginuser?._id);
-      if (isInArray(data._id, fav)) {
+      let fav = await toggleFavorite(data?.listing_id, loginuser?.listing_id);
+      if (isInArray(data.listing_id, fav)) {
         setFav(true);
       } else {
         setFav(false);
@@ -83,7 +83,7 @@ export default function Detail({ navigation, route }) {
   };
   useEffect(() => {
     getData();
-  }, [dat?._id != data?._id]);
+  }, [dat?.listing_id != data?.listing_id]);
   useEffect(() => {
     if (data && mapRef?.current) {
       mapRef?.current.animateToRegion(
@@ -100,16 +100,19 @@ export default function Detail({ navigation, route }) {
   const getData = async () => {
     try {
       setload(true);
-      let d = await getDataofAdByID(dat?._id);
+      let d = await getDataofAdByID(dat?.listing_id);
       // setload(false);
+      console.log("here");
+      console.log(d);
       if (d) {
+        console.log(d?.images);
         setDat(d);
         setimg(d?.images);
-        if (d.userId._id != loginuser?._id) {
-          await adView(dat?._id);
+        if (d.userId.listing_id != loginuser?.listing_id) {
+          await adView(dat?.listing_id);
         }
       } else {
-        setDat({}), navigation.goBack();
+        // setDat({}), navigation.goBack();
       }
       setload(false);
     } catch (error) {
@@ -128,15 +131,15 @@ export default function Detail({ navigation, route }) {
           onPressBack={() => navigation.goBack()}
           onPressShare={() =>
             GlobalMethods.onPressShare(
-              `${WebLink}${data?._id}`,
+              `${WebLink}${data?.listing_id}`,
               data?.title,
-              data?.images[0]
+              data?.images[0].src
             )
           }
         />
       )}
       footerUnScrollable={() =>
-        !(data?.userId?._id == loginuser?._id || load) &&
+        !(data?.userId?.listing_id == loginuser?.listing_id || load) &&
         islogin && (
           <DetailFooter
             pNumber={data?.phone}
@@ -155,7 +158,7 @@ export default function Detail({ navigation, route }) {
               GlobalMethods.onPressEmail(
                 data?.userId?.email,
                 loginuser?.email,
-                data?.title + `${WebLink}${data?._id}`
+                data?.title + `${WebLink}${data?.listing_id}`
               )
             }
           />
@@ -198,7 +201,7 @@ export default function Detail({ navigation, route }) {
                   }}
                 >
                   <Image
-                    source={{ uri: image }}
+                    source={{ uri: image.src }}
                     resizeMode="contain"
                     style={{
                       width: width(100),
@@ -254,7 +257,7 @@ export default function Detail({ navigation, route }) {
                   </View>
                 )}
                 {/*------fav btn-------*/}
-                {!(data?.userId?._id === loginuser?._id) ? (
+                {!(data?.userId?.listing_id === loginuser?.listing_id) ? (
                   <TouchableOpacity
                     style={{ marginHorizontal: width(3) }}
                     onPress={onpressfav}
@@ -637,7 +640,7 @@ export default function Detail({ navigation, route }) {
             </View>
           )}
           {/* -------user profile-------- */}
-          {!(data?.userId?._id == loginuser?._id) && (
+          {!(data?.userId?.listing_id == loginuser?.listing_id) && (
             <Pressable
               onPress={() => {
                 if (islogin) {
@@ -700,7 +703,7 @@ export default function Detail({ navigation, route }) {
             </Pressable>
           )}
           {/*------whatsapp / viber-------*/}
-          {!(data?.userId?._id == loginuser?._id) && islogin && (
+          {!(data?.userId?.listing_id == loginuser?.listing_id) && islogin && (
             <View style={styles.contact}>
               {!isNullOrNullOrEmpty(data?.whatsapp) && (
                 <TouchableOpacity

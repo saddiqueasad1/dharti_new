@@ -9,25 +9,27 @@ import styles from "./styles";
 
 export default function CategoryList({ navigation, search }) {
   const { t } = useTranslation();
-  const d = useSelector(selectCategoryList);
-  const [data, setData] = useState([d[0], d[1], d[2], d[8], d[9], d[13]]);
+  const categoryList = useSelector(selectCategoryList);
+  const [data, setData] = useState([]);
+
   useEffect(() => {
-    console.log("set cat", d);
-    if (d) {
-      setData([d[0], d[1], d[2], d[8], d[9], d[13]]);
+    if (categoryList && categoryList.length > 0) {
+      setData(categoryList.slice(0, 6));
     }
-  }, [d.length]);
+  }, [categoryList]); // Update when categoryList changes
+
   const renderItem = ({ item }) => {
     return (
       <CategoryIcon
         navigation={navigation}
         title={item?.name}
-        image={item?.image}
+        image={item?.icon?.url} 
         onPress={() => {
-          navigation.navigate(ScreenNames.BIKECATEGORY, {
+          navigation.navigate(ScreenNames.LISTDATA, {
             category: item,
             find: item?.name,
-            show: true,
+            subcategory: item?.name,
+            search: search || "",
           });
         }}
       />
@@ -46,7 +48,7 @@ export default function CategoryList({ navigation, search }) {
             });
           }}
         >
-          {<Text style={styles.textseeall}>{t("categorylist.seeAll")}</Text>}
+          <Text style={styles.textseeall}>{t("categorylist.seeAll")}</Text>
         </Pressable>
       </View>
 
@@ -55,7 +57,7 @@ export default function CategoryList({ navigation, search }) {
         renderItem={renderItem}
         numColumns={3}
         scrollEnabled={false}
-        keyExtractor={(item, index) => index}
+        keyExtractor={(item, index) => String(index)}
       />
     </View>
   );

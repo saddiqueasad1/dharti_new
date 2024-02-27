@@ -51,9 +51,8 @@ import styles from "./styles";
 export default function ListData({ navigation }) {
   const route = useRoute();
   const { t } = useTranslation();
-  const cat = route?.params?.category;
+  const cat = route?.params?.category.name;
   const find = route?.params?.find;
-  const sub = route?.params?.subcategory;
   const ti = route?.params?.search;
   const refRBSheet = useRef();
   const s = useSelector(selectCategoryList);
@@ -63,7 +62,6 @@ export default function ListData({ navigation }) {
   const modelRef = useRef();
   const [sortby, setSortby] = React.useState("");
   const [address, setAddress] = React.useState("");
-  const [subCategory, setSubCategory] = React.useState(sub);
 
   const [title, setTitle] = React.useState(ti || "");
   const [pageNumber, setPageNumber] = React.useState(1);
@@ -99,8 +97,7 @@ export default function ListData({ navigation }) {
   let uniqueEntries = {};
   const queryParams = {
     address: address.trim() || "",
-    category: category || "",
-    subCategory: subCategory || "",
+    categories: [route?.params?.category.term_id] || "",
     condition: condition || "",
     title: title.trim() || "",
     brand: brand || "",
@@ -133,7 +130,6 @@ export default function ListData({ navigation }) {
     setData([]);
     setempty(false);
     setCategory("");
-    setSubCategory("");
     setFindValue("");
     if (pageNumber != 0) {
       setPageNumber(1);
@@ -170,9 +166,6 @@ export default function ListData({ navigation }) {
   };
   useEffect(() => {
     getvehicleMake();
-    if (showType(category)) {
-      getvehicleSubCategory();
-    }
     getFeilds();
   }, [category]);
   const getFeilds = async () => {
@@ -193,14 +186,7 @@ export default function ListData({ navigation }) {
     }
     setLoder(false);
   };
-  const getvehicleSubCategory = async () => {
-    let vehicledata = await geVehicleCategory(findValue);
-    if (vehicledata) {
-      setVCategory(vehicledata);
-    } else {
-      setVCategory([]);
-    }
-  };
+
   const getSubcategoriesByName = (categories, categoryName) => {
     const matchedCategory = categories.find(
       (category) => category.name === categoryName
@@ -215,19 +201,32 @@ export default function ListData({ navigation }) {
   };
 
   const getData = async () => {
-    onRefresh(true);
-    let d = await getAllData(queryParams);
-    if (d?.ad.length == 0) {
-      setempty(true);
+    try {
+      onRefresh(true);
+
+      let d = await getAllData(queryParams);
+  
+  
+      console.log("pppppp---000");
+      console.log(d);
+      console.log(d?.length);
+      if (d?.length == 0) { 
+        setempty(true);
+      }
+      if (d) {
+        setTotalAds(d?.length);
+        setData((prevData) => [...prevData, ...d]);
+        setPageNumber(pageNumber + 1);
+      } else {
+        setData([]);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      onRefresh(false);
+
     }
-    if (d) {
-      setTotalAds(d?.totalAds);
-      setData((prevData) => [...prevData, ...d?.ad]);
-      setPageNumber(pageNumber + 1);
-    } else {
-      setData([]);
-    }
-    onRefresh(false);
+  
   };
 
   const rdata = [
@@ -294,7 +293,7 @@ export default function ListData({ navigation }) {
       headerUnScrollable={() => (
         <View style={{ backgroundColor: "white" }}>
           <Head
-            headtitle={category ? t(`category.${category}`) : "allData.title"}
+            headtitle={category ? category : "allData.title"}
             navigation={navigation}
           />
           <IconButton
@@ -325,7 +324,7 @@ export default function ListData({ navigation }) {
                 category: category,
                 find: category,
                 search: title,
-                sub: subCategory,
+                sub: 'subCategory',
                 show: true,
               });
             }}
@@ -356,8 +355,8 @@ export default function ListData({ navigation }) {
         <FlatList
           key={"coloum1"}
           data={data.filter((entry) => {
-            if (!uniqueEntries[entry._id]) {
-              uniqueEntries[entry._id] = true;
+            if (!uniqueEntries[entry.listing_id]) {
+              uniqueEntries[entry.listing_id] = true;
               return true;
             }
             return false;
@@ -482,28 +481,7 @@ export default function ListData({ navigation }) {
                     }
                   />
 
-                  {subCategory && (
-                    <IconButton
-                      onPress={() => {
-                        refRBSheet.current.close();
-                        setTimeout(() => {
-                          navigation.pop();
-                          navigation.replace(ScreenNames.BIKECATEGORY, {
-                            category: getSubcategoriesByName(s, category),
-                            find: category,
-                            search: title,
-                            show: true,
-                          });
-                        }, 600);
-                      }}
-                      title={t(`subList.${subCategory}`)}
-                      containerStyle={styles.containerb}
-                      textStyle={styles.texticon}
-                      iconright={
-                        <Ionicons name="chevron-forward" size={height(2)} />
-                      }
-                    />
-                  )}
+                 
                   <View style={{ alignSelf: "center" }}>
                     <Text style={styles.title}>{t("allData.sortby")}</Text>
                     <SelectDropdown

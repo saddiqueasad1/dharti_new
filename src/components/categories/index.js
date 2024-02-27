@@ -36,13 +36,12 @@ export default function CategoryIcon({
     >
       <View>
         <Image
-          tintColor={textcolor}
           style={[styles.image, imageStyle]}
           source={{ uri: image }}
         />
       </View>
       <Text style={[styles.text, textStyle, { color: textcolor }]}>
-        {t(`category.${title}`)}
+        {t(`${title}`)}
       </Text>
       {children}
     </TouchableOpacity>

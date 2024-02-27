@@ -33,9 +33,7 @@ export const getAllData = async (query_Params) => {
   const queryParams = new URLSearchParams({
     search: query_Params?.search || "",
     locations: query_Params?.locations ? query_Params?.locations.join(",") : "",
-    categories: query_Params?.categories
-      ? query_Params?.categories.join(",")
-      : "",
+    categories:query_Params?.categories,
     page: query_Params?.page,
     custom_fields: JSON.stringify(query_Params?.custom_fields || {}),
     price_range: query_Params?.price_range
@@ -72,11 +70,8 @@ export const getAllDataByLocation = async (queryParams) => {
 };
 export const getDataofAdByID = async (id) => {
   try {
-    const response = await ApiManager.get("ad/getSpecific/" + id);
-    if (!response.success) {
-      return false;
-    }
-    return response.data;
+    const response = await ApiManager.get("listings/" + id);
+    return response;
   } catch (error) {
     console.log(error);
     return []; // or some default value as needed
