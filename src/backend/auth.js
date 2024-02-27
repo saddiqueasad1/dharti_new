@@ -3,14 +3,14 @@ import { ApiManager } from "./ApiManager";
 
 const signupApi = async (data) => {
   try {
-    const response = await ApiManager.post("auth/register", data, {
+    const response = await ApiManager.post("signup",data, {
       headers: {
-        "Content-Type": "application/json",
+        "Accept": "application/json",
       },
     });
-    return response;
+    return response
   } catch (error) {
-    console.error("Signup API crashed", error);
+    console.error("Signup API crashed",error);
   }
 };
 const loginApi = async (data) => {

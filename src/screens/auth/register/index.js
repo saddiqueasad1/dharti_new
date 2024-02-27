@@ -71,8 +71,18 @@ export default function SignUp({ navigation, route }) {
   };
   const signup = async (data) => {
     try {
+      console.log("..srart...");
+      const data_ = {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        username: data.firstName + data.lastName,
+        email: data.email,
+        phone: data.phoneNumber,
+        password: data.password,
+      };
+
       dispatch(setAppLoader(true));
-      let r = await signupApi(data);
+      let r = await signupApi(data_);
       if (!r?.success) {
         dispatch(setAppLoader(false));
         errorMessage(t(`flashmsg.${r?.message}`), t(`flashmsg.error`));
@@ -87,6 +97,8 @@ export default function SignUp({ navigation, route }) {
       dispatch(setAppLoader(false));
     }
   };
+
+
 
   return (
     <ScreenWrapper
