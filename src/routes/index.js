@@ -59,6 +59,7 @@ import {
   ForgetPasswordScreen,
   LoginScreen,
   SignUpScreen,
+  OtpVerificationScreen,
   verifyScreen,
 } from "../screens/auth";
 import i18n from "../translation";
@@ -250,7 +251,7 @@ export default function Routes() {
   // async function schedulePushNotification() {
   //   await Notifications.scheduleNotificationAsync({
   //     content: {
-  //       title: "Eidcarosse",
+  //       title: "Dharti",
   //       body: "New message",
   //     },
   //     trigger: { seconds: 0.2 },
@@ -302,6 +303,7 @@ export default function Routes() {
         />
         <Stack.Screen name={ScreenNames.VERIFY} component={verifyScreen} />
         <Stack.Screen name={ScreenNames.SIGNUP} component={SignUpScreen} />
+        <Stack.Screen name={ScreenNames.OTPVERIFICATIO} component={OtpVerificationScreen} />
         <Stack.Screen name={ScreenNames.DETAIL} component={DetailScreen} />
         <Stack.Screen name={ScreenNames.LISTDATA} component={ListData} />
         <Stack.Screen name={ScreenNames.CATEGORY} component={CategoryScreen} />

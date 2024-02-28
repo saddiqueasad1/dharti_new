@@ -19,7 +19,7 @@ export default {
     passwordTitle: "Password",
     passwordPlaceholder: "Inserisci la tua password",
     checkBoxText:
-      "Ho letto e accettato i Termini e le Condizioni di Eidcarosse",
+      "Ho letto e accettato i Termini e le Condizioni di Dharti",
     checkBoxText2: "",
     termAndCondition: "Termini e Condizioni",
     continueWithGoogle: "Continua con Google",
@@ -85,34 +85,34 @@ export default {
   aboutUs: {
     aboutus: "Chi siamo",
     paraDetail1:
-      "Eidcarosse è un completo mercato online dedicato a facilitare l'acquisto e la vendita di veicoli. Con un'interfaccia utente amichevole e potenti funzionalità di ricerca, Eidcarosse collega individui alla ricerca di veicoli con venditori che offrono un'ampia gamma di opzioni. Che tu stia cercando una berlina elegante, un potente camion, una moto elegante o qualsiasi altro veicolo, Eidcarosse fornisce una piattaforma che semplifica l'intero processo.",
+      "Dharti è un completo mercato online dedicato a facilitare l'acquisto e la vendita di veicoli. Con un'interfaccia utente amichevole e potenti funzionalità di ricerca, Dharti collega individui alla ricerca di veicoli con venditori che offrono un'ampia gamma di opzioni. Che tu stia cercando una berlina elegante, un potente camion, una moto elegante o qualsiasi altro veicolo, Dharti fornisce una piattaforma che semplifica l'intero processo.",
     paraTitle2: "Acquirenti",
     paraDetail2by1:
-      "Per gli acquirenti, Eidcarosse offre una vasta selezione di veicoli da venditori privati e concessionari, garantendo l'accesso a una vasta gamma di opzioni per soddisfare le tue preferenze e il tuo budget.",
+      "Per gli acquirenti, Dharti offre una vasta selezione di veicoli da venditori privati e concessionari, garantendo l'accesso a una vasta gamma di opzioni per soddisfare le tue preferenze e il tuo budget.",
     paraDetail2by2:
       "Grazie a elenchi dettagliati e informazioni complete sui veicoli, inclusi specifiche, chilometraggio e prezzi, puoi prendere decisioni informate e trovare il veicolo perfetto per le tue esigenze.",
     paraTitle3: "Venditori",
     paraDetail3by1:
-      "Per i venditori, Eidcarosse offre una comoda piattaforma per mostrare i propri veicoli a un vasto e variegato pubblico di potenziali acquirenti.",
+      "Per i venditori, Dharti offre una comoda piattaforma per mostrare i propri veicoli a un vasto e variegato pubblico di potenziali acquirenti.",
     paraDetail3by2:
       "Inserisci il tuo veicolo con descrizioni dettagliate, immagini di alta qualità e prezzi competitivi e collegati direttamente con acquirenti interessati.",
     paraDetail3by3:
-      "Eidcarosse dà ai venditori la possibilità di raggiungere un mercato più ampio e semplificare il processo di vendita, rendendo più facile trovare il compratore giusto per il tuo veicolo.",
+      "Dharti dà ai venditori la possibilità di raggiungere un mercato più ampio e semplificare il processo di vendita, rendendo più facile trovare il compratore giusto per il tuo veicolo.",
     paraDetail4:
-      "La piattaforma offre funzionalità di messaggistica, consentendo agli acquirenti e ai venditori di comunicare direttamente e negoziare i termini. Inoltre, Eidcarosse offre una serie di funzionalità di verifica e sicurezza per garantire la tranquillità di tutti gli utenti.",
+      "La piattaforma offre funzionalità di messaggistica, consentendo agli acquirenti e ai venditori di comunicare direttamente e negoziare i termini. Inoltre, Dharti offre una serie di funzionalità di verifica e sicurezza per garantire la tranquillità di tutti gli utenti.",
   },
   SNTU: {
     sntu: "Vendi ora a noi.",
-    data: "Ora puoi vendere il tuo veicolo e le tue macchine su Eidcarosse. Offriamo un processo senza problemi e prezzi competitivi per il tuo veicolo. Che tu stia cercando di fare un upgrade o hai bisogno di vendere velocemente il tuo veicolo e le tue cose, siamo qui per te! Vendi ora e vivi un'esperienza di vendita senza intoppi con noi!",
+    data: "Ora puoi vendere il tuo veicolo e le tue macchine su Dharti. Offriamo un processo senza problemi e prezzi competitivi per il tuo veicolo. Che tu stia cercando di fare un upgrade o hai bisogno di vendere velocemente il tuo veicolo e le tue cose, siamo qui per te! Vendi ora e vivi un'esperienza di vendita senza intoppi con noi!",
   },
   RN: {
     rn: "Ripara ora",
-    data: "Vivi riparazioni di veicoli senza problemi con i tecnici esperti di Eidcarosse. Dalla manutenzione di routine a interventi più importanti, manterremo i tuoi veicoli in perfetto funzionamento. Guida con fiducia sapendo che i tuoi veicoli sono in mani esperte.",
+    data: "Vivi riparazioni di veicoli senza problemi con i tecnici esperti di Dharti. Dalla manutenzione di routine a interventi più importanti, manterremo i tuoi veicoli in perfetto funzionamento. Guida con fiducia sapendo che i tuoi veicoli sono in mani esperte.",
   },
   privacy: {
     privacy: "Informativa sulla privacy",
     paraDetail1:
-      "Gli sviluppatori dell'applicazione mobile di Eidcarosse danno la massima priorità e valore alla sicurezza e alla privacy delle informazioni che condividi con noi tramite la nostra applicazione Eidcarosse. La nostra intenzione è fare in modo che gli utenti si sentano il più confortevoli possibile nell'utilizzare la nostra app. Se decidi di affidarci le tue informazioni, devi capire come le raccogliamo, le usiamo e le manteniamo.\n\nQuando ti accingi ad acquisire Eidcarosse, dovrai registrarci. La registrazione ci fornisce il tuo nome e cognome, indirizzo email e numero di telefono.",
+      "Gli sviluppatori dell'applicazione mobile di Dharti danno la massima priorità e valore alla sicurezza e alla privacy delle informazioni che condividi con noi tramite la nostra applicazione Dharti. La nostra intenzione è fare in modo che gli utenti si sentano il più confortevoli possibile nell'utilizzare la nostra app. Se decidi di affidarci le tue informazioni, devi capire come le raccogliamo, le usiamo e le manteniamo.\n\nQuando ti accingi ad acquisire Dharti, dovrai registrarci. La registrazione ci fornisce il tuo nome e cognome, indirizzo email e numero di telefono.",
     paraTitle2: "Raccolta e Utilizzo delle Informazioni",
     paraDetail2:
       "Potremmo richiederti di fornirci determinate informazioni personali per un'esperienza migliore. Queste informazioni includono, ma non sono limitate a, nome, indirizzo e dati di posizione. Queste informazioni saranno accessibili solo a noi e saranno utilizzate solo come descritto in questa politica sulla privacy.",
@@ -135,11 +135,11 @@ export default {
     paraTitle8:
       "Le Nostre Procedure di Sicurezza contro le Violazioni dei Dati:",
     paraDetail8:
-      "Diamo grande importanza alla fiducia che hai riposto in noi fornendoci le tue informazioni personali. Pertanto, utilizziamo mezzi e tecnologie di sicurezza standard del settore per proteggere le tue informazioni personali da divulgazioni, accessi o utilizzi non autorizzati. Ti preghiamo di non divulgare la tua password e il nome utente di registrazione a persone non autorizzate per aiutarci a proteggere la tua privacy.\n\nAnche se nessun metodo di trasmissione su Internet o procedura di archiviazione elettronica è al 100% infallibile. Eidcarosse non lascia nulla al caso nei suoi sforzi per proteggere le tue informazioni personali.\n\nNel caso in cui le tue informazioni siano accessibili a persone non autorizzate o andate perse, ti informeremo non appena ne avremo conoscenza.",
+      "Diamo grande importanza alla fiducia che hai riposto in noi fornendoci le tue informazioni personali. Pertanto, utilizziamo mezzi e tecnologie di sicurezza standard del settore per proteggere le tue informazioni personali da divulgazioni, accessi o utilizzi non autorizzati. Ti preghiamo di non divulgare la tua password e il nome utente di registrazione a persone non autorizzate per aiutarci a proteggere la tua privacy.\n\nAnche se nessun metodo di trasmissione su Internet o procedura di archiviazione elettronica è al 100% infallibile. Dharti non lascia nulla al caso nei suoi sforzi per proteggere le tue informazioni personali.\n\nNel caso in cui le tue informazioni siano accessibili a persone non autorizzate o andate perse, ti informeremo non appena ne avremo conoscenza.",
     paraTitle9:
       "Come Accedere ai Tuoi Dati o Modificare le Tue Informazioni Personali:",
     paraDetail9:
-      "Quando accedi al nostro sito con le tue informazioni, tutte le informazioni del tuo account saranno disponibili per essere modificate o eliminate. Se desideri smettere di ricevere notifiche via email dall'app Eidcarosse, basta annullare l'iscrizione o inviarci una email, e elimineremo la tua email o account. Assicurati che l'oggetto dell'email dica 'elimina il mio nome utente'.",
+      "Quando accedi al nostro sito con le tue informazioni, tutte le informazioni del tuo account saranno disponibili per essere modificate o eliminate. Se desideri smettere di ricevere notifiche via email dall'app Dharti, basta annullare l'iscrizione o inviarci una email, e elimineremo la tua email o account. Assicurati che l'oggetto dell'email dica 'elimina il mio nome utente'.",
     paraTitle10: "Contattaci",
     paraDetail10:
       "Se hai suggerimenti o domande sulla nostra politica sulla privacy, non esitare a contattarci tramite kundendienst@eidcarosse.ch",
@@ -147,55 +147,55 @@ export default {
   terms: {
     tandc: "Termini e condizioni",
     paraData1:
-      "Prima di utilizzare il servizio dell'app mobile di Eidcarosse, è essenziale che tu legga attentamente e accetti le seguenti Condizioni d'Uso. La tua accettazione di queste condizioni è necessaria per utilizzare l'app. Assicurati di leggere attentamente i Termini e le Condizioni prima di utilizzare il servizio.",
+      "Prima di utilizzare il servizio dell'app mobile di Dharti, è essenziale che tu legga attentamente e accetti le seguenti Condizioni d'Uso. La tua accettazione di queste condizioni è necessaria per utilizzare l'app. Assicurati di leggere attentamente i Termini e le Condizioni prima di utilizzare il servizio.",
     paraTitle2: "Generale",
     paraData2:
-      "Eidcarosse rende gli inserzionisti e gli utenti responsabili di assicurarsi che tutti i contenuti, inclusi immagini, video, grafica e testo, caricati sulla piattaforma siano conformi alle leggi applicabili. Eventuali inesattezze o questioni legali derivanti dai contenuti pubblicati non sono responsabilità di Eidcarosse. Gli inserzionisti e gli utenti garantiscono che i loro contenuti non violino i diritti d'autore, i diritti di proprietà intellettuale o altri diritti di qualsiasi individuo o entità. Utilizzando il servizio, l'utente o l'inserzionista accetta di liberare Eidcarosse da qualsiasi obbligo, pretesa o responsabilità associata all'uso o all'incapacità di utilizzare la piattaforma. Inoltre, gli inserzionisti acconsentono alla visualizzazione dei loro contenuti su siti partner di Eidcarosse, soggetti agli stessi Termini e Condizioni di Eidcarosse.",
+      "Dharti rende gli inserzionisti e gli utenti responsabili di assicurarsi che tutti i contenuti, inclusi immagini, video, grafica e testo, caricati sulla piattaforma siano conformi alle leggi applicabili. Eventuali inesattezze o questioni legali derivanti dai contenuti pubblicati non sono responsabilità di Dharti. Gli inserzionisti e gli utenti garantiscono che i loro contenuti non violino i diritti d'autore, i diritti di proprietà intellettuale o altri diritti di qualsiasi individuo o entità. Utilizzando il servizio, l'utente o l'inserzionista accetta di liberare Dharti da qualsiasi obbligo, pretesa o responsabilità associata all'uso o all'incapacità di utilizzare la piattaforma. Inoltre, gli inserzionisti acconsentono alla visualizzazione dei loro contenuti su siti partner di Dharti, soggetti agli stessi Termini e Condizioni di Dharti.",
     paraTitle3: "Diritto d'Autore",
     paraData3:
-      "Gli inserzionisti concedono a Eidcarosse una licenza perpetua, irrevocabile, gratuita, non esclusiva e il diritto di utilizzare, modificare, riprodurre, pubblicare, adattare, tradurre, creare opere derivate, distribuire o incorporare i contenuti forniti in qualsiasi forma, tecnologia o supporto, sia esso attualmente conosciuto o sviluppato in futuro.",
+      "Gli inserzionisti concedono a Dharti una licenza perpetua, irrevocabile, gratuita, non esclusiva e il diritto di utilizzare, modificare, riprodurre, pubblicare, adattare, tradurre, creare opere derivate, distribuire o incorporare i contenuti forniti in qualsiasi forma, tecnologia o supporto, sia esso attualmente conosciuto o sviluppato in futuro.",
     paraTitle4: "Filigrane",
     paraData4:
-      "Eidcarosse applica filigrane a tutte le immagini per evitare il loro riutilizzo non autorizzato per altri scopi senza l'esplicito permesso dell'inserzionista.",
+      "Dharti applica filigrane a tutte le immagini per evitare il loro riutilizzo non autorizzato per altri scopi senza l'esplicito permesso dell'inserzionista.",
     paraTitle5: "Sicurezza e Immagini",
     paraData5:
-      "Eidcarosse si riserva il diritto di modificare i titoli di qualsiasi contenuto sull'app per scopi editoriali.",
+      "Dharti si riserva il diritto di modificare i titoli di qualsiasi contenuto sull'app per scopi editoriali.",
     paraTitle6: "Personale",
     paraData6:
-      "Eidcarosse si riserva il diritto di collaborare con le autorità nel caso in cui qualsiasi contenuto sull'app violi la legge. L'identità degli utenti, degli acquirenti o degli inserzionisti potrebbe essere determinata, ad esempio, da un ISP. Gli indirizzi IP potrebbero anche essere registrati per garantire il rispetto dei Termini e delle Condizioni.",
+      "Dharti si riserva il diritto di collaborare con le autorità nel caso in cui qualsiasi contenuto sull'app violi la legge. L'identità degli utenti, degli acquirenti o degli inserzionisti potrebbe essere determinata, ad esempio, da un ISP. Gli indirizzi IP potrebbero anche essere registrati per garantire il rispetto dei Termini e delle Condizioni.",
     paraTitle7: "Privacy",
     paraData7:
-      "Eidcarosse raccoglierà informazioni da utenti, acquirenti e inserzionisti. Utilizzando Eidcarosse, ciascun utente e inserzionista acconsente e autorizza la raccolta e l'uso di queste informazioni. Eidcarosse si riserva anche il diritto di divulgare le informazioni a Società Affiliate e a qualsiasi altra persona per supportare, amministrare e mantenere Eidcarosse, comprese attività di marketing, ricerca, pianificazione e sviluppo del prodotto.",
+      "Dharti raccoglierà informazioni da utenti, acquirenti e inserzionisti. Utilizzando Dharti, ciascun utente e inserzionista acconsente e autorizza la raccolta e l'uso di queste informazioni. Dharti si riserva anche il diritto di divulgare le informazioni a Società Affiliate e a qualsiasi altra persona per supportare, amministrare e mantenere Dharti, comprese attività di marketing, ricerca, pianificazione e sviluppo del prodotto.",
     paraTitle8: "Cookie",
     paraData8:
       "Questa app potrebbe utilizzare i cookie, che richiedono dispositivi abilitati ai cookie. Un file cookie contiene informazioni, come un ID utente casuale assegnato automaticamente dal sito per tenere traccia delle pagine visitate. I cookie non possono leggere dati dal disco rigido o identificare l'utente.",
     paraTitle9: "Indirizzo Email degli Utenti",
     paraData9:
-      "Gli utenti sono tenuti a fornire indirizzi email validi prima di poter pubblicare annunci. Gli indirizzi email non saranno visualizzati pubblicamente. Tuttavia, agli utenti è consentito inviare email ad altri utenti tramite Eidcarosse.",
+      "Gli utenti sono tenuti a fornire indirizzi email validi prima di poter pubblicare annunci. Gli indirizzi email non saranno visualizzati pubblicamente. Tuttavia, agli utenti è consentito inviare email ad altri utenti tramite Dharti.",
     paraTitle10: "Disponibilità del Sito",
     paraData10:
-      "Eidcarosse non garantisce l'accesso continuo o sicuro all'app. L'app è fornita sulla base 'così com'è' e 'quando disponibile'.",
+      "Dharti non garantisce l'accesso continuo o sicuro all'app. L'app è fornita sulla base 'così com'è' e 'quando disponibile'.",
     paraTitle11: "Link a Siti Web di Terze Parti",
     paraData11:
-      "Eidcarosse potrebbe contenere riferimenti e link ad altri siti (Siti Web di Terze Parti). Tuttavia, Eidcarosse non sarà responsabile dei contenuti di questi siti web di terze parti. I siti web di terze parti non sono monitorati o investigati da Eidcarosse. Una volta che un utente decide di lasciare Eidcarosse e accedere a un sito web di terze parti, lo fa a proprio rischio.",
+      "Dharti potrebbe contenere riferimenti e link ad altri siti (Siti Web di Terze Parti). Tuttavia, Dharti non sarà responsabile dei contenuti di questi siti web di terze parti. I siti web di terze parti non sono monitorati o investigati da Dharti. Una volta che un utente decide di lasciare Dharti e accedere a un sito web di terze parti, lo fa a proprio rischio.",
     paraTitle12: "Contenuti e Servizi a Pagamento",
     paraData12:
-      "Alcuni servizi e contenuti su Eidcarosse potrebbero richiedere un pagamento, compresi ma non limitati a pacchetti di abbonamento e la pubblicazione di annunci in categorie specifiche. Gli utenti potrebbero acquistare promozioni di annunci utilizzando voucher venduti o emessi da Eidcarosse, ma i voucher non sono rimborsabili in contanti. Gli inserzionisti e altri utenti potrebbero essere tenuti a trasmettere informazioni dei loro contenuti a pagamento tramite un fornitore terzo, che è regolato dai propri Termini e Condizioni. Gli utenti e gli inserzionisti accettano tali collegamenti a proprio rischio, e Eidcarosse declina ogni responsabilità ad essi correlata. Eidcarosse non è obbligata a rimborsare pagamenti relativi a contenuti a pagamento.",
+      "Alcuni servizi e contenuti su Dharti potrebbero richiedere un pagamento, compresi ma non limitati a pacchetti di abbonamento e la pubblicazione di annunci in categorie specifiche. Gli utenti potrebbero acquistare promozioni di annunci utilizzando voucher venduti o emessi da Dharti, ma i voucher non sono rimborsabili in contanti. Gli inserzionisti e altri utenti potrebbero essere tenuti a trasmettere informazioni dei loro contenuti a pagamento tramite un fornitore terzo, che è regolato dai propri Termini e Condizioni. Gli utenti e gli inserzionisti accettano tali collegamenti a proprio rischio, e Dharti declina ogni responsabilità ad essi correlata. Dharti non è obbligata a rimborsare pagamenti relativi a contenuti a pagamento.",
     paraTitle13: "Abbonamenti",
     paraData13:
-      "Eidcarosse creerà un negozio per conto dell'utente. Il negozio creato sarà privo di contenuti, in attesa dell'aggiunta degli stessi da parte dell'utente. Eidcarosse ha il diritto su qualsiasi contenuto aggiunto al negozio da parte dell'utente e ha il diritto di rimuovere o rifiutare la pubblicazione di contenuti che ritiene inappropriati o in violazione di qualsiasi aspetto dei Termini e delle Condizioni. Eidcarosse si riserva il diritto di cambiare o modificare i pacchetti di abbonamento, compreso il prezzo e i contenuti. Eidcarosse non è obbligata a rimborsare servizi o denaro se un pacchetto di abbonamento viene cancellato in anticipo, per qualsiasi motivo.",
+      "Dharti creerà un negozio per conto dell'utente. Il negozio creato sarà privo di contenuti, in attesa dell'aggiunta degli stessi da parte dell'utente. Dharti ha il diritto su qualsiasi contenuto aggiunto al negozio da parte dell'utente e ha il diritto di rimuovere o rifiutare la pubblicazione di contenuti che ritiene inappropriati o in violazione di qualsiasi aspetto dei Termini e delle Condizioni. Dharti si riserva il diritto di cambiare o modificare i pacchetti di abbonamento, compreso il prezzo e i contenuti. Dharti non è obbligata a rimborsare servizi o denaro se un pacchetto di abbonamento viene cancellato in anticipo, per qualsiasi motivo.",
     paraTitle14: "Disclaimer",
     paraData14:
-      "Eidcarosse declina ogni responsabilità per l'uso di Eidcarosse e non si assume alcuna responsabilità per qualsiasi reclamo, danno, ferita o responsabilità di qualsiasi tipo derivante da, connessa o in qualsiasi modo correlata a (a) eventuali errori su Eidcarosse o sui Contenuti, inclusi, ma non limitati a, errori tipografici ed errori tecnici, (b) siti web di terze parti o contenuti accessibili o recuperati direttamente o indirettamente tramite link in Eidcarosse, (c) l'indisponibilità di Eidcarosse, (d) l'uso di Eidcarosse o dei Contenuti, o (e) l'uso di qualsiasi apparecchiatura (o software) in connessione con Eidcarosse.",
+      "Dharti declina ogni responsabilità per l'uso di Dharti e non si assume alcuna responsabilità per qualsiasi reclamo, danno, ferita o responsabilità di qualsiasi tipo derivante da, connessa o in qualsiasi modo correlata a (a) eventuali errori su Dharti o sui Contenuti, inclusi, ma non limitati a, errori tipografici ed errori tecnici, (b) siti web di terze parti o contenuti accessibili o recuperati direttamente o indirettamente tramite link in Dharti, (c) l'indisponibilità di Dharti, (d) l'uso di Dharti o dei Contenuti, o (e) l'uso di qualsiasi apparecchiatura (o software) in connessione con Dharti.",
     paraTitle15: "Indennizzo",
     paraData15:
-      "Gli inserzionisti e gli altri utenti accettano di indennizzare Eidcarosse e i suoi dipendenti, agenti, dirigenti, direttori, da tutte le spese, perdite, danni e costi, inclusi gli onorari degli avvocati, derivanti da qualsiasi violazione di questi Termini e Condizioni (inclusa condotta negligente o illecita).",
+      "Gli inserzionisti e gli altri utenti accettano di indennizzare Dharti e i suoi dipendenti, agenti, dirigenti, direttori, da tutte le spese, perdite, danni e costi, inclusi gli onorari degli avvocati, derivanti da qualsiasi violazione di questi Termini e Condizioni (inclusa condotta negligente o illecita).",
     paraTitle16: "Modifiche",
     paraData16:
-      "Eidcarosse si riserva il diritto di modificare o alterare questi Termini e Condizioni. Tali modifiche o alterazioni saranno efficaci immediatamente dopo la pubblicazione su Eidcarosse. Sei responsabile di verificare regolarmente tali modifiche. Il tuo accesso o utilizzo continuato di Eidcarosse sarà considerato come l'accettazione dei Termini e delle Condizioni modificati.",
+      "Dharti si riserva il diritto di modificare o alterare questi Termini e Condizioni. Tali modifiche o alterazioni saranno efficaci immediatamente dopo la pubblicazione su Dharti. Sei responsabile di verificare regolarmente tali modifiche. Il tuo accesso o utilizzo continuato di Dharti sarà considerato come l'accettazione dei Termini e delle Condizioni modificati.",
     paraTitle17: "Legge Applicabile",
     paraData17:
-      "Eidcarosse è gestito in conformità alle leggi e ai regolamenti del rispettivo paese.",
+      "Dharti è gestito in conformità alle leggi e ai regolamenti del rispettivo paese.",
   },
   drawr: {
     faq: "FAQ",
@@ -497,7 +497,7 @@ export default {
     phlocation: "Seleziona Posizione",
     TandC1: "Ho letto i ",
     TandC2: "termini e le condizioni ",
-    TandC3: "di Eidcarosse e acconsento",
+    TandC3: "di Dharti e acconsento",
     post: "Aggiungi Pubblicazione",
     phsearchHere: "Cerca qui",
     defaultValueDropdown: "Seleziona un'opzione",

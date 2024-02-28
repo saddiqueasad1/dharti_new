@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "Eidcarosse.ch",
-        "slug": "Eidcarosse",
+        "name": "Dharti",
+        "slug": "dharti",
 
         "version": "1.0.3",
         "permissions": [
@@ -39,15 +39,15 @@
             "infoPlist": {
                 "UIStatusBarHidden": true,
                 "UIViewControllerBasedStatusBarAppearance": false,
-                "NSCameraUsageDescription": "Eidcarosse uses the camera to capture and upload user profile image and Listing Image to the server.",
-                "NSPhotoLibraryUsageDescription": "Eidcarosse needs access to the photo library to select and upload user profile image and Listing Image to the server.",
-                "NSPhotoLibraryAddUsageDescription": "Eidcarosse needs access to the photo library to select and upload user profile image and Listing Image to the server.",
-                "NSLocationWhenInUseUsageDescription": "Eidcarosse usages device location on listing information, Listing search Data and User information.",
-                "NSLocationAlwaysAndWhenInUseUsageDescription": "Eidcarosse usages device location on listing information, Listing search Data and User information.",
-                "NSLocationAlwaysUsageDescription": "Eidcarosse uses device location on listing information, Listing search Data and User information.",
-                "NSMicrophoneUsageDescription": "Eidcarosse uses your microphone while taking video of your product for uploading in listing information."
+                "NSCameraUsageDescription": "Dharti uses the camera to capture and upload user profile image and Listing Image to the server.",
+                "NSPhotoLibraryUsageDescription": "Dharti needs access to the photo library to select and upload user profile image and Listing Image to the server.",
+                "NSPhotoLibraryAddUsageDescription": "Dharti needs access to the photo library to select and upload user profile image and Listing Image to the server.",
+                "NSLocationWhenInUseUsageDescription": "Dharti usages device location on listing information, Listing search Data and User information.",
+                "NSLocationAlwaysAndWhenInUseUsageDescription": "Dharti usages device location on listing information, Listing search Data and User information.",
+                "NSLocationAlwaysUsageDescription": "Dharti uses device location on listing information, Listing search Data and User information.",
+                "NSMicrophoneUsageDescription": "Dharti uses your microphone while taking video of your product for uploading in listing information."
             },
-            "bundleIdentifier": "com.eidcarosse.Eidcarosse",
+            "bundleIdentifier": "com.dhartipak",
             "buildNumber": "6"
         },
         "androidStatusBar": {
@@ -56,14 +56,14 @@
         "android": {
             "config": {
                 "googleMaps": {
-                    "apiKey": "AIzaSyC9nSGumZ7_6Xs0pd6HBiU_paZT7mmH5UI"
+                    "apiKey": "mjo8H878ON7o7YN78NYH87HNYB87B87"
                 }
             },
             "adaptiveIcon": {
                 "foregroundImage": "./assets/icon.jpeg",
                 "backgroundColor": "#ffffff"
             },
-            "package": "com.eidcarosse.Eidcarossech",
+            "package": "com.dhartipak",
             "versionCode": 2
         },
         "web": {
@@ -73,7 +73,7 @@
             [
                 "expo-secure-store",
                 {
-                  "faceIDPermission": "Allow Eidcarosse.ch to access your Face ID biometric data."
+                  "faceIDPermission": "Allow Dharti to access your Face ID biometric data."
                 }
               ],
             [
@@ -92,8 +92,8 @@
             [
                 "expo-image-picker",
                 {
-                    "photosPermission": "Eidcarosse needs access to the photo library to select and upload user profile image and Listing Image to the server.",
-                    "cameraPermission": "Eidcarosse uses the camera to capture and upload user profile image and Listing Image to the server."
+                    "photosPermission": "Dharti needs access to the photo library to select and upload user profile image and Listing Image to the server.",
+                    "cameraPermission": "Dharti uses the camera to capture and upload user profile image and Listing Image to the server."
                 }
             ]
         ],

@@ -284,7 +284,9 @@ export default function Login({ navigation, route }) {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate(ScreenNames.SIGNUP);
+                // navigation.navigate(ScreenNames.SIGNUP);
+                navigation.navigate(ScreenNames.OTPVERIFICATIO);
+
               }}
             >
               <Text style={styles.text}> {t("login.registerNow")}</Text>

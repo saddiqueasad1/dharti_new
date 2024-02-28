@@ -192,7 +192,7 @@ const onPressShare = async (message, title, url) => {
   try {
     const result = await Share.share({
       message: `${title}\n${message}`,
-      title: "Eidcarosse",
+      title: "Dharti",
       url: message,
     });
 

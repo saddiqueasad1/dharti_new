@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import React, { useCallback, useRef, useState } from "react";
+import { Image, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton, ScreenWrapper } from "../../../components";
 import { Ionicons } from "@expo/vector-icons";
 import CategoryList from "../../../components/categorylist";
 import Header from "../../../components/header";
-import SearchBar from "../../../components/searchbar";
 import ScreenNames from "../../../routes/routes";
 import AppColors from "../../../utills/AppColors";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";

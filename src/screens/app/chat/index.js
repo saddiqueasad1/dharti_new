@@ -38,7 +38,7 @@ export default function ChatList({ navigation, route }) {
   // async function schedulePushNotification() {
   //   await Notifications.scheduleNotificationAsync({
   //     content: {
-  //       title: "Eidcarosse",
+  //       title: "Dharti",
   //       body: "New message",
   //     },
   //     trigger: { seconds: 1 },

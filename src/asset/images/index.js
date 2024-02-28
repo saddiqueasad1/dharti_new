@@ -2,7 +2,7 @@ const Icons = {
     login:require('./log.png'),
     logName:require('./eidcarose.png'),
     mainLogo:require('./mainLog.png'),
-    accountbg:require('./account_bg.jpeg'),
+    accountbg:require('./account_bg.png'),
     htsf1:require('./htsf1.png'),
     htsf2:require('./htsf2.png'),
     htsf3:require('./htsf3.png'),
@@ -13,5 +13,6 @@ const Icons = {
     loder:require('./newloder.gif'),
     empty:require('./empty.png'),
     emptyChat:require('./chatNotFound.png'),
+    bglogo:require('./product_info_icon.png'),
   };
   export default Icons

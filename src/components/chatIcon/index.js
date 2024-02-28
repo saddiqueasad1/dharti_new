@@ -202,7 +202,7 @@ export default function ChatIcon({ data }) {
           >
             {userDetail?.user
               ? `${userDetail?.user?.firstName} ${userDetail?.user?.lastName}`
-              : "Eidcarosse user"}
+              : "Dharti user"}
           </Text>
           <Text
             numberOfLines={1}
