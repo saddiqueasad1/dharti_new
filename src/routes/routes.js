@@ -2,6 +2,7 @@ const ScreenNames = {
   ONBOARDING: "OnBoarding",
   LOGIN: "Login",
   SIGNUP: "Signup",
+  OTPVERIFICATIO:'OtpVerification',
   HOME: "Home",
   DETAIL: "Detail",
   CATEGORY: "Category",
