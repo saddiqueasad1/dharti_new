@@ -216,7 +216,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
               {checkPrice(data?.raw_price) ? (
                 <View>
                   <Text numberOfLines={1} style={styles.chf}>
-                    CHF {formatPrice(data?.raw_price)}
+                    PKR {formatPrice(data?.raw_price)}
                   </Text>
                   <Text numberOfLines={1} style={styles.eur}>
                     EUR {formatPriceE(Math.round(data?.raw_price * 1.06))}
@@ -352,7 +352,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
             dotColor="lightgrey"
             automaticallyAdjustContentInsets={true}
           >
-            {img.map((image, index) => (
+            {data?.images.map((image, index) => (
               <Pressable
                 key={index}
                 style={{
@@ -362,7 +362,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
                 }}
               >
                 <Image
-                  source={{ uri: image }}
+                  source={{ uri: image?.src }}
                   resizeMode="contain"
                   style={{
                     width: width(96),

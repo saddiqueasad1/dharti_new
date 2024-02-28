@@ -18,11 +18,12 @@ export default function Loader() {
       <View style={styles.container}>
         <Image
           style={{
-            width: width(30),
-            height: width(30),
-            borderRadius: width(10),
+            width: height(10),
+            height: height(10),
+            borderRadius: width(50),
+            resizeMode:'cover'
           }}
-          source={Icons.loder}
+          source={Icons.iconLogo}
         />
       </View>
     </Modal>

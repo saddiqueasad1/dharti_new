@@ -846,7 +846,7 @@ export default function Detail({ navigation, route }) {
             {img.map((image, index) => (
               <Pressable key={index} style={styles.modelView}>
                 <Image
-                  source={{ uri: image }}
+                  source={{ uri: image?.src }}
                   resizeMode="contain"
                   style={styles.modelImage}
                 />

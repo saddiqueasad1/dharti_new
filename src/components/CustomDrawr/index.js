@@ -1,4 +1,4 @@
-import { AntDesign, Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Entypo, MaterialIcons, Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
   Image,
@@ -30,23 +30,36 @@ const CustomDrawer = ({ navigation }) => {
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
+      <View style={{marginVertical:height(2) }}>
         <Image
           source={require("../../../assets/splash.png")}
           style={{
-            width: height(35),
-            height: height(30),
-            tintColor: AppColors.primary,
+            width: height(20),
+            height: height(28),
+            // tintColor: AppColors.primary,
             alignSelf: "center",
+          
+           
           }}
         />
       </View>
       <View
         style={{
-          flex: 2.7,
+          
         }}
       >
         <ScrollView>
+            <IconButton
+            title={"D store"}
+            onPress={() => {
+              navigation.navigate(ScreenNames.REPAIR), navigation.closeDrawer();
+            }}
+            containerStyle={styles.container}
+            textStyle={styles.text}
+            icon={
+              <MaterialIcons name="store" style={styles.icon} size={height(2)} />
+            }
+          />
           <IconButton
             title={"drawr.faq"}
             containerStyle={styles.container}
@@ -119,7 +132,9 @@ const CustomDrawer = ({ navigation }) => {
             title={"drawr.contactUs"}
             containerStyle={styles.container}
             textStyle={styles.text}
-            onPress={() => Linking.openURL("https://eidcarosse.ch/contact-us")}
+            onPress={() =>{
+              //  Linking.openURL("https://eidcarosse.ch/contact-us")
+              }}
             icon={
               <AntDesign name="contacts" style={styles.icon} size={height(2)} />
             }
@@ -137,7 +152,7 @@ const CustomDrawer = ({ navigation }) => {
             }}
           />
 
-          <IconButton
+          {/* <IconButton
             title={"drawr.SNTU"}
             onPress={() => {
               navigation.navigate(ScreenNames.SNTU), navigation.closeDrawer();
@@ -145,18 +160,8 @@ const CustomDrawer = ({ navigation }) => {
             containerStyle={styles.container}
             textStyle={styles.text}
             icon={<AntDesign name="car" style={styles.icon} size={height(2)} />}
-          />
-          <IconButton
-            title={"drawr.RFRN"}
-            onPress={() => {
-              navigation.navigate(ScreenNames.REPAIR), navigation.closeDrawer();
-            }}
-            containerStyle={styles.container}
-            textStyle={styles.text}
-            icon={
-              <FontAwesome name="wrench" style={styles.icon} size={height(2)} />
-            }
-          />
+          /> */}
+        
           {/* <IconButton
           title={"drawr.share"}
           onPress={shareContent}
@@ -197,6 +202,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
     justifyContent: "flex-start",
+    backgroundColor:AppColors.primary
   },
   icon: {
     color: AppColors.white,
@@ -204,6 +210,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: height(1.8),
+    color:AppColors.white
   },
   textbuttom: {
     alignSelf: "center",

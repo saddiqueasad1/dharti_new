@@ -13,11 +13,11 @@ function MyDrawer() {
       screenOptions={{
         headerShown: false,
         drawerStyle: {
-          backgroundColor: "#E5E8E8",
+          backgroundColor: "#ffffff",
           width: width(80),
         },
         sceneContainerStyle: {
-          backgroundColor: "#E5E8E8",
+          backgroundColor: "#ffffff",
         },
       }}
       drawerContent={(props) => <CustomDrawer {...props} />}

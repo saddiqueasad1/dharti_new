@@ -174,14 +174,14 @@ export default function Login({ navigation, route }) {
         <View style={styles.imageiner}>
           <Image
             style={{
-              height: height(15),
-              width: height(15),
-              borderRadius: height(2),
+              height: height(25),
+              width: height(25),
+              borderRadius: height(30),
               alignSelf: "center",
               justifyContent: "center",
               marginVertical: height(2),
             }}
-            source={Icons.mainLogo}
+            source={Icons.iconLogo}
           />
         </View>
         <View

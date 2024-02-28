@@ -14,5 +14,6 @@ const Icons = {
     empty:require('./empty.png'),
     emptyChat:require('./chatNotFound.png'),
     bglogo:require('./product_info_icon.png'),
+    iconLogo:require('./icon.jpeg')
   };
   export default Icons
