@@ -18,7 +18,7 @@ export default {
     emailPlaceholder: "Entrez votre adresse e-mail",
     passwordTitle: "Mot de passe",
     passwordPlaceholder: "Entrez votre mot de passe",
-    checkBoxText: "J'ai lu et accepté les conditions d'Eidcarosse",
+    checkBoxText: "J'ai lu et accepté les conditions d'Dharti",
     checkBoxText2: "",
     termAndCondition: "Conditions générales",
     continueWithGoogle: "Continuer avec Google",
@@ -86,39 +86,39 @@ export default {
   aboutUs: {
     aboutus: "À propos de nous",
     paraDetail1:
-      "Eidcarosse est une place de marché en ligne complète dédiée à faciliter l'achat et la vente de véhicules. Avec une interface conviviale et des fonctionnalités de recherche puissantes, Eidcarosse met en relation les particuliers à la recherche de véhicules avec des vendeurs proposant une gamme étendue d'options. Que vous recherchiez une berline élégante, un puissant camion, une moto élégante ou tout autre véhicule, Eidcarosse offre une plateforme qui simplifie l'ensemble du processus.",
+      "Dharti est une place de marché en ligne complète dédiée à faciliter l'achat et la vente de véhicules. Avec une interface conviviale et des fonctionnalités de recherche puissantes, Dharti met en relation les particuliers à la recherche de véhicules avec des vendeurs proposant une gamme étendue d'options. Que vous recherchiez une berline élégante, un puissant camion, une moto élégante ou tout autre véhicule, Dharti offre une plateforme qui simplifie l'ensemble du processus.",
 
     paraTitle2: "Acheteurs",
     paraDetail2by1:
-      "Pour les acheteurs, Eidcarosse offre une vaste sélection de véhicules provenant de vendeurs privés et de concessionnaires, vous assurant un accès à un large éventail d'options pour répondre à vos préférences et votre budget.",
+      "Pour les acheteurs, Dharti offre une vaste sélection de véhicules provenant de vendeurs privés et de concessionnaires, vous assurant un accès à un large éventail d'options pour répondre à vos préférences et votre budget.",
     paraDetail2by2:
       "Avec des annonces détaillées et des informations complètes sur les véhicules, notamment les spécifications, le kilométrage et les prix, vous pouvez prendre des décisions éclairées et trouver le véhicule parfait qui répond à vos besoins.",
 
     paraTitle3: "Vendeurs",
     paraDetail3by1:
-      "Pour les vendeurs, Eidcarosse offre une plateforme pratique pour présenter vos véhicules à un large et diversifié public d'acheteurs potentiels.",
+      "Pour les vendeurs, Dharti offre une plateforme pratique pour présenter vos véhicules à un large et diversifié public d'acheteurs potentiels.",
     paraDetail3by2:
       "Listez votre véhicule avec des descriptions détaillées, des images de haute qualité et des prix compétitifs, et entrez directement en contact avec des acheteurs intéressés.",
     paraDetail3by3:
-      "Eidcarosse permet aux vendeurs d'atteindre un public plus large et de rationaliser le processus de vente, ce qui facilite la recherche de l'acheteur idéal pour votre véhicule.",
+      "Dharti permet aux vendeurs d'atteindre un public plus large et de rationaliser le processus de vente, ce qui facilite la recherche de l'acheteur idéal pour votre véhicule.",
 
     paraDetail4:
-      "La plateforme offre des capacités de messagerie, permettant aux acheteurs et aux vendeurs de communiquer directement et de négocier les modalités. De plus, Eidcarosse propose une gamme de fonctionnalités de vérification et de sécurité pour offrir la tranquillité d'esprit à tous les utilisateurs.",
+      "La plateforme offre des capacités de messagerie, permettant aux acheteurs et aux vendeurs de communiquer directement et de négocier les modalités. De plus, Dharti propose une gamme de fonctionnalités de vérification et de sécurité pour offrir la tranquillité d'esprit à tous les utilisateurs.",
   },
 
   SNTU: {
     sntu: "Vendez maintenant à nous",
-    data: "Vous pouvez désormais vendre votre véhicule et vos machines sur Eidcarosse. Nous offrons un processus sans tracas et des prix compétitifs pour votre véhicule. Que vous souhaitiez effectuer une mise à niveau ou que vous ayez besoin de vendre rapidement votre véhicule et vos biens, nous avons tout prévu. Vendez maintenant et vivez une expérience de vente sans problème avec nous !",
+    data: "Vous pouvez désormais vendre votre véhicule et vos machines sur Dharti. Nous offrons un processus sans tracas et des prix compétitifs pour votre véhicule. Que vous souhaitiez effectuer une mise à niveau ou que vous ayez besoin de vendre rapidement votre véhicule et vos biens, nous avons tout prévu. Vendez maintenant et vivez une expérience de vente sans problème avec nous !",
   },
   RN: {
     rn: "Réparez maintenant",
-    data: "Profitez de réparations de véhicules sans tracas avec les techniciens qualifiés d'Eidcarosse. De l'entretien de routine aux réparations majeures, nous garderons vos véhicules en bon état de fonctionnement. Conduisez en toute confiance en sachant que vos véhicules sont entre de bonnes mains.",
+    data: "Profitez de réparations de véhicules sans tracas avec les techniciens qualifiés d'Dharti. De l'entretien de routine aux réparations majeures, nous garderons vos véhicules en bon état de fonctionnement. Conduisez en toute confiance en sachant que vos véhicules sont entre de bonnes mains.",
   },
 
   privacy: {
     privacy: "Politique de confidentialité",
     paraDetail1:
-      "Les créateurs de l'application mobile Eidcarosse – accordent la priorité et attachent de l'importance à la sécurité et à la confidentialité des informations que vous partagez avec nous via notre application Eidcarosse. Nous souhaitons que nos utilisateurs se sentent aussi à l'aise que possible lorsqu'ils utilisent notre application. Si vous décidez de nous faire confiance avec vos informations, vous devez comprendre comment nous les collectons, les utilisons et les conservons.\n\nLorsque vous vous apprêtez à utiliser Eidcarosse, vous devrez vous inscrire auprès de nous. L'inscription nous donne votre prénom, nom de famille, adresse e-mail et numéro de téléphone.",
+      "Les créateurs de l'application mobile Dharti – accordent la priorité et attachent de l'importance à la sécurité et à la confidentialité des informations que vous partagez avec nous via notre application Dharti. Nous souhaitons que nos utilisateurs se sentent aussi à l'aise que possible lorsqu'ils utilisent notre application. Si vous décidez de nous faire confiance avec vos informations, vous devez comprendre comment nous les collectons, les utilisons et les conservons.\n\nLorsque vous vous apprêtez à utiliser Dharti, vous devrez vous inscrire auprès de nous. L'inscription nous donne votre prénom, nom de famille, adresse e-mail et numéro de téléphone.",
 
     paraTitle2: "Collecte et utilisation des informations",
     paraDetail2:
@@ -149,12 +149,12 @@ export default {
 
     paraTitle8: "Nos procédures de sécurité contre les violations de données :",
     paraDetail8:
-      "Nous attachons de l'importance à la confiance que vous nous avez accordée en nous fournissant vos informations personnelles. Par conséquent, nous utilisons des moyens de sécurité conformes aux normes de l'industrie et des technologies pour protéger vos informations personnelles contre toute divulgation, tout accès ou toute utilisation non autorisés. Veuillez ne pas divulguer votre mot de passe d'inscription et votre nom d'utilisateur à des personnes non autorisées pour nous aider à protéger votre vie privée.\n\nBien qu'aucune méthode de transmission sur Internet ou de procédure de stockage électronique ne soit totalement étanche, Eidcarosse ne laisse rien au hasard pour protéger vos informations personnelles.\n\nDans le cas où vos informations sont consultées par des personnes non autorisées ou sont perdues, nous vous en informerons dès que nous en aurons connaissance.",
+      "Nous attachons de l'importance à la confiance que vous nous avez accordée en nous fournissant vos informations personnelles. Par conséquent, nous utilisons des moyens de sécurité conformes aux normes de l'industrie et des technologies pour protéger vos informations personnelles contre toute divulgation, tout accès ou toute utilisation non autorisés. Veuillez ne pas divulguer votre mot de passe d'inscription et votre nom d'utilisateur à des personnes non autorisées pour nous aider à protéger votre vie privée.\n\nBien qu'aucune méthode de transmission sur Internet ou de procédure de stockage électronique ne soit totalement étanche, Dharti ne laisse rien au hasard pour protéger vos informations personnelles.\n\nDans le cas où vos informations sont consultées par des personnes non autorisées ou sont perdues, nous vous en informerons dès que nous en aurons connaissance.",
 
     paraTitle9:
       "Comment accéder à vos données ou modifier vos informations personnelles :",
     paraDetail9:
-      "Lorsque vous vous connectez sur notre site avec vos détails, toutes vos informations de compte seront disponibles pour que vous puissiez les modifier ou les supprimer. Si vous souhaitez arrêter de recevoir des notifications par e-mail pour l'application Eidcarosse, il vous suffit de vous désabonner ou de nous envoyer un e-mail, et nous effacerons votre e-mail ou votre compte. Assurez-vous que le sujet de votre e-mail indique 'supprimer mon nom d'utilisateur'.",
+      "Lorsque vous vous connectez sur notre site avec vos détails, toutes vos informations de compte seront disponibles pour que vous puissiez les modifier ou les supprimer. Si vous souhaitez arrêter de recevoir des notifications par e-mail pour l'application Dharti, il vous suffit de vous désabonner ou de nous envoyer un e-mail, et nous effacerons votre e-mail ou votre compte. Assurez-vous que le sujet de votre e-mail indique 'supprimer mon nom d'utilisateur'.",
 
     paraTitle10: "Contactez-nous",
     paraDetail10:
@@ -163,31 +163,31 @@ export default {
   terms: {
     tandc: "Conditions générales",
     paraData1:
-      "Avant d'utiliser le service de l'application mobile Eidcarosse, il est essentiel que vous examiniez attentivement et acceptiez les Conditions Générales suivantes. Votre acceptation de ces conditions est nécessaire pour utiliser l'application. Assurez-vous de lire attentivement les Conditions Générales avant d'utiliser le service.",
+      "Avant d'utiliser le service de l'application mobile Dharti, il est essentiel que vous examiniez attentivement et acceptiez les Conditions Générales suivantes. Votre acceptation de ces conditions est nécessaire pour utiliser l'application. Assurez-vous de lire attentivement les Conditions Générales avant d'utiliser le service.",
 
     paraTitle2: "Général",
     paraData2:
-      "Eidcarosse tient les annonceurs et les utilisateurs responsables de s'assurer que tout le contenu, y compris les images, vidéos, graphiques et textes, téléchargé sur la plateforme respecte les lois applicables. Toutes les inexactitudes ou problèmes légaux découlant du contenu publié ne relèvent pas de la responsabilité d'Eidcarosse. Les annonceurs et les utilisateurs garantissent que leur contenu ne viole pas les droits d'auteur, les droits de propriété intellectuelle ou tout autre droit de toute personne ou entité. En utilisant le service, l'utilisateur ou l'annonceur accepte de libérer Eidcarosse de toute obligation, réclamation ou responsabilité liée à l'utilisation ou à l'incapacité d'utiliser la plateforme. De plus, les annonceurs consentent à ce que leur contenu soit affiché sur les sites partenaires d'Eidcarosse, sous réserve des mêmes conditions que sur Eidcarosse elle-même.",
+      "Dharti tient les annonceurs et les utilisateurs responsables de s'assurer que tout le contenu, y compris les images, vidéos, graphiques et textes, téléchargé sur la plateforme respecte les lois applicables. Toutes les inexactitudes ou problèmes légaux découlant du contenu publié ne relèvent pas de la responsabilité d'Dharti. Les annonceurs et les utilisateurs garantissent que leur contenu ne viole pas les droits d'auteur, les droits de propriété intellectuelle ou tout autre droit de toute personne ou entité. En utilisant le service, l'utilisateur ou l'annonceur accepte de libérer Dharti de toute obligation, réclamation ou responsabilité liée à l'utilisation ou à l'incapacité d'utiliser la plateforme. De plus, les annonceurs consentent à ce que leur contenu soit affiché sur les sites partenaires d'Dharti, sous réserve des mêmes conditions que sur Dharti elle-même.",
 
     paraTitle3: "Droit d'Auteur",
     paraData3:
-      "Les annonceurs accordent à Eidcarosse une licence perpétuelle, irrévocable, exempte de redevances et non exclusive, ainsi que le droit d'utiliser, de modifier, de reproduire, de publier, d'adapter, de traduire, de créer des œuvres dérivées, de distribuer ou d'incorporer le contenu fourni sous quelque forme, technologie ou support que ce soit, que ce soit actuellement connu ou développé à l'avenir.",
+      "Les annonceurs accordent à Dharti une licence perpétuelle, irrévocable, exempte de redevances et non exclusive, ainsi que le droit d'utiliser, de modifier, de reproduire, de publier, d'adapter, de traduire, de créer des œuvres dérivées, de distribuer ou d'incorporer le contenu fourni sous quelque forme, technologie ou support que ce soit, que ce soit actuellement connu ou développé à l'avenir.",
 
     paraTitle4: "Filigranes",
     paraData4:
-      "Eidcarosse applique des filigranes à toutes les images pour empêcher leur utilisation non autorisée à d'autres fins sans la permission explicite de l'annonceur.",
+      "Dharti applique des filigranes à toutes les images pour empêcher leur utilisation non autorisée à d'autres fins sans la permission explicite de l'annonceur.",
 
     paraTitle5: "Sécurité et Images",
     paraData5:
-      "Eidcarosse se réserve le droit de modifier les titres de tout contenu sur l'application à des fins éditoriales.",
+      "Dharti se réserve le droit de modifier les titres de tout contenu sur l'application à des fins éditoriales.",
 
     paraTitle6: "Données Personnelles",
     paraData6:
-      "Eidcarosse se réserve le droit de coopérer avec les autorités en cas de violation de la loi par un contenu sur l'application. L'identité des utilisateurs, des acheteurs ou des annonceurs peut être déterminée, par exemple, par un fournisseur d'accès Internet. Les adresses IP peuvent également être enregistrées pour garantir le respect des conditions générales.",
+      "Dharti se réserve le droit de coopérer avec les autorités en cas de violation de la loi par un contenu sur l'application. L'identité des utilisateurs, des acheteurs ou des annonceurs peut être déterminée, par exemple, par un fournisseur d'accès Internet. Les adresses IP peuvent également être enregistrées pour garantir le respect des conditions générales.",
 
     paraTitle7: "Vie Privée",
     paraData7:
-      "Eidcarosse collectera des informations auprès des utilisateurs, des acheteurs et des annonceurs. En utilisant Eidcarosse, chaque utilisateur et annonceur consent à la collecte et à l'utilisation de ces informations. Eidcarosse se réserve également le droit de divulguer les informations aux affiliés de l'entreprise et à toute autre personne pour soutenir, administrer et maintenir Eidcarosse, y compris le marketing, la recherche, la planification et le développement de produits.",
+      "Dharti collectera des informations auprès des utilisateurs, des acheteurs et des annonceurs. En utilisant Dharti, chaque utilisateur et annonceur consent à la collecte et à l'utilisation de ces informations. Dharti se réserve également le droit de divulguer les informations aux affiliés de l'entreprise et à toute autre personne pour soutenir, administrer et maintenir Dharti, y compris le marketing, la recherche, la planification et le développement de produits.",
 
     paraTitle8: "Cookies",
     paraData8:
@@ -195,38 +195,38 @@ export default {
 
     paraTitle9: "Adresse Email des Utilisateurs",
     paraData9:
-      "Les utilisateurs doivent fournir des adresses e-mail valides avant de pouvoir publier des annonces. Les adresses e-mail ne seront pas affichées publiquement. Cependant, les utilisateurs sont autorisés à envoyer des e-mails à d'autres utilisateurs via Eidcarosse.",
+      "Les utilisateurs doivent fournir des adresses e-mail valides avant de pouvoir publier des annonces. Les adresses e-mail ne seront pas affichées publiquement. Cependant, les utilisateurs sont autorisés à envoyer des e-mails à d'autres utilisateurs via Dharti.",
 
     paraTitle10: "Disponibilité du Site",
-    paraData10: `  "Eidcarosse ne garantit pas un accès ininterrompu ou sécurisé à l'application. L'application est fournie "telle quelle" et "selon disponibilité"."`,
+    paraData10: `  "Dharti ne garantit pas un accès ininterrompu ou sécurisé à l'application. L'application est fournie "telle quelle" et "selon disponibilité"."`,
 
     paraTitle11: "Liens vers des Sites Web Tiers",
     paraData11:
-      "Eidcarosse peut contenir des références et des liens vers d'autres sites (Sites Web Tiers). Cependant, Eidcarosse ne sera pas responsable du contenu de ces sites web tiers. Les sites web tiers ne sont pas surveillés ni investigués par Eidcarosse. Lorsqu'un utilisateur décide de quitter Eidcarosse et d'accéder à un site web tiers, il le fait à ses propres risques.",
+      "Dharti peut contenir des références et des liens vers d'autres sites (Sites Web Tiers). Cependant, Dharti ne sera pas responsable du contenu de ces sites web tiers. Les sites web tiers ne sont pas surveillés ni investigués par Dharti. Lorsqu'un utilisateur décide de quitter Dharti et d'accéder à un site web tiers, il le fait à ses propres risques.",
 
     paraTitle12: "Contenu et Service Payant",
     paraData12:
-      "Certains services et contenus sur Eidcarosse peuvent nécessiter un paiement, notamment des forfaits d'adhésion et la publication d'annonces dans des catégories spécifiques. Les utilisateurs peuvent acheter des promotions d'annonces en utilisant des bons vendus ou émis par Eidcarosse, mais les bons ne sont pas monnayables. Les annonceurs et d'autres utilisateurs peuvent être tenus de transmettre des informations sur leur contenu payant via un fournisseur tiers, régi par ses propres conditions générales. Les utilisateurs et les annonceurs acceptent de tels liens à leurs propres risques, et Eidcarosse décline toute responsabilité liée à eux. Eidcarosse n'est pas tenu de rembourser les paiements effectués concernant du contenu payant.",
+      "Certains services et contenus sur Dharti peuvent nécessiter un paiement, notamment des forfaits d'adhésion et la publication d'annonces dans des catégories spécifiques. Les utilisateurs peuvent acheter des promotions d'annonces en utilisant des bons vendus ou émis par Dharti, mais les bons ne sont pas monnayables. Les annonceurs et d'autres utilisateurs peuvent être tenus de transmettre des informations sur leur contenu payant via un fournisseur tiers, régi par ses propres conditions générales. Les utilisateurs et les annonceurs acceptent de tels liens à leurs propres risques, et Dharti décline toute responsabilité liée à eux. Dharti n'est pas tenu de rembourser les paiements effectués concernant du contenu payant.",
 
     paraTitle13: "Adhésions",
     paraData13:
-      "Eidcarosse créera un magasin au nom de l'utilisateur. Le magasin créé sera dépourvu de contenu, en attente de l'ajout de contenu par l'utilisateur. Eidcarosse a le droit sur tout contenu ajouté au magasin par l'utilisateur et a le droit de le supprimer ou de refuser de publier du contenu qu'il juge inapproprié ou en violation des termes et conditions. Eidcarosse se réserve le droit de modifier ou de modifier les forfaits d'adhésion, y compris leur prix et leur contenu. Eidcarosse n'est pas tenu de rembourser les services ou l'argent si un forfait d'adhésion est annulé prématurément, pour quelque raison que ce soit.",
+      "Dharti créera un magasin au nom de l'utilisateur. Le magasin créé sera dépourvu de contenu, en attente de l'ajout de contenu par l'utilisateur. Dharti a le droit sur tout contenu ajouté au magasin par l'utilisateur et a le droit de le supprimer ou de refuser de publier du contenu qu'il juge inapproprié ou en violation des termes et conditions. Dharti se réserve le droit de modifier ou de modifier les forfaits d'adhésion, y compris leur prix et leur contenu. Dharti n'est pas tenu de rembourser les services ou l'argent si un forfait d'adhésion est annulé prématurément, pour quelque raison que ce soit.",
 
     paraTitle14: "Clause de non-responsabilité",
     paraData14:
-      "Eidcarosse n'assume aucune responsabilité pour l'utilisation d'Eidcarosse et décline toute responsabilité pour toute réclamation, blessure, dommage ou responsabilité de quelque nature que ce soit résultant, découlant de ou lié de quelque manière que ce soit à (a) toute erreur sur Eidcarosse ou le Contenu, y compris, mais sans s'y limiter, les erreurs typographiques et les erreurs techniques, (b) tout site web ou contenu de tiers accédé ou récupéré directement ou indirectement par le biais de liens sur Eidcarosse, (c) l'indisponibilité d'Eidcarosse, (d) votre utilisation d'Eidcarosse ou du Contenu, ou (e) votre utilisation de tout équipement (ou logiciel) en relation avec Eidcarosse.",
+      "Dharti n'assume aucune responsabilité pour l'utilisation d'Dharti et décline toute responsabilité pour toute réclamation, blessure, dommage ou responsabilité de quelque nature que ce soit résultant, découlant de ou lié de quelque manière que ce soit à (a) toute erreur sur Dharti ou le Contenu, y compris, mais sans s'y limiter, les erreurs typographiques et les erreurs techniques, (b) tout site web ou contenu de tiers accédé ou récupéré directement ou indirectement par le biais de liens sur Dharti, (c) l'indisponibilité d'Dharti, (d) votre utilisation d'Dharti ou du Contenu, ou (e) votre utilisation de tout équipement (ou logiciel) en relation avec Dharti.",
 
     paraTitle15: "Indemnisation",
     paraData15:
-      "Les annonceurs et autres utilisateurs acceptent d'indemniser Eidcarosse et ses employés, agents, dirigeants et directeurs de toutes dépenses, pertes, dommages et frais, y compris les frais d'avocat, découlant de toute violation de ces Conditions Générales (y compris une conduite négligente ou fautive).",
+      "Les annonceurs et autres utilisateurs acceptent d'indemniser Dharti et ses employés, agents, dirigeants et directeurs de toutes dépenses, pertes, dommages et frais, y compris les frais d'avocat, découlant de toute violation de ces Conditions Générales (y compris une conduite négligente ou fautive).",
 
     paraTitle16: "Modifications",
     paraData16:
-      "Eidcarosse se réserve le droit de modifier ou de modifier ces Conditions Générales. De telles modifications ou modifications seront effectives immédiatement après leur publication sur Eidcarosse. Vous êtes responsable de vérifier régulièrement de telles modifications. Votre accès ou votre utilisation continue d'Eidcarosse sera réputé être votre acceptation des Conditions Générales modifiées.",
+      "Dharti se réserve le droit de modifier ou de modifier ces Conditions Générales. De telles modifications ou modifications seront effectives immédiatement après leur publication sur Dharti. Vous êtes responsable de vérifier régulièrement de telles modifications. Votre accès ou votre utilisation continue d'Dharti sera réputé être votre acceptation des Conditions Générales modifiées.",
 
     paraTitle17: "Loi Applicable",
     paraData17:
-      "Eidcarosse est exploitée conformément aux lois et réglementations du pays respectif.",
+      "Dharti est exploitée conformément aux lois et réglementations du pays respectif.",
   },
   drawr: {
     faq: "FAQ",
@@ -529,7 +529,7 @@ export default {
     phlocation: "Sélectionner l'emplacement",
     TandC1: "J'ai lu les ",
     TandC2: "conditions générales ",
-    TandC3: "d'Eidcarosse et j'accepte",
+    TandC3: "d'Dharti et j'accepte",
     post: "Ajouter une Annonce",
     phsearchHere: "Rechercher ici",
     defaultValueDropdown: "Sélectionnez une option",

@@ -175,7 +175,7 @@ const CustomDrawer = ({ navigation }) => {
                 }}
               >
                 {" "}
-                Eidcarosse.ch
+                Dharti
               </Text>
             </Text>
           </View>

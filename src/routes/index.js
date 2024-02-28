@@ -251,7 +251,7 @@ export default function Routes() {
   // async function schedulePushNotification() {
   //   await Notifications.scheduleNotificationAsync({
   //     content: {
-  //       title: "Eidcarosse",
+  //       title: "Dharti",
   //       body: "New message",
   //     },
   //     trigger: { seconds: 0.2 },
