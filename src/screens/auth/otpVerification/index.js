@@ -18,25 +18,19 @@ import { Button, Head, Input, ScreenWrapper } from "../../../components";
 import { setAppLoader } from "../../../redux/slices/config";
 import PhoneInput from "react-native-phone-number-input";
 import { useSelector } from "react-redux";
-import {
-  setAdsFav,
-  setIsLoggedIn,
-  setToken,
-  setUserMeta,
-} from "../../../redux/slices/user";
-import ScreenNames from "../../../routes/routes";
 import AppColors from "../../../utills/AppColors";
 import { height, width } from "../../../utills/Dimension";
-import {
-  errorMessage,
-  setAuthData,
-  successMessage,
-} from "../../../utills/Methods";
+
 import styles from "./styles";
 import AppButton from "../../../components/AppButton";
 import { selectAppState } from "../../../redux/slices/appConfig/index";
 import { ApiManager } from "../../../backend/ApiManager";
-// import auth from '@react-native-firebase/auth';
+import {
+  getAuth,
+  PhoneAuthProvider,
+  signInWithCredential,
+  RecaptchaVerifier,
+} from "firebase/auth";
 export default function OtpVerification({ navigation, route }) {
   const dispatch = useDispatch(); 
   const { width: screenWidth } = Dimensions.get("window");
@@ -50,6 +44,8 @@ export default function OtpVerification({ navigation, route }) {
   const [verifying, setVerifying] = useState(false);
   const [counter, setCounter] = useState(false);
   const [countValue, setCount] = useState(null);
+ const auth = getAuth();
+ const recaptchaVerifier = useRef(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -97,6 +93,28 @@ export default function OtpVerification({ navigation, route }) {
       console.log('()=> firebaseOTPRequest');
 
       console.log(formattedNumber);
+
+
+      const phoneProvider = new PhoneAuthProvider(auth);
+      // const verificationId =
+      await phoneProvider
+        .verifyPhoneNumber(formattedNumber, recaptchaVerifier.current)
+        .then((verificationId) => {
+          console.log('verificationId :  ',verificationId);
+          setVerificationId(verificationId);
+  
+          Animated.timing(offsetX, {
+            toValue: -screenWidth,
+            duration: 1000,
+            useNativeDriver: false,
+          }).start();
+          setOTPSent(true);
+        })
+        .catch((err) =>{
+           alert(err.message)
+           console.error(err);
+          })
+        .finally(() => setOtpLoading(false));
       // await auth()
       //   .verifyPhoneNumber(formattedNumber)
       //   .then((confirmation) => {
@@ -130,11 +148,9 @@ export default function OtpVerification({ navigation, route }) {
       const requestData = {
         phone: formattedNumber,
         gateway: "firebase",
-        // gateway: config?.verification?.gateway,
       };
 
       console.log("verification---- aterty");
-      // if (config?.verification?.gateway === "firebase") {
         const res = await ApiManager.post("verification/send-otp", requestData);
         console.log("this is res", res);
         if (res.status === "success") {
@@ -145,31 +161,9 @@ export default function OtpVerification({ navigation, route }) {
         } else {
           alert(res?.data?.message || res?.data?.data?.error);
         }
-      // }
       return
 
-      if (config?.verification?.gateway === "twilio") {
-        if (user) {
-          setAuthToken(auth_token);
-        }
-
-        const res = await ApiManager.post("verification/send-otp", requestData);
-
-        if (res?.ok) {
-          Animated.timing(offsetX, {
-            toValue: -screenWidth,
-            duration: 1000,
-            useNativeDriver: false,
-          }).start();
-          setOTPSent(true);
-        } else {
-          alert(res?.data?.message || res?.data?.data?.error);
-        }
-
-        if (user) {
-          removeAuthToken();
-        }
-      }
+      
     } catch (error) {
       console.error("An error occurred:", error);
     } finally {
@@ -232,32 +226,7 @@ export default function OtpVerification({ navigation, route }) {
     }
   };
 
-  const login = async (data) => {
-    try {
-      console.log("login----");
-      dispatch(setAppLoader(true));
-      let res = await loginApi(data);
-      if (!res?.success) {
-        dispatch(setAppLoader(false));
-        errorMessage(res?.message);
-      } else if (res?.success) {
-        dispatch(setIsLoggedIn(true));
-        dispatch(setUserMeta(res?.data?.userDetails));
-        dispatch(setToken(res?.data?.token));
-        dispatch(setAdsFav(res?.data?.userDetails?.favAdIds));
-        setAuthData(data);
-        dispatch(setAppLoader(false));
-        successMessage("saved");
-        navigation.navigate(ScreenNames.BUTTOM);
-      } else {
-        alert("Somthing wrong in Login"), dispatch(setAppLoader(false));
-      }
-    } catch (error) {
-      errorMessage("Network error");
-      console.log(error);
-      dispatch(setAppLoader(false));
-    }
-  };
+ 
   return (
     <ScreenWrapper
       statusBarColor={AppColors.primary}
