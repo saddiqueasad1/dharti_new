@@ -29,6 +29,9 @@ import { height, width } from "../../../utills/Dimension";
 import { errorMessage, successMessage } from "../../../utills/Methods";
 import styles from "./styles";
 export default function SignUp({ navigation, route }) {
+  console.log('-----route-------');
+  console.log(route);
+  console.log(route.phone);
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [check, setCheck] = useState(false);
@@ -37,7 +40,7 @@ export default function SignUp({ navigation, route }) {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(route.phone);
   const [whatsapp, SetWhatsapp] = useState("");
   const [viber, setViber] = useState("");
 
@@ -46,7 +49,7 @@ export default function SignUp({ navigation, route }) {
   const [userNamer, setUserNamer] = useState("");
   const [emailr, setEmailr] = useState("");
   const [passwordr, setPasswordr] = useState("");
-  const [phoneNumberr, setPhoneNumberr] = useState("");
+  const [phoneNumberr, setPhoneNumberr] = useState(route.phone);
 
   const userData = {
     firstName,
@@ -83,13 +86,20 @@ export default function SignUp({ navigation, route }) {
 
       dispatch(setAppLoader(true));
       let r = await signupApi(data_);
+      console.log("singup es");
+
+
+      if (res?.data?.verification_mail) {
+        alert("An email is sent to your mail address with a verification link. Please verify your email address before logging in.");
+      }
+      console.log(r);
       if (!r?.success) {
         dispatch(setAppLoader(false));
         errorMessage(t(`flashmsg.${r?.message}`), t(`flashmsg.error`));
       } else if (r) {
         successMessage(t(`flashmsg.sussessloginmsg`), t(`flashmsg.success`));
         dispatch(setAppLoader(false));
-        navigation.navigate(ScreenNames.VERIFY, { data: r?.data });
+        // navigation.navigate(ScreenNames.VERIFY, { data: r?.data });
       } else {
         errorMessage(t(`flashmsg.signuperrormsg`), t(`flashmsg.success`));
       }
