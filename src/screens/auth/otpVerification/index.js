@@ -1,4 +1,3 @@
-import { AntDesign } from "@expo/vector-icons";
 import React, { useState, useRef, useContext, useEffect } from "react";
 import {
   ImageBackground,
@@ -10,29 +9,30 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import Icons from "../../../asset/images";
-import { loginApi } from "../../../backend/auth";
 import { Button, Head, Input, ScreenWrapper } from "../../../components";
-import { setAppLoader } from "../../../redux/slices/config";
 import PhoneInput from "react-native-phone-number-input";
 import { useSelector } from "react-redux";
 import AppColors from "../../../utills/AppColors";
 import { height, width } from "../../../utills/Dimension";
-
 import styles from "./styles";
 import AppButton from "../../../components/AppButton";
 import { selectAppState } from "../../../redux/slices/appConfig/index";
 import { ApiManager } from "../../../backend/ApiManager";
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import {
   getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
   PhoneAuthProvider,
   signInWithCredential,
-  RecaptchaVerifier,
 } from "firebase/auth";
+import { getApp } from "firebase/app";
+
 export default function OtpVerification({ navigation, route }) {
-  const dispatch = useDispatch(); 
   const { width: screenWidth } = Dimensions.get("window");
   const appConfig = useSelector(selectAppState);
   const { appSettings, config, ios, user, auth_token } = appConfig;
@@ -44,65 +44,29 @@ export default function OtpVerification({ navigation, route }) {
   const [verifying, setVerifying] = useState(false);
   const [counter, setCounter] = useState(false);
   const [countValue, setCount] = useState(null);
- const auth = getAuth();
- const recaptchaVerifier = useRef(null);
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const auth = getAuth();
+  const app = getApp();
+  const recaptchaVerifier = useRef(null);
   const offsetX = useRef(new Animated.Value(0)).current;
   const phoneInput = useRef(null);
-
-  function onAuthStateChanged(user) {
-   console.log("user-----");
-   console.log(user);
-  }
+  const [verificationId, setVerificationId] = useState();
 
   useEffect(() => {
-    // const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    // console.log("appConfig-----str,at", subscriber);
-    console.log(appSettings);
-    console.log("end---");
-    console.log(config);
-    console.log(ios);
+    auth.useDeviceLanguage();
   }, [appSettings, config, ios, user, auth_token]);
-
-  const isValidEmail = (email) => {
-    return email.length > 0;
-  };
-  const isValidPassword = (password) => {
-    return password.length >= 6;
-  };
-  const userData = {
-    username: email.trim(),
-    password: password.trim(),
-  };
 
   const handleOTPChange = (text) => {
     setOTP(text);
   };
 
-
   const firebaseOTPRequest = async () => {
-    // The FirebaseRecaptchaVerifierModal ref implements the
-    // FirebaseAuthApplicationVerifier interface and can be
-    // passed directly to `verifyPhoneNumber`.
     try {
-      // const phoneProvider = new auth.PhoneAuthProvider(auth);
-      // const credential = auth.PhoneAuthProvider.credential(confirm.verificationId, code);
-      // const verificationId =
-      console.log('()=> firebaseOTPRequest');
-
-      console.log(formattedNumber);
-
-
-      const phoneProvider = new PhoneAuthProvider(auth);
-      // const verificationId =
-      await phoneProvider
-        .verifyPhoneNumber(formattedNumber, recaptchaVerifier.current)
-        .then((verificationId) => {
-          console.log('verificationId :  ',verificationId);
-          setVerificationId(verificationId);
-  
+      console.log("()=> firebaseOTPRequest");
+      signInWithPhoneNumber(auth, formattedNumber, recaptchaVerifier.current)
+        .then((confirmationResult) => {
+          console.log("confirmationResult.");
+          console.log(confirmationResult.verificationId);
+          setVerificationId(confirmationResult.verificationId);
           Animated.timing(offsetX, {
             toValue: -screenWidth,
             duration: 1000,
@@ -110,60 +74,27 @@ export default function OtpVerification({ navigation, route }) {
           }).start();
           setOTPSent(true);
         })
-        .catch((err) =>{
-           alert(err.message)
-           console.error(err);
-          })
-        .finally(() => setOtpLoading(false));
-      // await auth()
-      //   .verifyPhoneNumber(formattedNumber)
-      //   .then((confirmation) => {
-      //     // setVerificationId(verificationId);
-
-      //     console.log("confirmation");
-      //     console.log(confirmation);
-      //     Animated.timing(offsetX, {
-      //       toValue: -screenWidth,
-      //       duration: 1000,
-      //       useNativeDriver: false,
-      //     }).start();
-      //     setOTPSent(true);
-      //   })
-      //   .catch((err) =>{ console.log(err); alert(err.message)})
-      //   .finally(() => setOtpLoading(false));
-      // setVerificationId(verificationId);
+        .catch((error) => {
+          console.error(error);
+        });
     } catch (err) {
       alert(err.message);
     }
   };
 
-
-
   const handleRequestOTP = async () => {
     setOtpLoading(true);
-    // console.log(JSON.stringify(appConfig));
-    // console.log('ookkk',formattedNumber);
-    // console.log(' config?.verification?.gateway', config);
     try {
       const requestData = {
         phone: formattedNumber,
         gateway: "firebase",
       };
-
-      console.log("verification---- aterty");
-        const res = await ApiManager.post("verification/send-otp", requestData);
-        console.log("this is res", res);
-        if (res.status === "success") {
-          
-          firebaseOTPRequest();
-          // alert(res?.message || res?.data?.data?.error);
-          // alert("nice")
-        } else {
-          alert(res?.data?.message || res?.data?.data?.error);
-        }
-      return
-
-      
+      const res = await ApiManager.post("verification/send-otp", requestData);
+      if (res.status === "success") {
+        firebaseOTPRequest();
+      } else {
+        alert(res?.data?.message || res?.data?.data?.error);
+      }
     } catch (error) {
       console.error("An error occurred:", error);
     } finally {
@@ -188,45 +119,98 @@ export default function OtpVerification({ navigation, route }) {
   };
 
   const handleOtpVerificationRequest = () => {
+    console.log("()=> ()=> ");
     setVerifying(true);
-    if (config?.verification?.gateway === "firebase") firebaseOTPVerification();
-    if (config?.verification?.gateway === "twilio") {
-      if (user) {
-        setAuthToken(auth_token);
-      }
-      ApiManager
-        .post("verification/verify-otp", { phone: formattedNumber, code: oTP })
-        .then((res) => {
-          if (res?.ok) {
-            setOTP("");
-            Alert.alert(
-              __("oTPScreenText.successTitle", appSettings.lng),
-              __("oTPScreenText.successMessage", appSettings.lng),
+    firebaseOTPVerification();
+  };
 
-              [
-                {
-                  text:
-                    route?.params?.source === "profile"
-                      ? __("oTPScreenText.okBtnTitle", appSettings.lng)
-                      : __("oTPScreenText.signUpBtnTitle", appSettings.lng),
-                  onPress: () => handleCleanUp(),
-                },
-              ]
-            );
-          } else {
-            alert(res?.data?.message || res?.data?.data?.error);
-          }
+  const firebaseOTPVerification = async () => {
+    console.log("()=> firebaseOTPVerification");
+    try {
+      const credential = PhoneAuthProvider.credential(verificationId, oTP);
+      await signInWithCredential(auth, credential)
+        .then((res) => {
+          console.log("res of ()=> firebaseOTPVerification");
+          // {"_redirectEventId": undefined, "apiKey": "AIzaSyBfTQ7IigRYXnp0DExoeutidqdN2xfljM0", "appName": "[DEFAULT]", "createdAt": "1709215100260", "displayName": undefined, "email": undefined, "emailVerified": false, "isAnonymous": false, "lastLoginAt": "1709215100261", "phoneNumber": "+923115182891", "photoURL": undefined, "providerData": [[Object]], "stsTokenManager": {"accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjNiYjg3ZGNhM2JjYjY5ZDcyYjZjYmExYjU5YjMzY2M1MjI5N2NhOGQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZGhhcnRpLWE3MmJkIiwiYXVkIjoiZGhhcnRpLWE3MmJkIiwiYXV0aF90aW1lIjoxNzA5MjE1MTAwLCJ1c2VyX2lkIjoiVHlIWFhpNHFxRVhvbUY2ajYwMGZESUd3UHBqMSIsInN1YiI6IlR5SFhYaTRxcUVYb21GNmo2MDBmRElHd1BwajEiLCJpYXQiOjE3MDkyMTUxMDAsImV4cCI6MTcwOTIxODcwMCwicGhvbmVfbnVtYmVyIjoiKzkyMzExNTE4Mjg5MSIsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsicGhvbmUiOlsiKzkyMzExNTE4Mjg5MSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBob25lIn19.ikdmvWhBhf6mqn-elafWPLxysHMleLVGI__I4wtrc1kL9mJ2vWuJysknWA3YQOhEjD6LhCkulJWEJvNHAogqsDAvuP_1mg-7YpxoCQgwRZTPrE0BuAAcV9x2au-C0cKyv3YLU3K_Bl8j5qWbIDkS-8Deuj2cUU4A7TH5HyH9R6_PORVCWHQscX2qpOtAkR3NkVL2iAfU8hbR9JKIvAa1w6Ci6aA125bMrprXJGjN9yjouknkDJrjtOHGFKgUDm4McReGv3fJwaqAlUtIqJyZzVRgoHedn2ZEZNAGJlMpHcbNaa8OanQwpjKPGFlIdl2GOdxoap2WfOqZsLMvk40MSw", "expirationTime": 1709218700412, "refreshToken": "AMf-vBwj_5RwgPkPFYtPI68eIlsWg8DnhstKpRIHgny240VwoGqnptOv81i2ep4DfKCeyUhRKiGZh3tCl_3N9mikCWBY2-HLcUlidY1_Dk6EtT9CmQfBFaIIL0HQIQd2tH1MDG7Hb3-o7JSYjJfzj8BMepkA_rQBT2OIjrtYcSnWtXPgWTOV3jGoD62sei1W8nKWcKbyV99M"}, "tenantId": undefined, "uid": "TyHXXi4qqEXomF6j600fDIGwPpj1"}
+          console.log(res.user);
+          finishFirebaseOTPVerification(res.user.uid);
         })
-        .then(() => {
-          if (user) {
-            removeAuthToken();
-          }
-          setVerifying(false);
-        });
+        .catch((err) => alert(err.message))
+        .finally(() => setVerifying(false));
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setVerifying(false);
     }
   };
 
- 
+  const finishFirebaseOTPVerification = (uid) => {
+    console.log("res of ()=> finishFirebaseOTPVerification");
+    if (user) setAuthToken(auth_token);
+    ApiManager.post("verification/store-firebase-verified-otp", {
+      phone: formattedNumber,
+      code: oTP,
+      uid: uid,
+    })
+      .then((res) => {
+        console.log("res of ()=> finishFirebaseOTPVerification");
+        console.log(res);
+
+        // if (res?.ok) {
+        setOTP("");
+        Alert.alert(
+          "Verification Successful",
+          "Phone number is successfully verified.",
+          [
+            {
+              text: "Complete Sign Up",
+              onPress: () => handleCleanUp(),
+            },
+          ]
+        );
+        // }
+      })
+      .catch((err) => {
+        Alert.alert(
+          "Verification Failed",
+          err?.message
+            ? "Error verifying OTP" + ", " + err.message
+            : "Error verifying OTP",
+          [
+            {
+              text: "ok",
+              onPress: () => handleResendRequest(),
+            },
+          ]
+        );
+      })
+      .finally(() => {
+        if (user) removeAuthToken();
+      });
+  };
+
+  const handleCleanUp = () => {
+    clearInterval(counter);
+    setCount(null);
+    setCounter(false);
+    setOTPSent(false);
+    setNumber("");
+    setFormattedNumber("");
+    // navigation.navigate(routes.signUpScreen, {
+    //   verified: true,
+    //   phone: formattedNumber,
+    // });
+    navigation.navigate(ScreenNames.SIGNUP, {
+      verified: true,
+      phone: formattedNumber,
+    });
+    Animated.timing(offsetX, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
+  };
+
   return (
     <ScreenWrapper
       statusBarColor={AppColors.primary}
@@ -266,15 +250,10 @@ export default function OtpVerification({ navigation, route }) {
                     Enter Phone Number
                   </Text>
                 </View>
-
                 <PhoneInput
                   ref={phoneInput}
                   defaultValue={route?.params?.phone || ""}
-                  // defaultCode={
-                  //   config?.verification?.default_country ||
-                  //   miscConfig?.defaulTCountryCode ||
-                  //   "US"
-                  // }
+                  defaultCode={"PK"}
                   layout="first"
                   onChangeText={(text) => {
                     setNumber(text);
@@ -296,11 +275,6 @@ export default function OtpVerification({ navigation, route }) {
                     borderTopRightRadius: 6,
                     borderBottomRightRadius: 6,
                   }}
-                  // countryPickerProps={{
-                  //   countryCodes: config?.verification?.country_list
-                  //     ? config.verification.country_list
-                  //     : miscConfig.countryCodes,
-                  // }}
                 />
                 <View
                   style={{
@@ -461,14 +435,10 @@ export default function OtpVerification({ navigation, route }) {
                 </View>
               </View>
             </Animated.View>
-            {/* {config?.verification?.gateway === "firebase" &&
-              firebaseConfig?.enabled && (
-                <FirebaseRecaptchaVerifierModal
-                  ref={recaptchaVerifier}
-                  firebaseConfig={app.options}
-                />
-              )}
-            {attemptInvisibleVerification && <FirebaseRecaptchaBanner />} */}
+            <FirebaseRecaptchaVerifierModal
+              ref={recaptchaVerifier}
+              firebaseConfig={app.options}
+            />
           </View>
         </View>
       </View>
