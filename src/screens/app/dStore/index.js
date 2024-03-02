@@ -2,19 +2,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   FlatList,
   ActivityIndicator,
   Image,
-  Dimensions,
   TouchableOpacity,
 } from "react-native";
-import Icons from "../../../asset/images";
-import { Button, Head, ScreenWrapper } from "../../../components";
+import { Head, ScreenWrapper } from "../../../components";
 import AppColors from "../../../utills/AppColors";
 import styles from "./styles";
-import { useTranslation } from "react-i18next";
-
+import ScreenNames from "../../../routes/routes";
 import { ApiManager } from "../../../backend/ApiManager";
 
 const paginationData = {
@@ -32,7 +28,6 @@ const allStoresFallBackImages = {
 };
 
 export default function DStore({ navigation, route }) {
-  // const [{ appSettings, rtl_support }] = useStateValue();
   const [loading, setLoading] = useState(true);
   const [storesData, setStoresData] = useState();
   const [refreshing, setRefreshing] = useState(false);
@@ -41,12 +36,9 @@ export default function DStore({ navigation, route }) {
   const [currentPage, setCurrentPage] = useState(
     pagination.page || paginationData.allStores.page
   );
-  //  Initial Call
   useEffect(() => {
     getStoresData(paginationData.allStores);
   }, []);
-
-  // Refreshing get listing call
   useEffect(() => {
     if (!refreshing) return;
     setCurrentPage(1);
@@ -54,7 +46,6 @@ export default function DStore({ navigation, route }) {
     getStoresData(paginationData.allStores);
   }, [refreshing]);
 
-  // next page get listing call
   useEffect(() => {
     if (!moreLoading) return;
     const data = {
@@ -70,7 +61,6 @@ export default function DStore({ navigation, route }) {
         const newData = res.data;
         const pagi = res.pagination;
         if (newData && newData.length > 0) {
-          // Assuming res is the direct array of stores
           if (refreshing) {
             setRefreshing(false);
           }
@@ -86,7 +76,6 @@ export default function DStore({ navigation, route }) {
             setLoading(false);
           }
         } else {
-          // Handle the case when res is empty or not as expected
           if (refreshing) {
             setRefreshing(false);
           }
@@ -99,7 +88,6 @@ export default function DStore({ navigation, route }) {
         }
       })
       .catch((error) => {
-        // Make sure to catch any error and update the state accordingly
         console.error("Error fetching stores:", error);
         setRefreshing(false);
         setMoreLoading(false);
@@ -113,7 +101,7 @@ export default function DStore({ navigation, route }) {
   );
 
   const handleStoreCardPress = (item) => {
-    navigation.navigate(routes.storeDetailsScreen, { storeId: item.id });
+    navigation.navigate(ScreenNames.DStoreDetailsScreen, { storeId: item.id });
   };
   const StoreCard = ({ item }) => (
     <View style={styles.storeWrap}>

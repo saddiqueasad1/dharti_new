@@ -26,6 +26,7 @@ const ScreenNames = {
   PP: "PrivacyPolicy",
   SNTU: "Sellus",
   REPAIR: "DStoreScreen",
+  DStoreDetailsScreen: "DStoreDetailsScreen",
   MAP: "Map",
   SETTING: "Setting",
   FORGET: "ForgetPassord",
