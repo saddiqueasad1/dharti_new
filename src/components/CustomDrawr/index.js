@@ -52,7 +52,7 @@ const CustomDrawer = ({ navigation }) => {
             <IconButton
             title={"D store"}
             onPress={() => {
-              navigation.navigate(ScreenNames.REPAIR), navigation.closeDrawer();
+              navigation.closeDrawer();
             }}
             containerStyle={styles.container}
             textStyle={styles.text}

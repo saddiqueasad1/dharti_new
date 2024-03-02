@@ -12,11 +12,11 @@ export default function Loader() {
   return (
     <Modal
       isVisible={appLoader}
-      backdropOpacity={1}
+      backdropOpacity={.6}
       backdropColor={AppColors.white}
     >
       <View style={styles.container}>
-        <Image
+        {/* <Image
           style={{
             width: height(10),
             height: height(10),
@@ -24,7 +24,8 @@ export default function Loader() {
             resizeMode:'cover'
           }}
           source={Icons.iconLogo}
-        />
+        /> */}
+        <ActivityIndicator size={'large'}  color={AppColors.primary}/>
       </View>
     </Modal>
   );

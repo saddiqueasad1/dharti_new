@@ -1,5 +1,6 @@
 import * as React from "react";
 import Svg, { G, Circle, Path, Defs } from "react-native-svg";
+import AppColors from "../utills/AppColors";
 /* SVGR has dropped some elements not supported by react-native-svg: filter */
 
 function AddIcon(props) {
@@ -13,7 +14,7 @@ function AddIcon(props) {
       {...props}
     >
       <G filter="url(#filter0_d_983_2030)">
-        <Circle cx={29.5} cy={25.5} r={25.5} fill="red" />
+        <Circle cx={29.5} cy={25.5} r={25.5} fill={AppColors.primary} />
       </G>
       <G filter="url(#filter1_d_983_2030)">
         <Path

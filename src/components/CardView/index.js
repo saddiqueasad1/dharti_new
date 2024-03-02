@@ -60,6 +60,7 @@ export default function CardView({ data }) {
       }
     }
   };
+  console.log(data);
   return (
     <View style={styles.main}>
       <TouchableOpacity
@@ -74,7 +75,7 @@ export default function CardView({ data }) {
             resizeMode="cover"
             style={styles.image}
             // source={{ uri: data?.image[0] }}
-            source={{ uri: data?.images[0] }}
+            source={{ uri: data?.images[0]?.src }}
           />
           {/* <SwiperFlatList
             // ref={introRef}
@@ -93,13 +94,13 @@ export default function CardView({ data }) {
             <View style={styles.categoryview}>
               <MaterialIcons name="category" color={"grey"} size={height(2)} />
               <Text numberOfLines={1} style={styles.detailtext}>
-                {t(`category.${data?.category}`)}
+                {data?.categories[0]?.name}
               </Text>
             </View>
             <View style={styles.categoryview}>
               <Entypo name="location-pin" color={"grey"} size={height(2)} />
               <Text numberOfLines={2} style={styles.detailtext}>
-                {data?.address}
+                {data?.contact?.address}
               </Text>
             </View>
             <View style={styles.categoryview}>
@@ -110,28 +111,20 @@ export default function CardView({ data }) {
               />
               <Text numberOfLines={1} style={styles.detailtext}>
                 {GlobalMethods.calculateTimeDifference(
-                  data?.createdAt,
+                  data?.created_at,
                   language
                 )}
               </Text>
             </View>
           </View>
-          {checkPrice(data?.price) ? (
+          {checkPrice(data?.price) && 
             <View>
               <Text numberOfLines={1} style={styles.chf}>
-                CHF {formatPrice(data?.price)}
+                PKR {formatPrice(data?.price)}
               </Text>
-              <Text numberOfLines={1} style={styles.eur}>
-                EUR {formatPriceE(Math.round(data?.price * 1.06))}
-              </Text>
+             
             </View>
-          ) : (
-            <View style={styles.cfpview}>
-              <Text numberOfLines={1} style={styles.cfp}>
-                {t(`addPost.${data?.price}`)}
-              </Text>
-            </View>
-          )}
+        }
         </View>
       </TouchableOpacity>
       {!(data?.userId?._id === loginuser?._id) ? (
@@ -147,17 +140,7 @@ export default function CardView({ data }) {
       ) : (
         <></>
       )}
-       {!data?.visibility && (
-        <View
-          style={{
-            height: height(20),
-            borderRadius: width(2),
-            width: width(86),
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            position: "absolute",
-          }}
-        />
-      )}
+
     </View>
   );
 }

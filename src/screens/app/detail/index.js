@@ -15,7 +15,7 @@ import Modal from "react-native-modal";
 import Swiper from "react-native-swiper";
 import { useDispatch, useSelector } from "react-redux";
 import { adView, getDataofAdByID, toggleFavorite } from "../../../backend/api";
-import { DetailFooter, DetailHeader, ScreenWrapper } from "../../../components";
+import { DetailFooter, DetailHeader, RelatedAd, ScreenWrapper } from "../../../components";
 import {
   selectFavAds,
   selectIsLoggedIn,
@@ -84,28 +84,15 @@ export default function Detail({ navigation, route }) {
   useEffect(() => {
     getData();
   }, [dat?.listing_id != data?.listing_id]);
-  useEffect(() => {
-    if (data && mapRef?.current) {
-      mapRef?.current.animateToRegion(
-        {
-          latitude: data?.latitude || 0,
-          longitude: data?.longitude || 0,
-          latitudeDelta: 0.001,
-          longitudeDelta: 0.001,
-        },
-        3 * 1000
-      );
-    }
-  }, [data, mapRef?.current]);
   const getData = async () => {
     try {
       setload(true);
       let d = await getDataofAdByID(dat?.listing_id);
       // setload(false);
       console.log("here");
-      console.log(d);
+      // console.log("deydisndu",d);
       if (d) {
-        console.log(d?.images);
+        // console.log(d?.images);
         setDat(d);
         setimg(d?.images);
         if (d.userId.listing_id != loginuser?.listing_id) {
@@ -121,12 +108,13 @@ export default function Detail({ navigation, route }) {
 
     // dispatch(setAppLoader(false));
   };
+  console.log("inner data", data?.contact?.locations);
   return (
     <ScreenWrapper
       showStatusBar={false}
       headerUnScrollable={() => (
         <DetailHeader
-          catgory={data?.category}
+          catgory={data?.categories[0]}
           subcatgory={data?.subCategory}
           onPressBack={() => navigation.goBack()}
           onPressShare={() =>
@@ -139,20 +127,20 @@ export default function Detail({ navigation, route }) {
         />
       )}
       footerUnScrollable={() =>
-        !(data?.userId?.listing_id == loginuser?.listing_id || load) &&
+        data &&
         islogin && (
           <DetailFooter
-            pNumber={data?.phone}
-            eMail={data?.email}
+            pNumber={data?.author?.phone_verified && data?.author?.phone}
+            eMail={data?.author?.email}
             onPressCall={() =>
               GlobalMethods.onPressCall(data?.userId?.phoneNumber)
             }
             onPressChat={() => {
-              navigation.navigate(ScreenNames.CHAT, {
-                userRoom: null,
-                usr: data?.userId,
-                userItem: data,
-              });
+              // navigation.navigate(ScreenNames.CHAT, {
+              //   userRoom: null,
+              //   usr: data?.userId,
+              //   userItem: data,
+              // });
             }}
             onPressMail={() =>
               GlobalMethods.onPressEmail(
@@ -181,7 +169,7 @@ export default function Detail({ navigation, route }) {
       ) : (
         <View style={styles.mainViewContainer}>
           {/*------Images-------*/}
-          <View style={styles.imageview}>
+         {img&& <View style={styles.imageview}>
             <Swiper
               style={{ height: height(30) }}
               activeDotColor={AppColors.primary}
@@ -201,7 +189,7 @@ export default function Detail({ navigation, route }) {
                   }}
                 >
                   <Image
-                    source={{ uri: image.src }}
+                    source={{ uri: image?.src }}
                     resizeMode="contain"
                     style={{
                       width: width(100),
@@ -214,19 +202,18 @@ export default function Detail({ navigation, route }) {
                 </Pressable>
               ))}
             </Swiper>
-          </View>
+          </View>}
           {/*------price-------*/}
           <View style={styles.nameview}>
             {!isNullOrNullOrEmpty(data?.price) && (
               <View
                 style={{
-                  paddingBottom: height(2),
                   flexDirection: "row",
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
               >
-                {checkPrice(data?.price) && data?.price ? (
+                {checkPrice(data?.price) && data?.price && (
                   <View>
                     <Text
                       numberOfLines={1}
@@ -236,23 +223,7 @@ export default function Detail({ navigation, route }) {
                         fontWeight: "bold",
                       }}
                     >
-                      CHF {formatPrice(data?.price)}
-                    </Text>
-                    <Text
-                      numberOfLines={1}
-                      style={{
-                        fontSize: height(1.5),
-                        color: "grey",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      EUR {formatPriceE(Math.round(data?.price * 1.06))}
-                    </Text>
-                  </View>
-                ) : (
-                  <View style={styles.cfpview}>
-                    <Text numberOfLines={1} style={styles.cfp}>
-                      {t(`addPost.${data?.price}`)}
+                      PKR {formatPrice(data?.price)}
                     </Text>
                   </View>
                 )}
@@ -293,7 +264,9 @@ export default function Detail({ navigation, route }) {
                 }}
               >
                 <Entypo name="location-pin" color={"grey"} size={height(2)} />
-                <Text style={{ fontSize: height(1.5) }}>{data?.address}</Text>
+                <Text style={{ fontSize: height(1.5) }}>
+                  {data?.author?.address}
+                </Text>
               </View>
               <Text
                 style={{
@@ -302,7 +275,7 @@ export default function Detail({ navigation, route }) {
                   color: AppColors.black,
                 }}
               >
-                {new Date(data?.createdAt).toLocaleString("en-US", {
+                {new Date(data?.date_created?.date).toLocaleString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
@@ -311,320 +284,30 @@ export default function Detail({ navigation, route }) {
             </View>
           </View>
           {/*---------detail view------*/}
-          {showDetails(data) && (
-            <View style={styles.detailview}>
-              <View style={styles.detailcard}>
-                <Text
-                  style={{
-                    fontSize: height(2.5),
-                    fontWeight: "bold",
-                    paddingBottom: height(1),
-                    color: AppColors.black,
-                  }}
-                >
-                  {t("detail.detailword")}
-                </Text>
 
-                {/*--------Vehicle brand------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.brand) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>{t("addPost.brand")}</Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.vhclZ?.brand === "Others"
-                        ? t("category.Others")
-                        : data?.vhclZ?.brand}
-                    </Text>
-                  </View>
-                )}
-                {/*--------Vehicle model------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.model) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>{t("addPost.model")}</Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.vhclZ?.model === "Others"
-                        ? t("category.Others")
-                        : data?.vhclZ?.model}
-                    </Text>
-                  </View>
-                )}
-                {/*--------Vehicle type------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.type) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>{t("addPost.type")}</Text>
-                    <Text style={styles.cardelement2}>
-                      {t(`type.${data?.vhclZ?.type}`)}
-                    </Text>
-                  </View>
-                )}
-                {/*--------Vehicle year------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.year) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>{t("addPost.year")}</Text>
-                    <Text style={styles.cardelement2}>{data?.vhclZ?.year}</Text>
-                  </View>
-                )}
-                {/*--------Vehicle condition------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.condition) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.condition")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {/* {data?.condition} */}
-                      {t(`condition.${data?.vhclZ?.condition}`)}
-                    </Text>
-                  </View>
-                )}
-                {/*--------Vehicle bodyshape------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.bodyShape) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.bodyshape")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {t(`bodyShapeList.${data?.vhclZ?.bodyShape}`)}
-                    </Text>
-                  </View>
-                )}
-                {/*--------Vehicle e-color------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.exteriorColor) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.exteriorcolor")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {t(`colorList.${data?.vhclZ?.exteriorColor}`)}
-                    </Text>
-                  </View>
-                )}
-                {/*--------Vehicle i-color------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.interiorColor) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.interiorcolor")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {t(`colorList.${data?.vhclZ?.interiorColor}`)}
-                    </Text>
-                  </View>
-                )}
-                {/*--------Vehicle fuel------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.fuelType) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.fueltype")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {t(`fuelTypelist.${data?.vhclZ?.fuelType}`)}
-                    </Text>
-                  </View>
-                )}
-                {/*--------Vehicle gareBox------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.gearBox) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.gearbox")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {t(`gearBoxList.${data?.vhclZ?.gearBox}`)}
-                    </Text>
-                  </View>
-                )}
-                {/*--------Vehicle Km------*/}
-                {!isNullOrNullOrEmpty(data?.vhclZ?.km) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>{t("detail.km")}</Text>
-                    <Text style={styles.cardelement2}>
-                      {t(data?.vhclZ?.km)}
-                    </Text>
-                  </View>
-                )}
-                {/*--------animalZ age------*/}
-                {!isNullOrNullOrEmpty(data?.animalZ?.age) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>{t("addPost.age")}</Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.animalZ?.age}
-                    </Text>
-                  </View>
-                )}
-                {/*--------animalZ breed------*/}
-                {!isNullOrNullOrEmpty(data?.animalZ?.breed) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>{t("addPost.breed")}</Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.animalZ?.breed}
-                    </Text>
-                  </View>
-                )}
-                {/*--------animalZ gender------*/}
-                {!isNullOrNullOrEmpty(data?.animalZ?.gender) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.gender")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {t(`addPost.${data?.animalZ?.gender}`)}
-                    </Text>
-                  </View>
-                )}
-                {/*--------bznessInAg workingHours------*/}
-                {!isNullOrNullOrEmpty(data?.bznessInAg?.workingHours) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.workingHours")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.bznessInAg?.workingHours}
-                    </Text>
-                  </View>
-                )}
-                {/*--------jobZ companyName------*/}
-                {!isNullOrNullOrEmpty(data?.jobZ?.companyName) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.companyName")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.jobZ?.companyName}
-                    </Text>
-                  </View>
-                )}
-                {/*--------jobZ positionType------*/}
-                {!isNullOrNullOrEmpty(data?.jobZ?.positionType) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.positionType")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.jobZ?.positionType}
-                    </Text>
-                  </View>
-                )}
-                {/*--------jobZ salaryFrom------*/}
-                {!isNullOrNullOrEmpty(data?.jobZ?.salaryFrom) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.salaryFrom")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.jobZ?.salaryFrom}
-                    </Text>
-                  </View>
-                )}
-                {/*--------jobZ salaryTo------*/}
-                {!isNullOrNullOrEmpty(data?.jobZ?.salaryTo) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.salaryTo")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.jobZ?.salaryTo}
-                    </Text>
-                  </View>
-                )}
-                {/*--------jobZ salaryPeriod------*/}
-                {!isNullOrNullOrEmpty(data?.jobZ?.salaryPeriod) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.salaryPeriod")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.jobZ?.salaryPeriod}
-                    </Text>
-                  </View>
-                )}
-                {/*--------property4sr area------*/}
-                {!isNullOrNullOrEmpty(data?.property4sr?.area) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>{t("addPost.area")}</Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.property4sr?.area}
-                    </Text>
-                  </View>
-                )}
-                {/*--------property4sr bedrooms------*/}
-                {!isNullOrNullOrEmpty(data?.property4sr?.bedrooms) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.bedrooms")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.property4sr?.bedrooms}
-                    </Text>
-                  </View>
-                )}
-                {/*--------property4sr bathrooms------*/}
-                {!isNullOrNullOrEmpty(data?.property4sr?.bathrooms) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.bathrooms")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.property4sr?.bathrooms}
-                    </Text>
-                  </View>
-                )}
-                {/*--------property4sr furnished------*/}
-                {!isNullOrNullOrEmpty(data?.property4sr?.furnished) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.furnished")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.property4sr?.furnished}
-                    </Text>
-                  </View>
-                )}
-                {/*--------rltnShp iAm------*/}
-                {!isNullOrNullOrEmpty(data?.rltnShp?.iAm) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>{t("addPost.iAm")}</Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.rltnShp?.iAm}
-                    </Text>
-                  </View>
-                )}
-                {/*--------rltnShp lkinFor------*/}
-                {!isNullOrNullOrEmpty(data?.rltnShp?.lkinFor) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("addPost.lookingFor")}
-                    </Text>
-                    <Text style={styles.cardelement2}>
-                      {data?.rltnShp?.lkinFor}
-                    </Text>
-                  </View>
-                )}
+          <View style={styles.detailview}>
+            <View style={styles.detailcard}>
+              <Text
+                style={{
+                  fontSize: height(2.5),
+                  fontWeight: "bold",
+                  paddingBottom: height(1),
+                  color: AppColors.black,
+                }}
+              >
+                {t("detail.detailword")}
+              </Text>
 
-                {/*--------Video URL------*/}
-                {!isNullOrNullOrEmpty(data?.videoUrl) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("detail.videourl")}
-                    </Text>
-                    <TouchableOpacity
-                      style={styles.cardelement2}
-                      onPress={handlePress}
-                    >
-                      <Text numberOfLines={1} style={{ color: "blue" }}>
-                        {data?.videoUrl}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-                {/*--------Website------*/}
-                {!isNullOrNullOrEmpty(data?.website) && (
-                  <View style={styles.cardrow}>
-                    <Text style={styles.cardelement}>
-                      {t("detail.website")}
-                    </Text>
-                    <Text style={styles.cardelement2}>{data?.website}</Text>
-                  </View>
-                )}
-              </View>
+              {/*--------Vehicle brand------*/}
+              {data?.custom_fields?.map((e) => (
+                <View style={styles.cardrow}>
+                  <Text style={styles.cardelement}>{e?.label}</Text>
+                  <Text style={styles.cardelement2}>{e?.value}</Text>
+                </View>
+              ))}
             </View>
-          )}
+          </View>
+
           {/*---------description------*/}
           {!isNullOrNullOrEmpty(data?.description) && (
             <View style={{ paddingLeft: width(5), paddingVertical: width(3) }}>
@@ -640,13 +323,13 @@ export default function Detail({ navigation, route }) {
             </View>
           )}
           {/* -------user profile-------- */}
-          {!(data?.userId?.listing_id == loginuser?.listing_id) && (
+          {data && (
             <Pressable
               onPress={() => {
                 if (islogin) {
-                  navigation.navigate(ScreenNames.OTHERPROFILE, {
-                    user: data?.userId,
-                  });
+                  // navigation.navigate(ScreenNames.OTHERPROFILE, {
+                  //   user: data?.userId,
+                  // });
                 } else {
                   infoMessage(
                     t(`flashmsg.loginView`),
@@ -658,7 +341,7 @@ export default function Detail({ navigation, route }) {
             >
               <View style={styles.profilecard}>
                 <Image
-                  source={{ uri: data?.userId?.image }}
+                  source={{ uri: data?.author?.pp_thumb_url }}
                   style={styles.profileimage}
                   resizeMode="cover"
                 />
@@ -672,7 +355,7 @@ export default function Detail({ navigation, route }) {
                       color: AppColors.black,
                     }}
                   >
-                    {data?.userId?.firstName}
+                    {data?.author?.username}
                   </Text>
                   <Text
                     style={{
@@ -702,13 +385,15 @@ export default function Detail({ navigation, route }) {
               </View>
             </Pressable>
           )}
-          {/*------whatsapp / viber-------*/}
-          {!(data?.userId?.listing_id == loginuser?.listing_id) && islogin && (
+          {/*------whatsapp -------*/}
+          {data?.contact && (
             <View style={styles.contact}>
-              {!isNullOrNullOrEmpty(data?.whatsapp) && (
+              {!isNullOrNullOrEmpty(data?.contact?.whatsapp_number) && (
                 <TouchableOpacity
                   style={{ marginRight: height(2) }}
-                  onPress={() => GlobalMethods.openWhatsApp(data?.whatsapp)}
+                  onPress={() =>
+                    GlobalMethods.openWhatsApp(data?.contact?.whatsapp_number)
+                  }
                 >
                   <Ionicons
                     size={height(5)}
@@ -717,20 +402,10 @@ export default function Detail({ navigation, route }) {
                   />
                 </TouchableOpacity>
               )}
-              {!isNullOrNullOrEmpty(data?.viber) && islogin && (
-                <TouchableOpacity
-                  style={{ paddingTop: height(1) }}
-                  onPress={() => {
-                    let res = GlobalMethods.openViber(data?.viber);
-                  }}
-                >
-                  <Fontisto size={height(4.5)} name="viber" color={"#59267c"} />
-                </TouchableOpacity>
-              )}
             </View>
           )}
           {/*------address-------*/}
-          {!isNullOrNullOrEmpty(data?.address) && (
+          {!isNullOrNullOrEmpty(data?.contact?.address) && (
             <View style={{ paddingLeft: width(4) }}>
               <Text
                 style={{
@@ -744,7 +419,7 @@ export default function Detail({ navigation, route }) {
             </View>
           )}
           {/*------Map view-------*/}
-          {!isNullOrNullOrEmpty(data?.address) && (
+          {!isNullOrNullOrEmpty(data?.contact?.address) && (
             <View style={styles.map}>
               <MapView
                 ref={mapRef}
@@ -762,8 +437,8 @@ export default function Detail({ navigation, route }) {
               >
                 <Marker
                   coordinate={{
-                    latitude: data?.latitude || 0,
-                    longitude: data?.longitude || 0,
+                    latitude:  data?.contact?.latitude || 0,
+                    longitude: data?.contact?.longitude || 0,
                     latitudeDelta: 0.01,
                     longitudeDelta: 0.01,
                   }}
@@ -771,6 +446,7 @@ export default function Detail({ navigation, route }) {
               </MapView>
             </View>
           )}
+          <RelatedAd data={data?.related}/>
         </View>
       )}
       {/*------model of pictures-------*/}

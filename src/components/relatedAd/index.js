@@ -8,27 +8,27 @@ import CardView from "../CardView";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
 
-export default function RelatedAd({ category, id }) {
+export default function RelatedAd({ data=[] }) {
   const { t } = useTranslation();
-  const [data, setData] = useState([]);
+
   const [refreshing, onRefresh] = useState(false);
-  const queryParams = {
-    category: category || "",
-    page: 1, // Adjust the page number as needed
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-  const getData = async () => {
-    onRefresh(true);
-    let d = await getAllData(queryParams);
-    if (d) {
-      setData(d?.ad);
-    } else {
-      setData([]);
-    }
-    onRefresh(false);
-  };
+  // const queryParams = {
+  //   category: category || "",
+  //   page: 1, // Adjust the page number as needed
+  // };
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+  // const getData = async () => {
+  //   onRefresh(true);
+  //   let d = await getAllData(queryParams);
+  //   if (d) {
+  //     setData(d?.ad);
+  //   } else {
+  //     setData([]);
+  //   }
+  //   onRefresh(false);
+  // };
   const renderItem = ({ item }) => (
     <View style={{ width: width(100), alignItems: "center" }}>
       <CardView data={item} />
@@ -60,7 +60,7 @@ export default function RelatedAd({ category, id }) {
       >
         <FlatList
           scrollEnabled={false}
-          data={data.filter((item) => item?._id != id)}
+          data={data}
           renderItem={renderItem}
           ListEmptyComponent={emptyView}
           keyExtractor={(item, index) => index}

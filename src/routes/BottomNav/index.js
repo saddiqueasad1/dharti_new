@@ -72,7 +72,6 @@ const BottomNav = ({ navigation }) => {
                 }}
               >
                 <AddIcon
-                  tintColor="#2d3436"
                   height={height(7)}
                   width={height(7)}
                 />

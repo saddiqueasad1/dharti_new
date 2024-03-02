@@ -27,6 +27,7 @@ import GlobalMethods, {
 import styles from "./styles";
 import { isNullOrNullOrEmpty } from "../../utills/Methods";
 const Card = React.memo(({ data, onPresshide, map = false }) => {
+  // console.log("component data ",data);
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const language = useSelector(selectCurrentLanguage);
@@ -96,9 +97,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
                   size={height(2)}
                 />
                 <Text numberOfLines={1} style={styles.categorytext}>
-                
-                  {/* {t(`category.${data?.category}`)} */}
-                  {`category`}
+                  {data?.categories[0]?.name}
                 </Text>
               </View>
             </View>
@@ -207,25 +206,15 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
         <Pressable
           style={styles.detail}
           onPress={() => {
-            map && onPresshide();
             navigation.navigate(ScreenNames.DETAIL, data);
           }}
         >
           {!isNullOrNullOrEmpty(data?.raw_price) && (
             <View style={styles.detailinerview}>
-              {checkPrice(data?.raw_price) ? (
+              {checkPrice(data?.raw_price) && (
                 <View>
                   <Text numberOfLines={1} style={styles.chf}>
                     PKR {formatPrice(data?.raw_price)}
-                  </Text>
-                  <Text numberOfLines={1} style={styles.eur}>
-                    EUR {formatPriceE(Math.round(data?.raw_price * 1.06))}
-                  </Text>
-                </View>
-              ) : (
-                <View style={styles.cfpview}>
-                  <Text numberOfLines={1} style={styles.cfp}>
-                    {t(`addPost.${data?.raw_price}`)}
                   </Text>
                 </View>
               )}
@@ -266,13 +255,15 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
       </View>
 
       <View style={styles.icons}>
-        <View style={styles.categoryview}>
-          <Entypo name="location-pin" color={"grey"} size={height(2)} />
-          <Text numberOfLines={2} style={styles.categorytext}>
-            {data?.contact.address}
-          </Text>
-        </View>
-        {!(data?.userId?._id === loginuser?._id) ? (
+         
+          <View style={styles.categoryview}>
+            <Entypo name="location-pin" color={"grey"} size={height(2)} />
+            <Text numberOfLines={2} style={styles.categorytext}>
+              {data?.contact?.address}
+            </Text>
+          </View>
+       
+        {data ? (
           <View
             style={{
               flexDirection: "row",
@@ -289,7 +280,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
                     t(`flashmsg.authentication`)
                   );
                 } else {
-                  GlobalMethods.onPressCall(data?.userId?.phoneNumber);
+                  GlobalMethods.onPressCall(data?.phone);
                 }
               }}
             >
@@ -307,12 +298,11 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
                     t(`flashmsg.authentication`)
                   );
                 } else {
-                  map && onPresshide();
-                  navigation.navigate(ScreenNames.CHAT, {
-                    userRoom: null,
-                    usr: data?.author_id,
-                    userItem: data,
-                  });
+                  // navigation.navigate(ScreenNames.CHAT, {
+                  //   userRoom: null,
+                  //   usr: data?.author_id,
+                  //   userItem: data,
+                  // });
                 }
               }}
             >
