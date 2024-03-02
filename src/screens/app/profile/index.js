@@ -28,6 +28,8 @@ export default function Profile({ navigation, route }) {
   const userdata = useSelector(selectUserMeta);
   const userAds = useSelector(selectUserAds);
   const userFav = useSelector(selectFavAds);
+
+  console.log(userdata);
   return (
     <ScreenWrapper
       barStyle="light-content"
@@ -45,7 +47,10 @@ export default function Profile({ navigation, route }) {
           }}
         />
         <View style={styles.imageiner}>
-          <Image style={styles.avatar} source={{ uri: userdata?.image }} />
+          <Image
+            style={styles.avatar}
+            source={{ uri: userdata?.pp_thumb_url }}
+          />
           <View
             style={{
               justifyContent: "center",
@@ -62,14 +67,48 @@ export default function Profile({ navigation, route }) {
                 marginTop: height(4),
               }}
             >
-              {userdata?.firstName} {userdata?.lastName}
+              {userdata?.first_name} {userdata?.last_name}
             </Text>
 
             {/* <Text style={styles.ptext}>{userdata?.userName}</Text> */}
             <Text style={[styles.ptext, { color: AppColors.primary }]}>
               {userdata?.email}
             </Text>
-            <Text style={styles.ptext}>{userdata?.phoneNumber}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {userdata?.phone_verified && (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="verified"
+                    color={AppColors.green}
+                    size={height(1.8)}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      color: AppColors.green,
+                      marginHorizontal: height(0.5),
+                    }}
+                  >
+                    verified
+                  </Text>
+                </View>
+              )}
+              <Text style={styles.ptext}>{userdata?.phone}</Text>
+            </View>
           </View>
 
           <View style={styles.wishlistview}>
