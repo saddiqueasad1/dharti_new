@@ -48,7 +48,7 @@ import {
   PrivacyPolicyScreen,
   PrivacySafety,
   ProfileScreen,
-  RepairSreen,
+  DStoreScreen,
   SearchScreen,
   SellUsScreen,
   TNCScreen,
@@ -330,7 +330,7 @@ export default function Routes() {
         <Stack.Screen name={ScreenNames.TNC} component={TNCScreen} />
         <Stack.Screen name={ScreenNames.PP} component={PrivacyPolicyScreen} />
         <Stack.Screen name={ScreenNames.SNTU} component={SellUsScreen} />
-        <Stack.Screen name={ScreenNames.REPAIR} component={RepairSreen} />
+        <Stack.Screen name={ScreenNames.REPAIR} component={DStoreScreen} />
         <Stack.Screen name={ScreenNames.SETTING} component={AppSetting} />
         <Stack.Screen name={ScreenNames.PANDS} component={PrivacySafety} />
 

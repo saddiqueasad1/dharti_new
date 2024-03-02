@@ -63,6 +63,7 @@ export default function Home({}) {
   const getData = useCallback(async () => {
     // dispatch(setAppLoader(true));
     try {
+      
       const data = await getDataofHomePage();
       if (data) {
         dispatch(setTopAds(data));
