@@ -23,6 +23,7 @@ import { getOwneAd } from "../../../backend/auth";
 import { MyListingView, ScreenWrapper } from "../../../components";
 import Header from "../../../components/header";
 import {
+    selectToken,
   selectUserAds,
   selectUserMeta,
   setUserAds,
@@ -124,7 +125,7 @@ const MyStoreScreen = (props) => {
 
   const user = useSelector(selectUserMeta);
   const config = useSelector(selectUserMeta);
-  const auth_token = user.auth_token;
+  const auth_token =  useSelector(selectToken);
   const { t } = useTranslation();
 
   const ios = false;
@@ -218,40 +219,57 @@ const MyStoreScreen = (props) => {
   }, []);
 
   const getStore = () => {
+    console.log('()=> getStore : ', auth_token);
     ApiManager.setAuthToken(auth_token);
-    ApiManager.get("my/store").then((res) => {
-      if (res.ok) {
-        if (res.data) {
-          setStoreData(res.data);
-          if (res.data.banner) {
-            setStoreBanner(res.data.banner);
+    try {
+      ApiManager.get("my/store").then((res) => {
+        console.log("res---");
+        console.log(res);
+        if (res) {
+          if (res) {
+            setStoreData(res);
+            if (res.banner) {
+              setStoreBanner(res.banner);
+            }
+            if (res.logo) {
+              setStoreLogo(res.logo);
+            }
+            setStoreOpeningHoursType(res.opening_hours?.type || "always");
+            setStoreOpeningHours(
+              res?.opening_hours?.hours || defaultOpeningHours
+            );
           }
-          if (res.data.logo) {
-            setStoreLogo(res.data.logo);
-          }
-          setStoreOpeningHoursType(res.data?.opening_hours?.type || "always");
-          setStoreOpeningHours(
-            res.data?.opening_hours?.hours || defaultOpeningHours
-          );
-        }
-        setLoading(false);
-        ApiManager.removeAuthToken();
-      } else {
-        if (res.status === 400) {
-          setUserHasNoStore(true);
+          setLoading(false);
+          ApiManager.removeAuthToken();
         } else {
-          handleError(
-            res?.data?.error_message ||
-              res?.problem + " Code: " + res?.status ||
-              t("myStoreTexts.errorNotification")
-          );
-        }
-        // TODO handle error
+          if (res.status === 400) {
+            setUserHasNoStore(true);
+          } else {
+            handleError(
+              res?.data?.error_message ||
+                res?.problem + " Code: " + res?.status ||
+                t("myStoreTexts.errorNotification")
+            );
+          }
+          // TODO handle error
 
+          setLoading(false);
+          ApiManager.removeAuthToken();
+        }
+      });
+    } catch (error) {
+        console.log('error?.code');
+        console.log(error?.code);
+        setUserHasNoStore(true);
+    } finally {
+        console.log('finally');
+        console.log(storeData);
+        if(storeData === '' || storeData === undefined ){ 
+            console.log("set this");
+            setUserHasNoStore(true)
+        }
         setLoading(false);
-        ApiManager.removeAuthToken();
-      }
-    });
+    }
   };
 
   const getTrimmedText = (text) => {

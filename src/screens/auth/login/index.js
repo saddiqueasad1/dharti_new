@@ -112,13 +112,9 @@ export default function Login({ navigation, route }) {
   const login = async (data) => {
     try {
       dispatch(setAppLoader(true));
-      console.log("-----");
       const APIData = { username: data.email, password: data.password };
-      console.log(APIData);
   
       let res = await loginApi(APIData);
-      console.log("watimggggg...");
-      console.log(res);
       // Adjusting for new response structure:
       if (!res?.jwt_token) { // Assuming success is determined by presence of jwt_token
         dispatch(setAppLoader(false));

@@ -146,6 +146,8 @@ export default function Routes() {
       const APIData = { username: data.email, password: data.password };
   
       const response = await loginApi(APIData);
+      console.log("watimggggg...");
+      console.log(response);
       
       if (response?.jwt_token) {
         const userDetails = response.user;
