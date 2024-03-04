@@ -5,6 +5,7 @@ import {
   MaterialIcons,
   FontAwesome,
   AntDesign,
+  FontAwesome5
 } from "@expo/vector-icons";
 import React from "react";
 import { Image, ImageBackground, Pressable, Text, View } from "react-native";
@@ -162,6 +163,18 @@ export default function Profile({ navigation, route }) {
             textStyle={styles.texticon}
             icon={
               <Entypo name="user" color={AppColors.primary} size={height(2)} />
+            }
+            iconright={<Ionicons name="chevron-forward" size={height(2)} />}
+          />
+          <IconButton
+            onPress={() => {
+              navigation.navigate(ScreenNames.MYSTORE);
+            }}
+            title={"profile.myStoreScreen"}
+            containerStyle={styles.container}
+            textStyle={styles.texticon}
+            icon={
+              <FontAwesome5 name="store" color={AppColors.primary} size={height(2)} />
             }
             iconright={<Ionicons name="chevron-forward" size={height(2)} />}
           />

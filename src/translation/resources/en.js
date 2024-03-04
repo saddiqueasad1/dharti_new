@@ -454,6 +454,7 @@ export default {
     privacy: "Privacy & Safety",
     appSetting: "App Settings",
     manageAccount: "Manage Account",
+    myStoreScreen: "My Store",
   },
   wishList: {
     title: "My Wish List",

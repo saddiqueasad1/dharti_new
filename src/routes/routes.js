@@ -38,5 +38,6 @@ const ScreenNames = {
   ICATEGORY: "InerCat",
   IBIKECATEGORY: "InerSubCat",
   ISEARCH: "InerSearch",
+  'MYSTORE': 'MyStore',
 };
 export default ScreenNames;
