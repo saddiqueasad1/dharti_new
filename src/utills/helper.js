@@ -1,3 +1,4 @@
+import {  decode } from "html-entities";
 // External Libraries
 const getPrice = (config, priceData, lng) => {
   const price = priceData?.price || 0;
@@ -37,24 +38,16 @@ const getPrice = (config, priceData, lng) => {
     return result;
   }
 };
+const getCurrencySymbol = (config) => {
+  // const entities = new Html5Entities();
+  // return entities.decode(config.symbol);
+  return decode(config.symbol);
+};
 
-const decodeHtmlEntities = (htmlString) => {
-    // Create a new DOMParser instance
-    const parser = new DOMParser();
-    // Parse the string as HTML
-    const doc = parser.parseFromString(htmlString, 'text/html');
-    // Return the text content, effectively decoding the entities
-    return doc.documentElement.textContent;
-  };
-  
-  // Example usage:
-  const getCurrencySymbol = (config) => {
-    return decodeHtmlEntities(config.symbol);
-  };
-  
-  const decodeString = (string) => {
-    return decodeHtmlEntities(string);
-  };
-  
+const decodeString = (string) => {
+  // const entities = new Html5Entities();
+  // return entities.decode(string);
+  return decode(string);
+};
 
 export { decodeString, getCurrencySymbol, getPrice };

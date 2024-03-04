@@ -18,7 +18,6 @@ import AppColors from "../../../utills/AppColors";
 import styles from "./styles";
 import { ApiManager } from "../../../backend/ApiManager";
 
-
 // Vector Icons
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -35,26 +34,28 @@ import { useStateValue } from "../../../redux/slices/appConfig";
 // import { getRelativeTimeConfig, getWeek, __ } from "../language/stringPicker";
 import ScreenNames from "../../../routes/routes";
 
-
 import CallIcon from "../../../asset/svgComponents/CallIcon";
 import MessageIcon from "../../../asset/svgComponents/MessageIcon";
 import GlobeIcon from "../../../asset/svgComponents/GlobeIcon";
 // import ReadMore from "react-native-read-more-text";
+import { useTranslation } from "react-i18next";
+import { selectUserMeta } from "../../../redux/slices/user";
+import { useSelector } from "react-redux";
 
 const storeDetailsTexts = {
   membershipMomentFormate: "D MMM, YYYY",
 };
 
 export const paginationData = {
-    home: { per_page: 30 },
-    search: { page: 1, per_page: 30 },
-    myListings: { page: 1, per_page: 30 },
-    favourites: { page: 1, per_page: 30 },
-    allStores: { page: 1, per_page: 30 },
-    storeDetails: { page: 1, per_page: 30 },
-    paymentHistory: { page: 1, per_page: 30 },
-    rating: { page: 1, per_page: 10 },
-  };
+  home: { per_page: 30 },
+  search: { page: 1, per_page: 30 },
+  myListings: { page: 1, per_page: 30 },
+  favourites: { page: 1, per_page: 30 },
+  allStores: { page: 1, per_page: 30 },
+  storeDetails: { page: 1, per_page: 30 },
+  paymentHistory: { page: 1, per_page: 30 },
+  rating: { page: 1, per_page: 10 },
+};
 
 const { width: windowWidth } = Dimensions.get("window");
 
@@ -84,8 +85,13 @@ const week = [
 ];
 
 const StoreDetailsScreen = ({ route, navigation }) => {
-  const [{ config, user , appSettings, rtl_support }] = useStateValue();
-  const ios = false
+  const { t } = useTranslation();
+
+  const user = useSelector(selectUserMeta);
+  const config = useSelector(selectUserMeta);
+
+  const ios = false;
+  const rtl_support = false;
   const [loading, setLoading] = useState(true);
   const [storeData, setStoreData] = useState();
   const [storeExpired, setStoreExpired] = useState(false);
@@ -102,6 +108,20 @@ const StoreDetailsScreen = ({ route, navigation }) => {
   const [currentPage, setCurrentPage] = useState(
     pagination.page || paginationData.storeDetails.page
   );
+
+  const [isExpanded, setIsExpanded] = useState(true);
+  const MAX_LENGTH = 100; // Maximum number of characters you want to show by default
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const getTrimmedText = (text) => {
+    if (text.length <= MAX_LENGTH) {
+      return text;
+    }
+    return isExpanded ? text : text.substring(0, MAX_LENGTH) + "...";
+  };
   // {* Get Store Detail Call *}
   useEffect(() => {
     // const timeConfig = getRelativeTimeConfig(appSettings.lng);
@@ -137,67 +157,85 @@ const StoreDetailsScreen = ({ route, navigation }) => {
   }, [moreLoading]);
 
   const getStoreDetail = (storeId) => {
-    ApiManager.get(`stores/${storeId}`).then((res) => {
-      console.log(res.data);
-      if (res.ok) {
-        if (res.data) {
-          setStoreData(res.data);
-          setLoading(false);
+    try {
+      ApiManager.get(`stores/${storeId}`).then((res) => {
+        if (res) {
+          if (res) {
+            setStoreData(res);
+            setLoading(false);
+          } else {
+            setStoreExpired(true);
+            setLoading(false);
+          }
         } else {
-          setStoreExpired(true);
+          // print error
+          // TODO handle error
           setLoading(false);
         }
-      } else {
-        // print error
-        // TODO handle error
-        setLoading(false);
-      }
+      });
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formattedDate = (originalDate) => {
+    const formattedDate = new Date(originalDate).toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
+    return formattedDate;
   };
 
   const getStoreListings = (storeId, paginationData) => {
+    console.log("()=> getStoreListings");
     const args = { ...paginationData, store_id: storeId };
-    ApiManager.get("store/listings", { ...args }).then((res) => {
-      if (res.ok) {
-        if (refreshing) {
-          setRefreshing(false);
-        }
-        if (moreLoading) {
-          setStoreListingsData((prevStoreListingsData) => [
-            ...prevStoreListingsData,
-            ...res.data.data,
-          ]);
-          setCurrentPage(res.data.pagination.page);
-          setMoreLoading(false);
-        } else {
-          setStoreListingsData(res.data.data);
-        }
-        setPagination(res.data.pagination ? res.data.pagination : {});
+    try {
+      ApiManager.get("store/listings", { ...args }).then((res) => {
+        if (res.data) {
+          if (refreshing) {
+            setRefreshing(false);
+          }
+          if (moreLoading) {
+            setStoreListingsData((prevStoreListingsData) => [
+              ...prevStoreListingsData,
+              ...res.data,
+            ]);
+            setCurrentPage(res.pagination.page);
+            setMoreLoading(false);
+          } else {
+            setStoreListingsData(res.data);
+          }
+          setPagination(res.pagination ? res.pagination : {});
 
-        if (initial) {
-          setInitial(false);
+          if (initial) {
+            setInitial(false);
+          }
+          if (loading) {
+            setLoading(false);
+          }
+        } else {
+          // print error
+          // TODO handle error
+          // if error give retry button and set initial to true only for initial call
+          if (refreshing) {
+            setRefreshing(false);
+          }
+          if (moreLoading) {
+            setMoreLoading(false);
+          }
+          if (loading) {
+            setLoading(false);
+          }
+          if (initial) {
+            setInitial(false);
+          }
         }
-        if (loading) {
-          setLoading(false);
-        }
-      } else {
-        // print error
-        // TODO handle error
-        // if error give retry button and set initial to true only for initial call
-        if (refreshing) {
-          setRefreshing(false);
-        }
-        if (moreLoading) {
-          setMoreLoading(false);
-        }
-        if (loading) {
-          setLoading(false);
-        }
-        if (initial) {
-          setInitial(false);
-        }
-      }
-    });
+      });
+    } catch (error) {
+    } finally {
+    }
   };
 
   const handleEmail = () => {
@@ -218,13 +256,13 @@ const StoreDetailsScreen = ({ route, navigation }) => {
   const handleEmailLoginAlert = () => {
     Alert.alert(
       "",
-      __("storeDetailsTexts.loginAlert", appSettings.lng),
+      t("storeDetailsTexts.loginAlert"),
       [
         {
-          text: __("storeDetailsTexts.cancelButtonTitle", appSettings.lng),
+          text: t("storeDetailsTexts.cancelButtonTitle"),
         },
         {
-          text: __("storeDetailsTexts.loginButtonTitle", appSettings.lng),
+          text: t("storeDetailsTexts.loginButtonTitle"),
           onPress: () => navigation.navigate(ScreenNames.loginScreen),
         },
       ],
@@ -318,7 +356,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                     />
                   </View>
                   <Text style={[styles.listingCardText, rtlText]}>
-                    {/* {moment(item.created_at).fromNow()} */}
+                    {formattedDate(item.created_at)}
                   </Text>
                 </View>
                 <View
@@ -347,8 +385,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                     />
                   </View>
                   <Text style={[styles.listingCardText, rtlText]}>
-                    {__("storeDetailsTexts.viewsCount", appSettings.lng)}{" "}
-                    {item?.view_count}
+                    {t("storeDetailsTexts.viewsCount")} {item?.view_count}
                   </Text>
                 </View>
               </View>
@@ -357,14 +394,14 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                 numberOfLines={1}
               >
                 {getPrice(
-                  config.currency,
+                  "pak",
                   {
                     pricing_type: item.pricing_type,
                     price_type: item.price_type,
                     price: item.price,
                     max_price: item.max_price,
                   },
-                  appSettings.lng
+                  "en"
                 )}
               </Text>
             </View>
@@ -375,9 +412,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
   );
 
   const handleViewListing = (listing) => {
-    navigation.push(ScreenNames.listingDetailScreen, {
-      listingId: listing.listing_id,
-    });
+    navigation.navigate(ScreenNames.DETAIL, listing);
   };
 
   const ListSeparator = () => (
@@ -395,7 +430,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
   const getOpenHours = () => {
     if (storeData) {
       if (storeData?.opening_hours?.type === "always") {
-        return __("storeDetailsTexts.alwaysOpen", appSettings.lng);
+        return "storeDetailsTexts.alwaysOpen";
       }
       if (storeData?.opening_hours?.type === "selected") {
         const today = weekData[new Date().getDay()];
@@ -405,12 +440,12 @@ const StoreDetailsScreen = ({ route, navigation }) => {
             storeData?.opening_hours?.hours[today]?.open ||
             storeData?.opening_hours?.hours[today]?.close
           ) {
-            return __("storeDetailsTexts.openingHourOpen", appSettings.lng);
+            return "storeDetailsTexts.openingHourOpen";
           } else {
-            return __("storeDetailsTexts.fullDayOpen", appSettings.lng);
+            return "storeDetailsTexts.fullDayOpen";
           }
         } else {
-          return __("storeDetailsTexts.closed", appSettings.lng);
+          return "storeDetailsTexts.closed";
         }
       }
     }
@@ -420,9 +455,10 @@ const StoreDetailsScreen = ({ route, navigation }) => {
   const keyExtractor = useCallback((item, index) => `${index}`, []);
 
   const handleMoreDetailPress = () => {
-    navigation.navigate(ScreenNames.storeMoreDetailsScreen, { data: storeData });
+    navigation.navigate(ScreenNames.storeMoreDetailsScreen, {
+      data: storeData,
+    });
   };
-
 
   const habdleSocialLinkOpen = (url) => {
     Linking.openURL(url);
@@ -439,7 +475,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
         }}
         onPress={handleDescriptionToggle}
       >
-        {__("listingDetailScreenTexts.showMore", appSettings.lng)}
+        {t("listingDetailScreenTexts.showMore")}
       </Text>
     );
   };
@@ -454,7 +490,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
         }}
         onPress={handleDescriptionToggle}
       >
-        {__("listingDetailScreenTexts.showLess", appSettings.lng)}
+        {t("listingDetailScreenTexts.showLess")}
       </Text>
     );
   };
@@ -477,9 +513,12 @@ const StoreDetailsScreen = ({ route, navigation }) => {
           style={{ width: "100%", alignItems: "center", paddingVertical: 5 }}
         >
           <Text
-            style={[{ fontWeight: "bold", color: AppColors.text_dark }, rtlTextA]}
+            style={[
+              { fontWeight: "bold", color: AppColors.text_dark },
+              rtlTextA,
+            ]}
           >
-            {__("storeMoreDetailTexts.alwaysOpen", appSettings.lng)}
+            {t("storeDetailsTexts.alwaysOpen")}
           </Text>
         </View>
       );
@@ -523,7 +562,9 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                       styles.hoursText,
                       {
                         fontWeight: today ? "bold" : "normal",
-                        color: today ? AppColors.text_dark : AppColors.text_gray,
+                        color: today
+                          ? AppColors.text_dark
+                          : AppColors.text_gray,
                       },
                       rtlTextA,
                     ]}
@@ -538,7 +579,9 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                       styles.hoursText,
                       {
                         fontWeight: today ? "bold" : "normal",
-                        color: today ? AppColors.text_dark : AppColors.text_gray,
+                        color: today
+                          ? AppColors.text_dark
+                          : AppColors.text_gray,
                       },
                     ]}
                   >
@@ -559,7 +602,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   rtlTextA,
                 ]}
               >
-                {__("storeMoreDetailTexts.fullDayOpen", appSettings.lng)}
+                {t("storeMoreDetailTexts.fullDayOpen")}
               </Text>
             )}
           </>
@@ -573,7 +616,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
               rtlTextA,
             ]}
           >
-            {__("storeMoreDetailTexts.closed", appSettings.lng)}
+            {t("storeMoreDetailTexts.closed")}
           </Text>
         )}
       </View>
@@ -637,7 +680,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
             <Text style={[styles.storeTitle, rtlText]} numberOfLines={1}>
               {storeData?.title
                 ? decodeString(storeData.title)
-                : __("storeDetailsTexts.nullText", appSettings.lng)}
+                : t("storeDetailsTexts.nullText")}
             </Text>
           </View>
           {
@@ -664,7 +707,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                     rtlText,
                   ]}
                 >
-                  {__("listingDetailScreenTexts.verified", appSettings.lng)}
+                  {t("storeDetailsTexts.verified")}
                 </Text>
               </View>
             </View>
@@ -680,12 +723,10 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                 rtlText,
               ]}
             >
-              {__("storeDetailsTexts.membership", appSettings.lng)}
+              {t("storeDetailsTexts.membership")}
               {" : "}
               <Text style={{ color: AppColors.text_gray }}>
-                {/* {moment(storeData.created_at).format(
-                  storeDetailsTexts.membershipMomentFormate
-                )} */}
+                {formattedDate(storeData.created_at)}
               </Text>
             </Text>
           </View>
@@ -719,7 +760,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   >
                     {!!storeData?.phone
                       ? decodeString(storeData.phone)
-                      : __("storeDetailsTexts.nullText", appSettings.lng)}
+                      : t("storeDetailsTexts.nullText")}
                   </Text>
                 </View>
               </View>
@@ -743,7 +784,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   >
                     {!!storeData?.email
                       ? decodeString(storeData.email)
-                      : __("storeDetailsTexts.nullText", appSettings.lng)}
+                      : t("storeDetailsTexts.nullText")}
                   </Text>
                 </View>
               </View>
@@ -765,7 +806,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                 >
                   {!!storeData?.website
                     ? storeData.website
-                    : __("storeDetailsTexts.nullText", appSettings.lng)}
+                    : t("storeDetailsTexts.nullText")}
                 </Text>
               </View>
             )}
@@ -848,11 +889,15 @@ const StoreDetailsScreen = ({ route, navigation }) => {
             >
               <Text
                 style={[
-                  { fontSize: 16, fontWeight: "bold", color: AppColors.text_dark },
+                  {
+                    fontSize: 16,
+                    fontWeight: "bold",
+                    color: AppColors.text_dark,
+                  },
                   rtlTextA,
                 ]}
               >
-                {__("listingDetailScreenTexts.description", appSettings.lng)}
+                {t("storeDetailsTexts.description")}
               </Text>
             </View>
             <View
@@ -872,12 +917,22 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                 width: "100%",
               }}
             >
+              <Text style={[rtlText, styles.text]}>
+                {decodeString(getTrimmedText(storeData.description).trim())}
+              </Text>
+              {storeData.description.length > MAX_LENGTH && (
+                <TouchableOpacity onPress={toggleExpanded}>
+                  <Text style={styles.showMoreButton}>
+                    {isExpanded ? "Show Less" : "Show More"}
+                  </Text>
+                </TouchableOpacity>
+              )}
               {/* <ReadMore
                 numberOfLines={3}
                 renderTruncatedFooter={renderTruncatedFooter}
                 renderRevealedFooter={renderRevealedFooter}
-              >
-                <Text
+              > */}
+              {/* <Text
                   style={[
                     rtlText,
                     {
@@ -888,8 +943,8 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   ]}
                 >
                   {decodeString(storeData.description).trim()}
-                </Text>
-              </ReadMore> */}
+                </Text> */}
+              {/* </ReadMore> */}
             </View>
           </View>
         )}
@@ -911,10 +966,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   color: AppColors.text_dark,
                 }}
               >
-                {__(
-                  "storeMoreDetailTexts.sectionTitles.openinigDateTime",
-                  appSettings.lng
-                )}
+                {t("storeMoreDetailTexts.sectionTitles.openinigDateTime")}
               </Text>
             </View>
 
@@ -986,7 +1038,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                     rtlText,
                   ]}
                 >
-                  {__("storeMoreDetailTexts.noData", appSettings.lng)}
+                  {t("storeMoreDetailTexts.noData")}
                 </Text>
               </View>
             )}
@@ -1005,14 +1057,15 @@ const StoreDetailsScreen = ({ route, navigation }) => {
             >
               <Text
                 style={[
-                  { fontSize: 16, fontWeight: "bold", color: AppColors.text_dark },
+                  {
+                    fontSize: 16,
+                    fontWeight: "bold",
+                    color: AppColors.text_dark,
+                  },
                   rtlTextA,
                 ]}
               >
-                {__(
-                  "storeMoreDetailTexts.sectionTitles.storeAddress",
-                  appSettings.lng
-                )}
+                {t("storeMoreDetailTexts.sectionTitles.storeAddress")}
               </Text>
             </View>
             <View
@@ -1070,7 +1123,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
               rtlText,
             ]}
           >
-            {__("storeDetailsTexts.latestAds", appSettings.lng)}
+            {t("storeDetailsTexts.latestAds")}
           </Text>
         </View>
       </View>
@@ -1104,7 +1157,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
               rtlText,
             ]}
           >
-            {__("storeDetailsTexts.emptyListing", appSettings.lng)}
+            {t("storeDetailsTexts.emptyListing")}
           </Text>
         </View>
       );
@@ -1167,7 +1220,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
     <View style={styles.loading}>
       <ActivityIndicator size="large" color={AppColors.primary} />
       <Text style={[styles.text, rtlText]}>
-        {__("storeDetailsTexts.loadingText", appSettings.lng)}
+        {t("storeDetailsTexts.loadingText")}
       </Text>
     </View>
   ) : (
@@ -1177,7 +1230,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
           {/* Header */}
           <View style={styles.header}>
             <Text style={[styles.screenTitle, rtlText]}>
-              {__("storeDetailsTexts.title", appSettings.lng)}
+              {t("storeDetailsTexts.title")}
             </Text>
             {/* Back Button */}
             <TouchableOpacity
@@ -1234,7 +1287,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   }}
                 >
                   <Text style={[styles.callText, rtlText]}>
-                    {__("storeDetailsTexts.callPrompt", appSettings.lng)}
+                    {t("storeDetailsTexts.callPrompt")}
                   </Text>
                   <TouchableOpacity
                     onPress={() => handleCall(storeData.phone)}
@@ -1251,7 +1304,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   </TouchableOpacity>
                   {/* {ios && (
                     <AppTextButton
-                      title={__(
+                      title={t(
                         "storeDetailsTexts.cancelButtonTitle",
                         appSettings.lng
                       )}
@@ -1269,10 +1322,10 @@ const StoreDetailsScreen = ({ route, navigation }) => {
         <View style={styles.expiredWrap}>
           <EvilIcons name="exclamation" size={50} color={AppColors.red} />
           <Text style={[styles.expiredText, rtlText]}>
-            {__("storeDetailsTexts.storeExpired", appSettings.lng)}
+            {t("storeDetailsTexts.storeExpired")}
           </Text>
           {/* <AppButton
-            title={__("storeDetailsTexts.goBackButtonTitle", appSettings.lng)}
+            title={t("storeDetailsTexts.goBackButtonTitle")}
             onPress={handleGoBack}
             style={styles.goBackButton}
           /> */}
@@ -1314,7 +1367,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                     ]}
                     numberOfLines={1}
                   >
-                    {__("sellerContactTexts.email", appSettings.lng)}
+                    {t("sellerContactTexts.email")}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -1324,5 +1377,5 @@ const StoreDetailsScreen = ({ route, navigation }) => {
     </View>
   );
 };
-   
+
 export default StoreDetailsScreen;

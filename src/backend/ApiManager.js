@@ -23,14 +23,23 @@ axiosInstance.interceptors.response.use(
 );
 
 export const ApiManager = {
-  get: async (endpoint, params = {}) => {
+   get : async (endpoint, params = {}) => {
     try {
-      console.log('endpointendpoint------', endpoint);
-      const response = await axiosInstance.get(endpoint);
+      console.log('Requesting endpoint:', endpoint);
+  
+      // Check if there are any parameters to be sent with the request.
+      let config = {};
+      if (Object.keys(params).length > 0) {
+        config.params = params;
+      }
+  
+      // Making a GET request with optional parameters.
+      const response = await axiosInstance.get(endpoint, config);
       return response;
     } catch (error) {
-      console.log("000ali of gettt");
-      throw error;
+      console.error("Error occurred in get", endpoint);
+      console.error("Error occurred while making a GET request: ", error);
+      throw error; // Re-throw the error to be handled by the caller.
     }
   },
   post: async (endpoint, body, params = {}) => {
@@ -45,6 +54,7 @@ export const ApiManager = {
 
     } catch (error) {
       console.log('error',error);
+      console.error("Error occurred in post ", endpoint);
       throw error;
     }
   },
@@ -53,6 +63,7 @@ export const ApiManager = {
       const response = await axiosInstance.put(endpoint, body, { params });
       return response;
     } catch (error) {
+      console.error("Error occurred in put ", endpoint);
       throw error;
     }
   },
@@ -61,6 +72,8 @@ export const ApiManager = {
       const response = await axiosInstance.patch(endpoint, body, { params });
       return response;
     } catch (error) {
+      console.error("Error occurred in patch ", endpoint);
+
       throw error;
     }
   },
@@ -69,6 +82,7 @@ export const ApiManager = {
       const response = await axiosInstance.delete(endpoint, { params });
       return response;
     } catch (error) {
+      console.error("Error occurred in delete ", endpoint);
       throw error;
     }
   },

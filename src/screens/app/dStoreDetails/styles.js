@@ -283,4 +283,18 @@ const styles = StyleSheet.create({
     marginRight: 5,
     lineHeight: 20,
   },
+  text: {
+    textAlign: 'justify',
+    color: AppColors.text_gray,
+    lineHeight: 25,
+    // Add other styles as per your theme
+  },
+  showMoreButton: {
+    color: AppColors.link_color,
+    marginTop: 5,
+    // Add other styles as per your theme
+  },
 });
+
+export default styles;
+
