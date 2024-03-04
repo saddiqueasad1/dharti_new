@@ -54,7 +54,7 @@ import {
   SellUsScreen,
   TNCScreen,
   WishScreen,
-  MyStore
+  MyStoreScreen
 } from "../screens/app";
 import {
   CPFscreen,
@@ -295,7 +295,7 @@ export default function Routes() {
   };
   return (
     <NavigationContainer>
-      <Loader />
+      {/* <Loader /> */}
       <Stack.Navigator screenOptions={{ header: () => false }}>
         <Stack.Screen name={"drawr"} component={MyDrawer} />
         <Stack.Screen name={ScreenNames.LOGIN} component={LoginScreen} />
@@ -338,7 +338,7 @@ export default function Routes() {
         <Stack.Screen name={ScreenNames.PANDS} component={PrivacySafety} />
 
         <Stack.Screen name={ScreenNames.CPF} component={CPFscreen} />
-        <Stack.Screen name={ScreenNames.MYSTORE} component={MyStore} />
+        <Stack.Screen name={ScreenNames.MYSTORE} component={MyStoreScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
