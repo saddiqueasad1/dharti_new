@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     paddingBottom: width(1),
     color: AppColors.black,
   },
-  categoryview: { flexDirection: "row", alignItems: "center" },
+  categoryview: { flexDirection: "row", alignItems: "center",marginVertical:height(.2) },
   detailtext: {
     fontSize: height(1.3),
     marginLeft: width(2),
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: width(45),
-    height: height(20),
+    height: height(15),
     borderRadius: width(2),
   },
   detail: {

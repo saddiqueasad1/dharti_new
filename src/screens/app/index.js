@@ -20,6 +20,7 @@ export { default as AboutUsScreen } from "./Aboutus";
 export { default as TNCScreen } from "./T&C";
 export { default as PrivacyPolicyScreen } from "./privacypolicy";
 export { default as SellUsScreen } from "./SNTU";
-export { default as RepairSreen } from "./repairnow";
+export { default as DStoreScreen } from "./dStore";
+export { default as DStoreDetailsScreen } from "./dStoreDetails";
 export { default as AppSetting } from "./AppSetting";
 export { default as PrivacySafety } from "./privecyandSafety";

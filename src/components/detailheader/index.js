@@ -20,8 +20,10 @@ export default function DetailHeader({
 }) {
   const { t } = useTranslation();
   const list = useSelector(selectCategoryList);
-  const cat = list.find((x) => x.name == catgory);
-  const sub = cat?.subCategories.find((e) => e.name == subcatgory);
+  
+  // const cat = list.find((x) => x?.name == catgory);
+  
+  // const sub = cat?.subCategories.find((e) => e.name == subcatgory);
   return (
     <View style={styles.container}>
       <View style={styles.menuicon}>
@@ -32,7 +34,7 @@ export default function DetailHeader({
             color={AppColors.black}
           />
         </TouchableOpacity>
-        {cat && (
+        {catgory && (
           <View
             style={{
               flexDirection: "row",
@@ -43,7 +45,7 @@ export default function DetailHeader({
               width:width(75),
             }}
           >
-            <Image
+            {/* <Image
               tintColor={AppColors.primary}
               style={{
                 width: height(4),
@@ -51,7 +53,7 @@ export default function DetailHeader({
                 paddingLeft: height(3),
               }}
               source={{ uri: cat?.image }}
-            />
+            /> */}
             <View>
               <Text
                 style={{
@@ -61,9 +63,9 @@ export default function DetailHeader({
                   fontWeight: "bold",
                 }}
               >
-                {t(`category.${cat?.name}`)}
+                {catgory?.name}
               </Text>
-              {sub && (
+              {catgory && (
                 <Text
                   style={{
                     color: AppColors.primary,
@@ -71,7 +73,7 @@ export default function DetailHeader({
                     paddingHorizontal: width(4.5),
                   }}
                 >
-                  {t(`subList.${sub?.name}`)}
+                  {catgory?.slug}
                 </Text>
               )}
             </View>

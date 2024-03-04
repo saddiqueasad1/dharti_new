@@ -9,7 +9,7 @@ const Icons = {
     tnc:require('./tnc_bg.png'),
     pp:require('./pp_bg.png'),
     sellnow:require('./sellnow.png'),
-    repairnow:require('./repairnow.png'),
+    dStore:require('./repairnow.png'),
     loder:require('./newloder.gif'),
     empty:require('./empty.png'),
     emptyChat:require('./chatNotFound.png'),

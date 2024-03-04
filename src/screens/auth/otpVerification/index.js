@@ -31,6 +31,7 @@ import {
   signInWithCredential,
 } from "firebase/auth";
 import { getApp } from "firebase/app";
+import ScreenNames from "../../../routes/routes";
 
 export default function OtpVerification({ navigation, route }) {
   const { width: screenWidth } = Dimensions.get("window");
@@ -156,7 +157,6 @@ export default function OtpVerification({ navigation, route }) {
         console.log("res of ()=> finishFirebaseOTPVerification");
         console.log(res);
 
-        // if (res?.ok) {
         setOTP("");
         Alert.alert(
           "Verification Successful",
@@ -168,7 +168,6 @@ export default function OtpVerification({ navigation, route }) {
             },
           ]
         );
-        // }
       })
       .catch((err) => {
         Alert.alert(
@@ -196,10 +195,6 @@ export default function OtpVerification({ navigation, route }) {
     setOTPSent(false);
     setNumber("");
     setFormattedNumber("");
-    // navigation.navigate(routes.signUpScreen, {
-    //   verified: true,
-    //   phone: formattedNumber,
-    // });
     navigation.navigate(ScreenNames.SIGNUP, {
       verified: true,
       phone: formattedNumber,

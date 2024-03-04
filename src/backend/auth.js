@@ -30,6 +30,7 @@ const loginApi = async (data) => {
   }
 };
 const getOwneAd = async (id, getHidden = true) => {
+  return [];
   try {
     const response = await ApiManager.get(
       `auth/getUserAds/${id}/${getHidden}`

@@ -28,7 +28,6 @@ import { Card } from "../../../components";
 import { selectCurrentLanguage } from "../../../redux/slices/language";
 import styles from "./styles";
 export default function Home({}) {
-  console.log("startr from home----");
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
   useScrollToTop(scrollViewRef);
@@ -63,6 +62,7 @@ export default function Home({}) {
   const getData = useCallback(async () => {
     // dispatch(setAppLoader(true));
     try {
+      
       const data = await getDataofHomePage();
       if (data) {
         dispatch(setTopAds(data));

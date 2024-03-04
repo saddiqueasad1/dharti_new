@@ -6,7 +6,7 @@ const AppColors = {
     transparent:'transparent',
     grey:'#E5E8E8',
     greybackground:'#EFEFEF',
-    green:"#36C95C",
+    green:"#4CBB17",
     button: {
       disabled: "#F7DC6F",
       active: "#ddac17",

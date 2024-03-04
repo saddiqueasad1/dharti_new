@@ -1,15 +1,10 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-  ImageBackground,
-  Platform,
-  Pressable,
   Text,
-  TouchableOpacity,
+   TouchableOpacity,
   View,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
 import { useTranslation } from "react-i18next";
 import CheckBox from "react-native-check-box";
 import { useDispatch } from "react-redux";
@@ -29,9 +24,7 @@ import { height, width } from "../../../utills/Dimension";
 import { errorMessage, successMessage } from "../../../utills/Methods";
 import styles from "./styles";
 export default function SignUp({ navigation, route }) {
-  console.log('-----route-------');
-  console.log(route);
-  console.log(route.phone);
+  const  verifiedPhone  = route.params.phone
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [check, setCheck] = useState(false);
@@ -40,7 +33,7 @@ export default function SignUp({ navigation, route }) {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(route.phone);
+  const [phoneNumber, setPhoneNumber] = useState(verifiedPhone);
   const [whatsapp, SetWhatsapp] = useState("");
   const [viber, setViber] = useState("");
 
@@ -49,7 +42,7 @@ export default function SignUp({ navigation, route }) {
   const [userNamer, setUserNamer] = useState("");
   const [emailr, setEmailr] = useState("");
   const [passwordr, setPasswordr] = useState("");
-  const [phoneNumberr, setPhoneNumberr] = useState(route.phone);
+  const [phoneNumberr, setPhoneNumberr] = useState("");
 
   const userData = {
     firstName,
@@ -100,6 +93,8 @@ export default function SignUp({ navigation, route }) {
         successMessage(t(`flashmsg.sussessloginmsg`), t(`flashmsg.success`));
         dispatch(setAppLoader(false));
         // navigation.navigate(ScreenNames.VERIFY, { data: r?.data });
+        successMessage("Verified login now", "Success");
+        navigation.navigate(ScreenNames.LOGIN);
       } else {
         errorMessage(t(`flashmsg.signuperrormsg`), t(`flashmsg.success`));
       }
@@ -156,7 +151,15 @@ export default function SignUp({ navigation, route }) {
           secure={true}
           require={passwordr}
         />
-        <NumberInput
+          <Input
+          value={phoneNumber}
+          setvalue={setPhoneNumber}
+          title={"signup.phoneNumberTitle"}
+          placeholder={"signup.phoneNumberPlaceholder"}
+          require={false}
+          editable={false}
+        />
+        {/* <NumberInput
           value={phoneNumber}
           secure={false}
           showBtn={false}
@@ -165,19 +168,7 @@ export default function SignUp({ navigation, route }) {
           placeholder={"signup.phoneNumberPlaceholder"}
           require={phoneNumberr}
           keyboardType="phone-pad"
-        />
-        {/* <Input
-              value={whatsapp}
-              setvalue={SetWhatsapp}
-              title={"signup.whatsappTitle"}
-              placeholder={"signup.whatsappPlaceholder"}
-            />
-            <Input
-              value={viber}
-              setvalue={setViber}
-              title={"signup.viberTitle"}
-              placeholder={"signup.viberPlaceholder"}
-            /> */}
+        /> */}
         <View style={styles.checkview}>
           <CheckBox
             checkedImage={
