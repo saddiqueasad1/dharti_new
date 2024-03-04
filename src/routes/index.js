@@ -143,53 +143,46 @@ export default function Routes() {
   };
   const login = async (data) => {
     try {
-      const response = await loginApi(data);
-      if (response?.data) {
-        await fetchRoomsData(response?.data?.userDetails?._id);
-        const userAd = await getOwneAd(response?.data?.userDetails?._id);
-        setUser(response?.data?.userDetails);
-        dispatch(setUserMeta(response?.data?.userDetails));
-        dispatch(setToken(response?.data?.token));
+      const APIData = { username: data.email, password: data.password };
+  
+      const response = await loginApi(APIData);
+      
+      if (response?.jwt_token) {
+        const userDetails = response.user;
+        await fetchRoomsData(userDetails.id);
+        const userAd = await getOwneAd(userDetails.id);
+        setUser(userDetails);
+        dispatch(setUserMeta(userDetails));
+        dispatch(setToken(response.jwt_token));
         dispatch(setUserAds(userAd));
-        dispatch(setAdsFav(response?.data?.userDetails?.favAdIds));
-      } else if (response?.data?.success == false && isConnected) {
+        dispatch(setAdsFav(userDetails.favAdIds));
+        dispatch(setIsLoggedIn(true));
+      } else if (response?.success === false && isConnected) {
         dispatch(setIsLoggedIn(false));
         dispatch(setUserMeta(null));
         dispatch(setUserAds(null));
         dispatch(setAdsFav([]));
         await setAuthData(null),
-          Alert.alert(t("flashmsg.alert"), t("flashmsg.reloginMsg"), [
-            { text: "OK", onPress: () => {} },
-          ]);
-      } else if (response?.success == false) {
-        dispatch(setIsLoggedIn(false));
-        dispatch(setUserMeta(null));
-        dispatch(setUserAds(null));
-        dispatch(setAdsFav([]));
-        await setAuthData(null),
-          Alert.alert(t("flashmsg.alert"), t("flashmsg.reloginMsg"), [
-            { text: "OK", onPress: () => {} },
-          ]);
+        Alert.alert(t("flashmsg.alert"), t("flashmsg.reloginMsg"), [
+          { text: "OK", onPress: () => {} },
+        ]);
       } else {
         let userData = await getAuthAllData();
         if (userData) {
           dispatch(setIsLoggedIn(true));
           dispatch(setUserMeta(userData));
-
-          await fetchRoomsData(userData?._id);
-          const userAd = await getOwneAd(userData?._id);
+          await fetchRoomsData(userData.id);
+          const userAd = await getOwneAd(userData.id);
           setUser(userData);
           dispatch(setUserAds(userAd));
-          dispatch(setAdsFav(userData?.favAdIds));
+          dispatch(setAdsFav(userData.favAdIds));
         }
-        // Alert.alert(t("flashmsg.alert"), t("Check the Internet connection"), [
-        //   { text: "OK", onPress: () => {} },
-        // ]);
+        // Handle other cases if needed
       }
     } catch (error) {
       dispatch(setAppLoader(false));
     }
-  };
+  };  
 
   const fetchData = useCallback(async (data, id) => {
     const search =
