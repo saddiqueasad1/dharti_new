@@ -290,7 +290,7 @@ export default function Routes() {
   };
   return (
     <NavigationContainer>
-      {/* <Loader /> */}
+      <Loader />
       <Stack.Navigator screenOptions={{ header: () => false }}>
         <Stack.Screen name={"drawr"} component={MyDrawer} />
         <Stack.Screen name={ScreenNames.LOGIN} component={LoginScreen} />
