@@ -59,7 +59,6 @@ export const ApiManager = {
     console.log("axiosInstance: " ,axiosInstance);
     try {
       const response = await axiosInstance.post(endpoint, body);
-      console.log('responseresponse',response);
       return response;
 
     } catch (error) {

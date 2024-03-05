@@ -146,6 +146,8 @@ export default function Routes() {
       const APIData = { username: data.email, password: data.password };
   
       const response = await loginApi(APIData);
+      console.log("watimggggg...");
+      console.log(response);
       
       if (response?.jwt_token) {
         const userDetails = response.user;
@@ -288,7 +290,7 @@ export default function Routes() {
   };
   return (
     <NavigationContainer>
-      {/* <Loader /> */}
+      <Loader />
       <Stack.Navigator screenOptions={{ header: () => false }}>
         <Stack.Screen name={"drawr"} component={MyDrawer} />
         <Stack.Screen name={ScreenNames.LOGIN} component={LoginScreen} />
