@@ -44,9 +44,6 @@ export default function MyCard({ data }) {
   const hideMenu = () => setModalVisible(false);
 
   const showMenu = () => setModalVisible(true);
-  useEffect(() => {
-    setPublish(data?.visibility);
-  });
 
   const parsePrice = (price) => {
     return parseInt(price.replace(/,/g, ''), 10);
@@ -65,7 +62,7 @@ export default function MyCard({ data }) {
   const refreshAd = async () => {
     dispatch(setAppLoader(true));
     try {
-      const d = await refreshApi(data?._id);
+      const d = await refreshApi(data?.listing_id);
       if (d?.success) {
         await getData(userid);
         successMessage(t("flashmsg.Ad Refresh"), t("flashmsg.success"));
@@ -80,7 +77,7 @@ export default function MyCard({ data }) {
     }
   };
   const publishAd = async () => {
-    let r = await togglePublish(data._id);
+    let r = await togglePublish(data.listing_id);
     dispatch(setAppLoader(true));
     try {
       await getData(userid);
@@ -226,7 +223,7 @@ export default function MyCard({ data }) {
             <AntDesign name="play" size={height(2)} />
             <Text style={{ fontSize: height(1.5), color: AppColors.black }}>
               {"  "}
-              {t("myad.republish")}
+              {t("myad.promote")} 
             </Text>
           </MenuItem>
         )}
@@ -242,6 +239,20 @@ export default function MyCard({ data }) {
           <Text style={{ color: AppColors.primary, fontSize: height(1.5) }}>
             {"   "}
             {t("myad.delete")}
+          </Text>
+        </MenuItem>
+        <MenuItem
+          onPress={() => {
+            hideMenu(),
+              setTimeout(() => {
+                setVisible(true);
+              }, 600);
+          }}
+        >
+          <AntDesign name="file-markdown" size={height(2)} />
+          <Text style={{ fontSize: height(1.5), color: AppColors.black }}>
+            {"   "}
+            {t("myad.marksold")}
           </Text>
         </MenuItem>
       </Menu>
@@ -292,7 +303,7 @@ export default function MyCard({ data }) {
             color={"red"}
             label={t("myad.delete")}
             onPress={() => {
-              deleteAd(data._id);
+              deleteAd(data.listing_id);
               setVisible(false);
             }}
           />
