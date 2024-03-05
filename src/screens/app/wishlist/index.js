@@ -16,11 +16,12 @@ import {
   setAdsFav,
 } from "../../../redux/slices/user";
 import { MaterialIcons } from "@expo/vector-icons";
+import { successMessage } from "../../../utills/Methods";
 
 import ScreenNames from "../../../routes/routes";
 import AppColors from "../../../utills/AppColors";
 //import { data } from "../../../utills/Data";
-import { getFavAds } from "../../../backend/auth";
+import { getFavAds, removeFavAds } from "../../../backend/auth";
 import { height, width } from "../../../utills/Dimension";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
@@ -63,8 +64,10 @@ export default function WishList({ navigation, route }) {
     try {
       setLoader(true);
       ApiManager.setAuthToken(auth_token);
-      let res = await getFavAds(data);
+      let res = await removeFavAds(listing.listing_id);
+      setData(data.filter((fav) => fav != listing));
       setLoader(false);
+      successMessage("", "Successfully removed");
     } catch (error) {
     } finally {
       setLoader(false);
@@ -77,11 +80,11 @@ export default function WishList({ navigation, route }) {
       t("commmon.removePromptMessage"),
       [
         {
-          text: t("commmon.removeButtonTitle"),
+          text: t("storeDetailsTexts.cancelButtonTitle"),
           style: "cancel",
         },
         {
-          text: t("commmon.cancelButtonTitle"),
+          text: t("commmon.removeButtonTitle"), 
           onPress: () => handleRemoveFromFavorites(listing),
         },
       ],
@@ -141,7 +144,7 @@ export default function WishList({ navigation, route }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.iconButton}
-                  onPress={handleRemoveFavAlert}
+                  onPress={()=>handleRemoveFavAlert(item)}
                 >
                   <View style={styles.dltIconWrap}>
                     <DeleteIcon fillColor={AppColors.black} />

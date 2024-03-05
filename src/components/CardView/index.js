@@ -60,7 +60,6 @@ export default function CardView({ data }) {
       }
     }
   };
-  console.log(data);
   return (
     <View style={styles.main}>
       <TouchableOpacity
