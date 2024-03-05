@@ -26,8 +26,9 @@ const styles = StyleSheet.create({
     height: height(18),
   },
   image: {
-    flex: 1,
     borderRadius: width(2),
+    width: width(40),
+    height: height(18),
   },
   detail: {
     width: width(28),

@@ -39,14 +39,15 @@ export default function MyCard({ data }) {
     if (d) dispatch(setUserAds(d));
     else dispatch(setUserAds([]));
   });
-  const [publish, setPublish] = useState(data?.visibility);
+  const [publish, setPublish] = useState(data?.status === 'publish');
   const [isModalVisible, setModalVisible] = useState(false);
   const hideMenu = () => setModalVisible(false);
 
   const showMenu = () => setModalVisible(true);
-  useEffect(() => {
-    setPublish(data?.visibility);
-  });
+
+  const parsePrice = (price) => {
+    return parseInt(price.replace(/,/g, ''), 10);
+  };
   const deleteAd = async (id) => {
     dispatch(setAppLoader(true));
     try {
@@ -61,7 +62,7 @@ export default function MyCard({ data }) {
   const refreshAd = async () => {
     dispatch(setAppLoader(true));
     try {
-      const d = await refreshApi(data?._id);
+      const d = await refreshApi(data?.listing_id);
       if (d?.success) {
         await getData(userid);
         successMessage(t("flashmsg.Ad Refresh"), t("flashmsg.success"));
@@ -76,7 +77,7 @@ export default function MyCard({ data }) {
     }
   };
   const publishAd = async () => {
-    let r = await togglePublish(data._id);
+    let r = await togglePublish(data.listing_id);
     dispatch(setAppLoader(true));
     try {
       await getData(userid);
@@ -92,7 +93,7 @@ export default function MyCard({ data }) {
         <Image
           resizeMode="cover"
           style={styles.image}
-          source={{ uri: data?.images[0] }}
+          source={data?.images[0]?.src ? { uri: data.images[0]?.src  } : require("../../asset/images/200X150.png")}
         />
       </View>
       <View style={styles.detail}>
@@ -103,14 +104,17 @@ export default function MyCard({ data }) {
           <View style={styles.categoryview}>
             <AntDesign name="clockcircleo" color={"grey"} size={height(2)} />
             <Text numberOfLines={1} style={styles.textcategory}>
-              {GlobalMethods.calculateTimeDifference(data?.createdAt, language)}
+              {GlobalMethods.calculateTimeDifference(
+                data?.created_at,
+                language
+              )}
             </Text>
           </View>
 
           <View style={styles.categoryview}>
             <AntDesign name="eye" color={"grey"} size={height(2)} />
             <Text numberOfLines={2} style={styles.textcategory}>
-              {data?.views}
+              {data?.view_count}
             </Text>
           </View>
         </View>
@@ -127,7 +131,7 @@ export default function MyCard({ data }) {
             {checkPrice(data?.price) ? (
               <View style={{ width: width(50) }}>
                 <Text numberOfLines={1} style={styles.chf}>
-                  CHF {formatPrice(data?.price)}
+                  CHF {formatPrice(parsePrice(data?.price))}
                 </Text>
                 <Text numberOfLines={1} style={styles.eur}>
                   EUR {formatPriceE(Math.round(data?.price * 1.06))}
@@ -219,7 +223,7 @@ export default function MyCard({ data }) {
             <AntDesign name="play" size={height(2)} />
             <Text style={{ fontSize: height(1.5), color: AppColors.black }}>
               {"  "}
-              {t("myad.republish")}
+              {t("myad.promote")} 
             </Text>
           </MenuItem>
         )}
@@ -235,6 +239,20 @@ export default function MyCard({ data }) {
           <Text style={{ color: AppColors.primary, fontSize: height(1.5) }}>
             {"   "}
             {t("myad.delete")}
+          </Text>
+        </MenuItem>
+        <MenuItem
+          onPress={() => {
+            hideMenu(),
+              setTimeout(() => {
+                setVisible(true);
+              }, 600);
+          }}
+        >
+          <AntDesign name="file-markdown" size={height(2)} />
+          <Text style={{ fontSize: height(1.5), color: AppColors.black }}>
+            {"   "}
+            {t("myad.marksold")}
           </Text>
         </MenuItem>
       </Menu>
@@ -285,7 +303,7 @@ export default function MyCard({ data }) {
             color={"red"}
             label={t("myad.delete")}
             onPress={() => {
-              deleteAd(data._id);
+              deleteAd(data.listing_id);
               setVisible(false);
             }}
           />

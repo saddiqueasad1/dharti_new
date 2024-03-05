@@ -26,12 +26,9 @@ const loginApi = async (data) => {
     return false;
   }
 };
-const getOwneAd = async (id, getHidden = true) => {
-  return [];
+const getOwneAd = async (arg) => {
   try {
-    const response = await ApiManager.get(
-      `auth/getUserAds/${id}/${getHidden}`
-    );
+    const response = await ApiManager.get("my/listings", arg);
     return response?.data;
   } catch (error) {
     return []; // or some default value as needed

@@ -149,11 +149,9 @@ export default function Routes() {
       if (response?.jwt_token) {
         const userDetails = response.user;
         await fetchRoomsData(userDetails.id);
-        const userAd = await getOwneAd(userDetails.id);
         setUser(userDetails);
         dispatch(setUserMeta(userDetails));
         dispatch(setToken(response.jwt_token));
-        dispatch(setUserAds(userAd));
         dispatch(setAdsFav(userDetails.favAdIds));
         dispatch(setIsLoggedIn(true));
       } else if (response?.success === false && isConnected) {
