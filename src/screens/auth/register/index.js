@@ -79,10 +79,8 @@ export default function SignUp({ navigation, route }) {
 
       dispatch(setAppLoader(true));
       let r = await signupApi(data_);
-      console.log("singup es");
 
-
-      if (res?.data?.verification_mail) {
+      if (r?.verification_mail) {
         alert("An email is sent to your mail address with a verification link. Please verify your email address before logging in.");
       }
       console.log(r);
