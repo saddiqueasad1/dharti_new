@@ -188,12 +188,10 @@ const MyStoreScreen = ({ navigation, route }) => {
   }, []);
 
   const getStore = () => {
-    console.log("()=> getStore : ", auth_token);
+    console.log("()=> getStore : ");
     ApiManager.setAuthToken(auth_token);
     try {
       ApiManager.get("my/store").then((res) => {
-        console.log("res---");
-        console.log(res);
         if (res) {
           if (res) {
             setStoreData(res);
@@ -210,6 +208,7 @@ const MyStoreScreen = ({ navigation, route }) => {
           }
           setLoading(false);
           ApiManager.removeAuthToken();
+             setUserHasNoStore(false);
         } else {
           if (res.status === 400) {
             setUserHasNoStore(true);
@@ -227,14 +226,9 @@ const MyStoreScreen = ({ navigation, route }) => {
         }
       });
     } catch (error) {
-      console.log("error?.code");
-      console.log(error?.code);
       setUserHasNoStore(true);
     } finally {
-      console.log("finally");
-      console.log(storeData);
       if (storeData === "" || storeData === undefined) {
-        console.log("set this");
         setUserHasNoStore(true);
       }
       setLoading(false);
@@ -508,17 +502,19 @@ const MyStoreScreen = ({ navigation, route }) => {
     }
   };
   const updateImage = (formData, arg) => {
+    console.log('() => updateImage');
     ApiManager.post(`my/store/${arg}`, formData).then((res) => {
-      if (res.ok) {
+        console.log(res);
+      if (res) {
         ApiManager.removeAuthToken();
         ApiManager.removeMultipartHeader();
         if (arg === "logo") {
-          setStoreLogo(res.data);
+          setStoreLogo(res);
           setLogoLoading((prevLogoLoading) => !prevLogoLoading);
           handleSuccess(t("myStoreTexts.successNotifications.logo"));
         }
         if (arg === "banner") {
-          setStoreBanner(res.data);
+          setStoreBanner(res);
           setBannerLoading((prevBannerLoading) => !prevBannerLoading);
           handleSuccess(t("myStoreTexts.successNotifications.banner"));
         }
@@ -532,8 +528,8 @@ const MyStoreScreen = ({ navigation, route }) => {
           setBannerLoading(false);
         }
         handleError(
-          res?.data?.error_message ||
-            res?.data?.error ||
+          res?.error_message ||
+            res?.error ||
             res?.problem ||
             t("myStoreTexts.errorNotification")
         );
@@ -570,6 +566,7 @@ const MyStoreScreen = ({ navigation, route }) => {
   };
 
   const handleUpdate = (values) => {
+    console.log("()=> handleUpdate");
     setStoreUpdateLoading(true);
 
     let storeInfo = {
@@ -593,7 +590,7 @@ const MyStoreScreen = ({ navigation, route }) => {
 
     ApiManager.setAuthToken(auth_token);
     ApiManager.post("my/store", storeInfo).then((res) => {
-      if (res.ok) {
+      if (res) {
         setStoreUpdateLoading(false);
         handleSuccess(t("myStoreTexts.successNotifications.storeInfo"));
       } else {
