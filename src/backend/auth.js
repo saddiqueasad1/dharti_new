@@ -71,6 +71,16 @@ const getFavAds = async (data) => {
     return []; // or some default value as needed
   }
 };
+const removeFavAds = async (listing_id) => {
+  try {
+    const response = await ApiManager.post("my/favourites", {
+      listing_id: listing_id,
+    });
+    return response?.data;
+  } catch (error) {
+    return []; // or some default value as needed
+  }
+};
 const changePasswordAPI = async (id, data) => {
   try {
     const response = await ApiManager.post(`auth/change-password/${id}`, data, {
@@ -180,6 +190,7 @@ export {
   loginApi,
   getOwneAd,
   getFavAds,
+  removeFavAds,
   updateProfile,
   getUserByID,
   changePasswordAPI,
