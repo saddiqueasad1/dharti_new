@@ -7,6 +7,7 @@ import { getOwneAd } from "../../../backend/auth";
 import { MyListingView, ScreenWrapper } from "../../../components";
 import Header from "../../../components/header";
 import {
+  selectToken,
   selectUserAds,
   selectUserMeta,
   setUserAds,
@@ -15,26 +16,42 @@ import ScreenNames from "../../../routes/routes";
 import AppColors from "../../../utills/AppColors";
 import { height, width } from "../../../utills/Dimension";
 import { MaterialIcons } from "@expo/vector-icons";
-
+import { ApiManager } from "../../../backend/ApiManager";
 import styles from "./styles";
+
 export default function MyListing({ navigation, route }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const data = useSelector(selectUserAds);
   const userdata = useSelector(selectUserMeta);
   const [refreshing, setRefreshing] = useState(false);
+  const auth_token = useSelector(selectToken);
+
 
   const onRefresh = () => {
     myAdsFunction();
   };
   useFocusEffect(
     React.useCallback(() => {
-      myAdsFunction();
+      const data = {
+        per_page: 30,
+        page: 1,
+      };
+      myAdsFunction(data);
     }, [])
   );
-  const myAdsFunction = async () => {
+  const myAdsFunction = async (arg) => {
+
+    console.log('()=> myAdsFunction : ', auth_token);
+
+    ApiManager.setAuthToken(auth_token);
+
+
     setRefreshing(true);
-    const userAd = await getOwneAd(userdata?._id);
+    const userAd = await getOwneAd(arg);
+    console.log('userAd------');
+    console.log(userAd);
+    console.log(userAd[0].images[0]);
     dispatch(setUserAds(userAd));
     setRefreshing(false);
   };
