@@ -14,9 +14,6 @@ const signupApi = async (data) => {
   }
 };
 const loginApi = async (data) => {
-
-  console.log("data");
-  console.log(data);
   try {
     const response = await ApiManager.post("login", data, {
       headers: {

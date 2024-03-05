@@ -9,6 +9,7 @@ export { default as OtherProfileScreen } from "./OtherProfile";
 export { default as EditProfile } from "./editprofile";
 export { default as PasswordScreens } from "./changepassword";
 export { default as AccountScreen } from "./manageAccount";
+export { default as MyStoreScreen } from "./myStore";
 export { default as WishScreen } from "./wishlist";
 export { default as MyListingScreen } from "./MyListings";
 export { default as AddPostScreen } from "./AddPost";

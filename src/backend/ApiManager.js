@@ -1,9 +1,5 @@
 import axios from "axios";
-import { BaseUrl, Apikey } from "../../src/utills/Constants";
-
-axios.defaults.baseURL = BaseUrl;
-
-const apiRequestTimeOut = 30000; // 30 secs
+import { BaseUrl } from "../../src/utills/Constants";
 
 const axiosInstance = axios.create({
   baseURL: 'https://www.dhartipak.com/wp-json/rtcl/v1/',
@@ -21,6 +17,20 @@ axiosInstance.interceptors.response.use(
     throw error.response ? error.response.data : { error: "Something went wrong", error };
   }
 );
+
+// Set the default timeout for API requests
+const apiRequestTimeOut = 30000; // 30 secs
+
+const setAuthToken = (token) =>
+  axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + token;
+
+const removeAuthToken = () => delete axiosInstance.defaults.headers.common["Authorization"];
+
+const setMultipartHeader = () =>
+  axiosInstance.defaults.headers.common["Content-Type"] = "multipart/form-data";
+
+const removeMultipartHeader = () => delete axiosInstance.defaults.headers.common["Content-Type"];
+
 
 export const ApiManager = {
    get : async (endpoint, params = {}) => {
@@ -49,7 +59,6 @@ export const ApiManager = {
     console.log("axiosInstance: " ,axiosInstance);
     try {
       const response = await axiosInstance.post(endpoint, body);
-      console.log('responseresponse',response);
       return response;
 
     } catch (error) {
@@ -86,4 +95,8 @@ export const ApiManager = {
       throw error;
     }
   },
+  setAuthToken,
+  removeAuthToken,
+  setMultipartHeader,
+  removeMultipartHeader
 };

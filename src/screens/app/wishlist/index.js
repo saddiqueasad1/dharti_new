@@ -8,6 +8,8 @@ import {
   selectUserMeta,
   setAdsFav,
 } from "../../../redux/slices/user";
+import { MaterialIcons } from "@expo/vector-icons";
+
 import ScreenNames from "../../../routes/routes";
 import AppColors from "../../../utills/AppColors";
 //import { data } from "../../../utills/Data";
@@ -54,12 +56,23 @@ export default function WishList({ navigation, route }) {
             loader ? (
               <ActivityIndicator color={AppColors.primary} size={"large"} />
             ) : (
-              <View>
+              <View   style={{
+                alignContent: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                height: height(80),
+              }}
+            >
+              <MaterialIcons
+                name="favorite-border"
+                size={width(60)}
+                color={AppColors.bgIcon}
+              />
                 <Text
                   style={{
                     fontWeight: "bold",
                     fontSize: height(2),
-                    paddingTop: height(40),
+                  
                   }}
                 >
                   {t("commmon.nothingtoshow")}

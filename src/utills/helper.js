@@ -50,4 +50,17 @@ const decodeString = (string) => {
   return decode(string);
 };
 
-export { decodeString, getCurrencySymbol, getPrice };
+const getWeek = () => {
+  let data = {
+    0: "Sunday",
+    1: "Monday",
+    2: "Tuesday",
+    3: "Wednesday",
+    4: "Thursday",
+    5: "Friday",
+    6: "Saturday"
+  };
+  return eval(data);
+};
+
+export { decodeString, getCurrencySymbol, getPrice, getWeek };
