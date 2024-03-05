@@ -1,10 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Head, ScreenWrapper } from "../../../components";
 import CardView from "../../../components/CardView";
 import {
   selectFavAds,
+  selectToken,
   selectUserMeta,
   setAdsFav,
 } from "../../../redux/slices/user";
@@ -17,23 +24,31 @@ import { getFavAds } from "../../../backend/auth";
 import { height, width } from "../../../utills/Dimension";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
+import { ApiManager } from "../../../backend/ApiManager";
+import DeleteIcon from "../../../asset/svgComponents/DeleteIcon";
+
 export default function WishList({ navigation, route }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const userInfo = useSelector(selectUserMeta);
   const userFav = useSelector(selectFavAds);
   const id = userInfo?._id;
+  const auth_token = useSelector(selectToken);
 
   const [data, setData] = useState([]);
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    getData(id);
+    const data = {
+      per_page: 30,
+      page: 1,
+    };
+    getData(data);
   }, [userFav?.length]);
-  const getData = useCallback(async (id) => {
+  const getData = useCallback(async (data) => {
     setLoader(true);
-    let d = await getFavAds(id);
-
+    ApiManager.setAuthToken(auth_token);
+    let d = await getFavAds(data);
     if (d) {
       let all = d.map((item) => {
         return item._id;
@@ -43,6 +58,37 @@ export default function WishList({ navigation, route }) {
     } else setData([]);
     setLoader(false);
   }, []);
+
+  const handleRemoveFromFavorites = async (listing) => {
+    try {
+      setLoader(true);
+      ApiManager.setAuthToken(auth_token);
+      let res = await getFavAds(data);
+      setLoader(false);
+    } catch (error) {
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const handleRemoveFavAlert = (listing) => {
+    Alert.alert(
+      "",
+      t("commmon.removePromptMessage"),
+      [
+        {
+          text: t("commmon.removeButtonTitle"),
+          style: "cancel",
+        },
+        {
+          text: t("commmon.cancelButtonTitle"),
+          onPress: () => handleRemoveFromFavorites(listing),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <ScreenWrapper
       headerUnScrollable={() => (
@@ -56,23 +102,23 @@ export default function WishList({ navigation, route }) {
             loader ? (
               <ActivityIndicator color={AppColors.primary} size={"large"} />
             ) : (
-              <View   style={{
-                alignContent: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                height: height(80),
-              }}
-            >
-              <MaterialIcons
-                name="favorite-border"
-                size={width(60)}
-                color={AppColors.bgIcon}
-              />
+              <View
+                style={{
+                  alignContent: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: height(80),
+                }}
+              >
+                <MaterialIcons
+                  name="favorite-border"
+                  size={width(60)}
+                  color={AppColors.bgIcon}
+                />
                 <Text
                   style={{
                     fontWeight: "bold",
                     fontSize: height(2),
-                  
                   }}
                 >
                   {t("commmon.nothingtoshow")}
@@ -81,17 +127,27 @@ export default function WishList({ navigation, route }) {
             )
           ) : (
             data.map((item, index) => (
-              <TouchableOpacity
-                disabled={!item?.visibility}
-                activeOpacity={0.7}
-                onPress={() => {
-                  navigation.navigate(ScreenNames.DETAIL, item);
-                }}
-                key={index}
-                style={{ width: width(100), alignItems: "center" }}
-              >
-                <CardView data={item} />
-              </TouchableOpacity>
+              <View>
+                <TouchableOpacity
+                  disabled={!item?.visibility}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    navigation.navigate(ScreenNames.DETAIL, item);
+                  }}
+                  key={index}
+                  style={{ width: width(100), alignItems: "center" }}
+                >
+                  <CardView data={item} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  onPress={handleRemoveFavAlert}
+                >
+                  <View style={styles.dltIconWrap}>
+                    <DeleteIcon fillColor={AppColors.black} />
+                  </View>
+                </TouchableOpacity>
+              </View>
             ))
           )}
         </View>

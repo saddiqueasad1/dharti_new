@@ -63,12 +63,9 @@ async function updateProfile(id, formData) {
     throw error; // Re-throw the error to handle it at a higher level if necessary
   }
 }
-const getFavAds = async (id) => {
+const getFavAds = async (data) => {
   try {
-    const response = await ApiManager.get(`auth/getFavAds/${id}`);
-    // if (!response.success) {
-    //   throw new Error("Network error home APi");
-    // }
+    const response = await ApiManager.get("my/favourites", data);
     return response?.data;
   } catch (error) {
     return []; // or some default value as needed

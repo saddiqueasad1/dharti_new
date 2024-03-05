@@ -27,5 +27,20 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     width:width(90)
   },
+  iconButton: {
+    borderRadius: 3,
+    backgroundColor: AppColors.primary,
+    width: 25,
+    height: 25,
+    position: 'absolute',
+    bottom: 10,
+    right: 20,
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  dltIconWrap: {
+    width: 15,
+    height: 15,
+  },
 });
 export default styles;

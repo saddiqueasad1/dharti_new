@@ -1076,6 +1076,8 @@ export default {
     nochatMsg: "No messages",
     checkNet: "Check the Internet connection",
     cpholder: "Enter your country name",
+    removePromptMessage: "Do You want to remove this ad from your favorites?",
+    removeButtonTitle: "Remove",
   },
   Others: "Others",
   storeDetailsTexts: {
