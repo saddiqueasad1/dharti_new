@@ -1232,7 +1232,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
             <Text style={[styles.screenTitle, rtlText]}>
               {t("storeDetailsTexts.title")}
             </Text>
-            {/* Back Button */}
+            
             <TouchableOpacity
               style={styles.headerBackButton}
               onPress={() => navigation.goBack()}

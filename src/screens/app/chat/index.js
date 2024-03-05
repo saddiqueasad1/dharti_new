@@ -1,7 +1,7 @@
 import { get, getDatabase, off, onValue, ref } from "firebase/database";
 import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
-
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +18,7 @@ import {
   setChatRooms,
 } from "../../../redux/slices/user";
 import AppColors from "../../../utills/AppColors";
-import { height } from "../../../utills/Dimension";
+import { height, width } from "../../../utills/Dimension";
 import styles from "./styles";
 export default function ChatList({ navigation, route }) {
   const { t } = useTranslation();
@@ -132,7 +132,9 @@ export default function ChatList({ navigation, route }) {
 
   return (
     <ScreenWrapper
-      headerUnScrollable={() => <Header navigation={navigation} title="Chats" />}
+      headerUnScrollable={() => (
+        <Header navigation={navigation} title="Chats" />
+      )}
       refreshing={loading}
       onRefresh={promisFuntion}
       scrollEnabled
@@ -153,12 +155,23 @@ export default function ChatList({ navigation, route }) {
           )}
           keyExtractor={(item, index) => index}
           ListEmptyComponent={() => (
-            <View>
+            <View
+              style={{
+                alignContent: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                height:height(80)
+              }}
+            >
+              <Ionicons
+                name="chatbubbles-outline"
+                size={width(60)}
+                color={AppColors.bgIcon}
+              />
               <Text
                 style={{
                   fontWeight: "bold",
                   fontSize: height(2),
-                  paddingTop: height(40),
                   color: AppColors.black,
                 }}
               >

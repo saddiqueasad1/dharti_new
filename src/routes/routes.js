@@ -2,7 +2,7 @@ const ScreenNames = {
   ONBOARDING: "OnBoarding",
   LOGIN: "Login",
   SIGNUP: "Signup",
-  OTPVERIFICATIO:'OtpVerification',
+  OTPVERIFICATIO: "OtpVerification",
   HOME: "Home",
   DETAIL: "Detail",
   CATEGORY: "Category",
@@ -38,6 +38,6 @@ const ScreenNames = {
   ICATEGORY: "InerCat",
   IBIKECATEGORY: "InerSubCat",
   ISEARCH: "InerSearch",
-  'MYSTORE': 'MyStore',
+  MYSTORE: "MyStore",
 };
 export default ScreenNames;

@@ -132,6 +132,7 @@ export default function Home({}) {
         <View style={{ salignItems: "center" }}>
           {data?.length === 0 ? (
             <View style={styles.notfoundview}>
+                 <Ionicons name="reload-circle-outline" size={width(60)} color={AppColors.bgIcon}/>
               <Text
                 style={{
                   fontWeight: "bold",
@@ -140,10 +141,12 @@ export default function Home({}) {
               >
                 {t("commmon.nothingtoshow")}
               </Text>
-              <Image
+              {/* <Image
                 source={Icons.empty}
+                tintColor={AppColors.primary}
                 style={{ height: width(60), width: width(60) }}
-              />
+              /> */}
+           
             </View>
           ) : (
             data.map((item, index) => (
