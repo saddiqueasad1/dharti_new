@@ -10,16 +10,17 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
-  },
-  "submit": {
-    "production": {
-      "ios":{
-        "appleId":"Dharti@gmail.com",
-        "ascAppId":"6475070488",
-        "appleTeamId":"64Z736VMNC"
-
+    "production": {},
+    "test": {
+      "ios": {
+        "simulator": true
+      },
+      "android": {
+        "buildType": "apk"
       }
     }
+  },
+  "submit": {
+    "production": {}
   }
 }
