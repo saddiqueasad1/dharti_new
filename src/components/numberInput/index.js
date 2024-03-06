@@ -50,7 +50,7 @@ export default function NumberInput({
               }}
               onChangeFormattedText={(text) => {
                 showBtn && setChangeValue(text);
-                !showBtn && setvalue(text);
+                showBtn && setvalue(text);
               }}
               placeholder={"XX XXX XX XX"}
               filterProps={{ placeholder: t("commmon.cpholder") }}

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 
@@ -14,49 +14,79 @@ import {
 } from "../../../components";
 
 import { useTranslation } from "react-i18next";
-import { updateProfile } from "../../../backend/auth";
+import { updateProfile, uploadImage } from "../../../backend/auth";
 import { setAppLoader } from "../../../redux/slices/config";
-import { selectUserMeta, setUserMeta } from "../../../redux/slices/user";
+import { selectToken, selectUserMeta, setUserMeta } from "../../../redux/slices/user";
 import AppColors from "../../../utills/AppColors";
 import { height, width } from "../../../utills/Dimension";
 import { errorMessage } from "../../../utills/Methods";
+import { ApiManager } from "../../../backend/ApiManager";
 
 export default function EditProfile({ navigation, route }) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const userdata = useSelector(selectUserMeta);
   const imageRef = useRef(null);
-  const [image, setImage] = React.useState([userdata?.image]);
-  const [firstName, setFirstName] = React.useState(userdata?.firstName || null);
-  const [lastName, setLastName] = React.useState(userdata?.lastName || null);
+  const [image, setImage] = React.useState([userdata?.pp_thumb_url]);
+  const [firstName, setFirstName] = React.useState(userdata?.first_name || null);
+  const [lastName, setLastName] = React.useState(userdata?.last_name || null);
 
-  const [userName, setUserName] = React.useState(userdata?.userName || null);
   const [email, setEmail] = React.useState(userdata?.email || null);
-  const [whatsapp, setWhatsapp] = React.useState(userdata?.whatsapp || "");
-  const [viber, setViber] = React.useState(userdata?.viber || "");
-  const [whatsappChannel, setWhatsappChannel] = React.useState(
-    userdata?.whatsappChannel || ""
+  const [whatsapp, setWhatsapp] = React.useState(userdata?.whatsapp_number || "");
+  const [website, setwebsite] = React.useState(userdata?.website || "");
+  const [address, setAddress] = React.useState(userdata?.address || "");
+  const [zipCode, setZipCode] = React.useState(
+    userdata?.zipcode || ""
   );
   const [phoneNumber, setPhoneNumber] = React.useState(
-    userdata?.phoneNumber || null
+    userdata?.phone || null
   );
+  const auth_token = useSelector(selectToken);
+
+
+
+  const updateImage = async (result) => {
+    try {
+      ApiManager.setAuthToken(auth_token);
+      ApiManager.setMultipartHeader();
+
+      let localUri = result.uri;
+      let filename = localUri.split("/").pop();
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      const image = {
+        uri: localUri,
+        name: filename,
+        type,
+      };
+      // Upload the image using the fetch and FormData APIs
+      let formData = new FormData();
+      // Assume "photo" is the name of the form field the server expects
+      formData.append("image", image);
+      let response = await uploadImage(formData);
+    } catch (error) {
+      console.error("error :", error);
+    }
+  };
+
+  
   const update = async () => {
     try {
+      ApiManager.setAuthToken(auth_token);
       dispatch(setAppLoader(true));
-      const formData = new FormData();
-      formData.append("firstName", firstName);
-      formData.append("lastName", lastName);
-      formData.append("phoneNumber", phoneNumber);
-      formData.append("viber", viber);
-      formData.append("whatsapp", whatsapp);
-      formData.append("whatsappChannel", whatsappChannel);
-      formData.append("file", {
-        name: `image`,
-        type: "image/jpeg", // Adjust the type if needed
-        uri: image[0],
-      });
+      const value = {
+        first_name: firstName || "",
+        last_name: lastName || "",
+        pass1: "",
+        pass2: "",
+        phone: phoneNumber || "",
+        whatsapp_number: whatsapp || "",
+        website: website || "",
+        zipcode: zipCode || "",
+        address: address || "",
+      };
 
-      let d = await updateProfile(userdata?._id, formData);
+      let d = await updateProfile(value);
       if (d) {
         dispatch(setUserMeta(d)), navigation.goBack();
       } else {
@@ -64,7 +94,7 @@ export default function EditProfile({ navigation, route }) {
       }
       dispatch(setAppLoader(false));
     } catch (error) {
-      console.error("update", error);
+      errorMessage(t(`flashmsg.profileupdateerrormsg`), t(`flashmsg.error`));
       dispatch(setAppLoader(false));
     }
   };
@@ -152,6 +182,8 @@ export default function EditProfile({ navigation, route }) {
             value={phoneNumber}
             setvalue={setPhoneNumber}
             keyboardType="phone-pad"
+            editable={false}
+            showBtn={false}
           />
           <NumberInput
             title={"WhatsApp"}
@@ -159,19 +191,24 @@ export default function EditProfile({ navigation, route }) {
             setvalue={setWhatsapp}
             keyboardType="phone-pad"
           />
-          <Input
-            title={"WhatsApp Channel"}
+           <Input
+            title={"Website"}
             placeholder={"whatsapp.com/channel/xxxxx"}
-            value={whatsappChannel}
-            setvalue={setWhatsappChannel}
+            value={website}
+            setvalue={setwebsite}
           />
-          <NumberInput
-            title={"editprofile.viberTitle"}
-            value={viber}
-            setvalue={setViber}
-            keyboardType="phone-pad"
+          <Input
+            title={"Zip code"}
+            placeholder={'Zip code'}
+            value={zipCode}
+            setvalue={setZipCode}
           />
-
+          <Input
+            title={"Address"}
+            placeholder={"Address"}
+            value={address}
+            setvalue={setAddress}
+          />
           <Button
             containerStyle={styles.button}
             onPress={update}
@@ -189,6 +226,7 @@ export default function EditProfile({ navigation, route }) {
             //}
           });
           setImage(selectedImages);
+          updateImage(img[0]);
         }}
       />
     </ScreenWrapper>
