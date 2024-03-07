@@ -1761,8 +1761,8 @@ export default function AddPost({ navigation, route }) {
               }}
               query={{
                 key: Apikey,
-                language: "de",
-                components: "country:ch",
+                language: "en",
+            
               }}
               currentLocationLabel="Current location"
               nearbyPlacesAPI="GooglePlacesSearch"

@@ -299,7 +299,7 @@ export default function Detail({ navigation, route }) {
               </Text>
 
               {/*--------Vehicle brand------*/}
-              {data?.custom_fields?.map((e) => (
+              {data?.custom_fields?.map((e) =>e?.value&& (
                 <View style={styles.cardrow}>
                   <Text style={styles.cardelement}>{e?.label}</Text>
                   <Text style={styles.cardelement2}>{e?.value}</Text>
@@ -327,9 +327,9 @@ export default function Detail({ navigation, route }) {
             <Pressable
               onPress={() => {
                 if (islogin) {
-                  // navigation.navigate(ScreenNames.OTHERPROFILE, {
-                  //   user: data?.userId,
-                  // });
+                  data?.store?.id&& navigation.navigate(ScreenNames.DStoreDetailsScreen, {
+                    storeId: data?.store?.id,
+                  });
                 } else {
                   infoMessage(
                     t(`flashmsg.loginView`),

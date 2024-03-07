@@ -230,17 +230,10 @@ export default function OtpVerification({ navigation, route }) {
 
   return (
     <ScreenWrapper
-      statusBarColor={AppColors.primary}
-      barStyle="light-content"
       scrollEnabled
-      headerUnScrollable={() => <Head navigation={navigation} />}
+      headerUnScrollable={() => <Head navigation={navigation} headtitle={'Otp Verification'} />}
     >
       <View style={styles.mainViewContainer}>
-        <ImageBackground source={Icons.bglogo} style={styles.bg}>
-          <View style={styles.imageiner}>
-            <Text style={styles.logintext}>Otp Verification</Text>
-          </View>
-        </ImageBackground>
         <View style={{ height: height(70), paddingTop: width(10) }}>
           <View style={styles.container}>
             <Animated.View

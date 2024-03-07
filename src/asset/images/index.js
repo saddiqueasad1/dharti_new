@@ -1,11 +1,11 @@
 const Icons = {
     accountbg:require('./account_bg.png'),
-    tnc:require('./tnc_bg.png'),
-    pp:require('./pp_bg.png'),
-    sellnow:require('./sellnow.png'),
-    loder:require('./newloder.gif'),
-    empty:require('./empty.png'),
+    tnc:require('./pp_bg.png'),
     bglogo:require('./product_info_icon.png'),
-    iconLogo:require('./icon.jpeg')
+    iconLogo:require('./icon.jpeg'),
+    htsf1:require('./clear-descripion.png'),
+    htsf2:require('./pick-the-right-price.png'),
+    htsf3:require('./use-great-photo.png')
+
   };
   export default Icons
