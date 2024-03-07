@@ -15,10 +15,16 @@ import Modal from "react-native-modal";
 import Swiper from "react-native-swiper";
 import { useDispatch, useSelector } from "react-redux";
 import { adView, getDataofAdByID, toggleFavorite } from "../../../backend/api";
-import { DetailFooter, DetailHeader, RelatedAd, ScreenWrapper } from "../../../components";
+import {
+  DetailFooter,
+  DetailHeader,
+  RelatedAd,
+  ScreenWrapper,
+} from "../../../components";
 import {
   selectFavAds,
   selectIsLoggedIn,
+  selectToken,
   selectUserMeta,
   setAdsFav,
 } from "../../../redux/slices/user";
@@ -36,9 +42,11 @@ import GlobalMethods, {
 } from "../../../utills/Methods";
 import styles from "./styles";
 import { formatDistanceToNow } from "date-fns";
+import { ApiManager } from "../../../backend/ApiManager";
 export default function Detail({ navigation, route }) {
   const { t } = useTranslation();
   const dat = route?.params;
+  const token = useSelector(selectToken);
   const loginuser = useSelector(selectUserMeta);
   const islogin = useSelector(selectIsLoggedIn);
   const mapRef = useRef(null);
@@ -48,6 +56,7 @@ export default function Detail({ navigation, route }) {
   const [fav, setFav] = useState(false);
   const [img, setimg] = useState([]);
   const [load, setload] = useState(false);
+  const [fload, setfload] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -72,11 +81,15 @@ export default function Detail({ navigation, route }) {
     if (!loginuser) {
       infoMessage(t(`flashmsg.loginfavorite`), t(`flashmsg.authentication`));
     } else {
-      let fav = await toggleFavorite(data?.listing_id, loginuser?.listing_id);
+      setfload(true);
+      ApiManager.setAuthToken(token);
+      let fav = await toggleFavorite(data?.listing_id);
       if (isInArray(data.listing_id, fav)) {
         setFav(true);
+        setfload(false);
       } else {
         setFav(false);
+        setfload(false);
       }
       dispatch(setAdsFav(fav));
     }
@@ -87,6 +100,7 @@ export default function Detail({ navigation, route }) {
   const getData = async () => {
     try {
       setload(true);
+
       let d = await getDataofAdByID(dat?.listing_id);
       // setload(false);
       console.log("here");
@@ -108,7 +122,6 @@ export default function Detail({ navigation, route }) {
 
     // dispatch(setAppLoader(false));
   };
-  console.log("inner data", data?.contact?.locations);
   return (
     <ScreenWrapper
       showStatusBar={false}
@@ -169,40 +182,42 @@ export default function Detail({ navigation, route }) {
       ) : (
         <View style={styles.mainViewContainer}>
           {/*------Images-------*/}
-         {img&& <View style={styles.imageview}>
-            <Swiper
-              style={{ height: height(30) }}
-              activeDotColor={AppColors.primary}
-              dotColor="white"
-              automaticallyAdjustContentInsets={true}
-            >
-              {img?.map((image, index) => (
-                <Pressable
-                  key={index}
-                  style={{
-                    width: width(100),
-                    height: height(32),
-                    // backgroundColor: AppColor.lightGrey,
-                  }}
-                  onPress={() => {
-                    setShowModal(true);
-                  }}
-                >
-                  <Image
-                    source={{ uri: image?.src }}
-                    resizeMode="contain"
+          {img && (
+            <View style={styles.imageview}>
+              <Swiper
+                style={{ height: height(30) }}
+                activeDotColor={AppColors.primary}
+                dotColor="white"
+                automaticallyAdjustContentInsets={true}
+              >
+                {img?.map((image, index) => (
+                  <Pressable
+                    key={index}
                     style={{
                       width: width(100),
                       height: height(32),
-                      marginTop: height(1),
-                      // alignSelf: "center",
+                      // backgroundColor: AppColor.lightGrey,
                     }}
-                    // style={{ flex: 1, resizeMode: "cover" }}
-                  />
-                </Pressable>
-              ))}
-            </Swiper>
-          </View>}
+                    onPress={() => {
+                      setShowModal(true);
+                    }}
+                  >
+                    <Image
+                      source={{ uri: image?.src }}
+                      resizeMode="contain"
+                      style={{
+                        width: width(100),
+                        height: height(32),
+                        marginTop: height(1),
+                        // alignSelf: "center",
+                      }}
+                      // style={{ flex: 1, resizeMode: "cover" }}
+                    />
+                  </Pressable>
+                ))}
+              </Swiper>
+            </View>
+          )}
           {/*------price-------*/}
           <View style={styles.nameview}>
             {!isNullOrNullOrEmpty(data?.price) && (
@@ -228,19 +243,21 @@ export default function Detail({ navigation, route }) {
                   </View>
                 )}
                 {/*------fav btn-------*/}
-                {!(data?.userId?.listing_id === loginuser?.listing_id) ? (
+                {loginuser && (
                   <TouchableOpacity
                     style={{ marginHorizontal: width(3) }}
                     onPress={onpressfav}
                   >
-                    <AntDesign
-                      size={height(2.5)}
-                      color={fav ? AppColors.primary : "black"}
-                      name={fav ? "heart" : "hearto"}
-                    />
+                    {fload ? (
+                      <ActivityIndicator color={AppColors.primary} />
+                    ) : (
+                      <AntDesign
+                        size={height(2.5)}
+                        color={fav ? AppColors.primary : "black"}
+                        name={fav ? "star" : "staro"}
+                      />
+                    )}
                   </TouchableOpacity>
-                ) : (
-                  <></>
                 )}
               </View>
             )}
@@ -299,12 +316,15 @@ export default function Detail({ navigation, route }) {
               </Text>
 
               {/*--------Vehicle brand------*/}
-              {data?.custom_fields?.map((e) =>e?.value&& (
-                <View style={styles.cardrow}>
-                  <Text style={styles.cardelement}>{e?.label}</Text>
-                  <Text style={styles.cardelement2}>{e?.value}</Text>
-                </View>
-              ))}
+              {data?.custom_fields?.map(
+                (e) =>
+                  e?.value && (
+                    <View style={styles.cardrow}>
+                      <Text style={styles.cardelement}>{e?.label}</Text>
+                      <Text style={styles.cardelement2}>{e?.value}</Text>
+                    </View>
+                  )
+              )}
             </View>
           </View>
 
@@ -327,9 +347,10 @@ export default function Detail({ navigation, route }) {
             <Pressable
               onPress={() => {
                 if (islogin) {
-                  data?.store?.id&& navigation.navigate(ScreenNames.DStoreDetailsScreen, {
-                    storeId: data?.store?.id,
-                  });
+                  data?.store?.id &&
+                    navigation.navigate(ScreenNames.DStoreDetailsScreen, {
+                      storeId: data?.store?.id,
+                    });
                 } else {
                   infoMessage(
                     t(`flashmsg.loginView`),
@@ -437,7 +458,7 @@ export default function Detail({ navigation, route }) {
               >
                 <Marker
                   coordinate={{
-                    latitude:  data?.contact?.latitude || 0,
+                    latitude: data?.contact?.latitude || 0,
                     longitude: data?.contact?.longitude || 0,
                     latitudeDelta: 0.01,
                     longitudeDelta: 0.01,
@@ -446,7 +467,7 @@ export default function Detail({ navigation, route }) {
               </MapView>
             </View>
           )}
-          <RelatedAd data={data?.related}/>
+          <RelatedAd data={data?.related} />
         </View>
       )}
       {/*------model of pictures-------*/}
