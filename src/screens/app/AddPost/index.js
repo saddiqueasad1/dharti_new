@@ -28,7 +28,6 @@ import AppButton from "../../../components/AppButton";
 import TabScreenHeader from "../../../components/TabScreenHeader";
 
 import { decodeString } from "../../../utills/helper";
-// import { routes } from "../navigation/routes";
 import EditIcon from "../../../asset/svgComponents/EditIcon";
 import { selectToken, selectUserMeta } from "../../../redux/slices/user";
 import { useSelector } from "react-redux";
@@ -362,7 +361,8 @@ const AddPostScreen = ({ navigation }) => {
   };
 
   const handleMembership = () => {
-    navigation.navigate(routes.myMembershipScreen);
+    // navigation.navigate(routes.myMembershipScreen);
+    navigation.navigate(ScreenNames.HOME)
   };
 
   const handleGoBack = () => {
@@ -374,7 +374,10 @@ const AddPostScreen = ({ navigation }) => {
     //   type: "SET_NEW_LISTING_SCREEN",
     //   listing_locations: null,
     // });
-    navigation.replace(routes.drawerNavigator);
+    // navigation.replace(routes.drawerNavigator);
+
+    navigation.navigate(ScreenNames.HOME)
+
   };
 
   const rtlTextA = rtl_support && {
@@ -437,7 +440,8 @@ const AddPostScreen = ({ navigation }) => {
               title={t("newListingScreenTexts.verifyBtnTitle")}
               style={{ paddingHorizontal: "15%" }}
               onPress={() =>
-                navigation.navigate(routes.myProfileScreen, { source: "new" })
+                // navigation.navigate(routes.myProfileScreen, { source: "new" })
+                navigation.navigate(ScreenNames.HOME)
               }
             />
           </View>
@@ -736,7 +740,7 @@ const AddPostScreen = ({ navigation }) => {
             <AppButton
               style={styles.authButton}
               title={t("newListingScreenTexts.loginOrSignUpButtonTitle")}
-              onPress={() => navigation.navigate(routes.loginScreen)}
+              onPress={() => navigation.navigate(ScreenNames.HOME)}
               textStyle={rtlText}
             />
           </View>

@@ -453,16 +453,15 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
       console.log("res------");
       console.log(res);
       if (res) {
-      console.log("res------");
 
         setFormData(res);
-        
-        setLoading(false)
+
+        // setLoading(false)
         initialCFDependencyCheck(res.custom_fields);
         let tempListingCommonData = {};
         tempListingCommonData["pricing_type"] = "price";
 
-        if (res?.data?.config?.hidden_fields?.includes("price_type")) {
+        if (res?.config?.hidden_fields?.includes("price_type")) {
           const tmpCmnReqFlds = commonRequiredFields.filter(
             (_fld) => _fld !== "price_type"
           );
@@ -472,6 +471,7 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
         setListingCommonData(tempListingCommonData);
 
         if (res.config.hidden_fields) {
+
           setCommonRequiredFields((prevCommonRequiredFields) =>
             prevCommonRequiredFields.filter(
               (common) => !res.config.hidden_fields.includes(common)
@@ -481,24 +481,35 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
         if ("google" === config?.map?.type && config?.map?.api_key) {
           Geocoder.init(config.map.api_key);
         }
+
         let geoAddress = [];
+
         if (user.address) {
           geoAddress.push(user.address);
         }
+
         if (user.zipcode) {
           geoAddress.push(user.zipcode);
         }
-        if (config.location_type === "local" && listing_locations.length) {
+        console.log( listing_locations);
+
+        if (config.location_type === "local" && listing_locations?.length) {
           listing_locations.map((_location) => geoAddress.push(_location.name));
         }
+
         if (
           geoAddress.length &&
           config?.map &&
           config?.location_type === "geo"
         ) {
+          console.log(config?.map);
+        console.log("res------7");
+          
           if ("google" === config?.map?.type) {
             Geocoder.from(decodeString(geoAddress.join(", ")))
               .then((json) => {
+                console.log("--json---");
+                 console.log(json);
                 var location = json.results[0].geometry.location;
                 const initialMarkerPosition = {
                   latitude: location.lat,
@@ -518,6 +529,8 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
                   );
                   Geocoder.from(decodeString(onlyAddress.join(", ")))
                     .then((json) => {
+                      console.log("e--json---");
+                      console.log(json);
                       var location = json.results[0].geometry.location;
                       const initialMarkerPosition2 = {
                         latitude: location.lat,
@@ -587,6 +600,7 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
               });
           }
         } else {
+          
           if (config?.map?.center) {
             const initialMarkerPosition = {
               latitude: parseFloat(config.map.center.lat),
@@ -605,9 +619,11 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
           setLoading(false);
           // TODO add event
         }
+
         ApiManager.removeAuthToken();
       } else {
-        alert(res?.data?.error_message || res?.data?.error || res?.problem);
+
+        alert(res?.error_message || res?.error || res?.problem);
         ApiManager.removeAuthToken();
         setLoading(false);
       }
@@ -703,7 +719,9 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
 
   // {* Form Submission *}
   const handleListingFormSubmit = (contact) => {
-    setUploadProgress(0);
+    console.log("handle/////");
+    try {
+      setUploadProgress(0);
     setSubmitLoading(true);
     const tempCFData = { ...listingData };
     Object.keys(listingData).map((_key) => {
@@ -728,11 +746,11 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
       ...markerPosition,
       ["social_profiles"]: { ...socialProfiles },
       ["active_bhs"]: bHActive ? 1 : 0,
-      ["active_special_bhs"]: defaultSBH.length ? 1 : 0,
+      ["active_special_bhs"]: defaultSBH?.length ? 1 : 0,
       bhs: defaultBH,
       special_bhs: defaultSBH,
     };
-    if (config.location_type === "local" && listing_locations.length) {
+    if (config.location_type === "local" && listing_locations?.length) {
       for (const item of listing_locations) {
         data.locations.push(item.term_id);
       }
@@ -827,6 +845,11 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
         }
       });
     }
+    } catch (error) {
+      console.log("error");
+      console.log(error);
+    }
+
   };
 
   const progressValue = (value) => {
@@ -1955,7 +1978,7 @@ marker.setPopupContent("Address jhfashf asdjhfskjhdfk").openPopup();
                     </Text>
                   )}
                 </View>
-                <View style={styles.view}>
+                {/* <View style={styles.view}>
                   <TouchableOpacity
                     style={{ alignItems: "center", paddingHorizontal: 5 }}
                     onPress={() => {
@@ -2005,7 +2028,7 @@ marker.setPopupContent("Address jhfashf asdjhfskjhdfk").openPopup();
                       </Text>
                     </View>
                   </TouchableOpacity>
-                </View>
+                </View> */}
 
                 <ImageInputList
                   imageUris={imageUris}

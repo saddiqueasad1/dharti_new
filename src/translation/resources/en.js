@@ -1293,6 +1293,17 @@ newListingScreenTexts: {
   "addPhotosButtonTitle": "Add Photos",
   "addPhotoButtonTitle": "Add Photo"
 },
-
+"imageInputTexts": {
+  "cancelButtonTitle": "Cancel",
+  "ifImageLibraryPermissionDenied": "You need to enable permission to access image library",
+  "ifCameraPermissionDenied": "You need to enable permission to access your camera",
+  "deleteMessageHeader": "Delete",
+  "deletePrompt": "Do you really want to remove this image?",
+  "yesButton": "Yes",
+  "noButton": "No",
+  "addPhoto": "Add Photo",
+  "takePhoto": "Take Photo",
+  "fromGallery": "From Gallery"
+},
 
 };
