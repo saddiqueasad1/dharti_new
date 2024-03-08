@@ -54,7 +54,8 @@ import {
   SellUsScreen,
   TNCScreen,
   WishScreen,
-  MyStoreScreen
+  MyStoreScreen,
+  SelectLocationScreen
 } from "../screens/app";
 import {
   CPFscreen,
@@ -329,6 +330,7 @@ export default function Routes() {
 
         <Stack.Screen name={ScreenNames.CPF} component={CPFscreen} />
         <Stack.Screen name={ScreenNames.MYSTORE} component={MyStoreScreen} />
+        <Stack.Screen name={ScreenNames.SELECTLOCATION} component={SelectLocationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

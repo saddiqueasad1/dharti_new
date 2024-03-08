@@ -39,5 +39,6 @@ const ScreenNames = {
   IBIKECATEGORY: "InerSubCat",
   ISEARCH: "InerSearch",
   MYSTORE: "MyStore",
+  SELECTLOCATION: "SelectLocationScreen",
 };
 export default ScreenNames;

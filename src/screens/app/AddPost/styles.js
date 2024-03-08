@@ -2,81 +2,294 @@ import { Platform, StyleSheet } from "react-native";
 import { height, width } from "../../../utills/Dimension";
 import AppColors from "../../../utills/AppColors";
 
+
 const styles = StyleSheet.create({
-  mainViewContainer: {
+  adCategory: {
+    marginBottom: 5,
+  },
+  adType: {},
+  authButton: {
+    borderRadius: 3,
+    width: "100%",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  authButtonWrap: {
+    marginVertical: 20,
+    width: "100%",
+  },
+  button: {
+    width: "45%",
+  },
+  buttonWrap: {
+    flexDirection: "row",
+    width: "100%",
     alignItems: "center",
-    padding: height(2),
+    justifyContent: "space-around",
+    paddingHorizontal: "3%",
+    marginTop: "5%",
+  },
+  categoryChangeWrap: {
+    paddingVertical: 10,
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    paddingHorizontal: "3%",
+    marginHorizontal: "3%",
+    elevation: 0.5,
+    borderRadius: 6,
+    shadowColor: AppColors.border_light,
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowOffset: {
+      height: 1,
+      width: 0,
+    },
     backgroundColor: AppColors.white,
-    flexBasis: "auto",
+    marginVertical: 5,
   },
-  title: {
-    fontSize: height(1.8),
-    paddingVertical: width(2),
-    paddingLeft: width(2),
+  categoryPickerFieldText: {
+    textTransform: "capitalize",
+  },
+  categoryPickerFieldWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: AppColors.gray,
+    borderRadius: 3,
+    paddingVertical: 5,
+    paddingHorizontal: "3%",
+    marginVertical: 10,
+  },
+  categoryPickerOptions: {
+    backgroundColor: AppColors.bg_dark,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    marginVertical: 6,
+    marginHorizontal: 4,
+    borderRadius: 3,
+  },
+  categoryPickerOptionsText: {
+    fontSize: 13.5,
+    color: AppColors.text_gray,
+  },
+  categoryPickerWrap: {},
+  categoryTitle: {
+    fontSize: 14,
     fontWeight: "bold",
-    color: AppColors.black,
+    color: AppColors.text_dark,
   },
-  searchbox: {
-    width: width(90),
-    borderRadius: width(1),
-    height: height(6),
-    // borderWidth: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: "rgba(0, 0, 0, 0.2)",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
+  categoryRoute: {
+    fontSize: 15,
+    color: AppColors.text_gray,
   },
-  dropdown: {
-    borderRadius: width(1),
-    width: width(90),
+  categoryTitleWrap: {
+    paddingVertical: 15,
   },
-  price: {
-    backgroundColor: AppColors.greybackground,
-    borderBottomWidth: 0,
-    borderRadius: width(1),
+  categoryWrap: {
+    paddingHorizontal: "3%",
+    backgroundColor: AppColors.white,
+    margin: "3%",
+    elevation: 0.5,
+    borderRadius: 6,
+    shadowColor: AppColors.border_light,
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowOffset: {
+      height: 1,
+      width: 0,
+    },
+  },
+  changeCategory: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 5,
+    marginTop: 10,
+    borderRadius: 3,
+    backgroundColor: AppColors.primary,
+  },
+  changecategoryText: {
+    color: AppColors.white,
+    paddingRight: 5,
+  },
+  changeCategoryWrap: {
+    marginTop: 5,
+    marginBottom: 15,
+  },
+  checkWrap: {
+    alignItems: "center",
+    marginVertical: "10%",
   },
   container: {
+    flex: 1,
+    backgroundColor: "#F8F8F8",
+  },
+  displayNone: {
+    display: "none",
+  },
+  flashMessage: {
+    position: "absolute",
+    backgroundColor: "green",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    bottom: 0,
+    zIndex: 2,
+  },
+  formSeparator: {
+    width: "100%",
+  },
+  freeAdText: {
+    backgroundColor: AppColors.light_green,
+    width: "80%",
+    textAlign: "center",
+    color: AppColors.dark_green,
+    borderRadius: 3,
+    paddingVertical: 8,
+    fontSize: 16,
+  },
+  freeAdWrap: {
+    paddingHorizontal: "3%",
+    alignItems: "center",
+    marginVertical: 15,
+  },
+  locationSelector: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 8,
+    borderRadius: 3,
+    backgroundColor: AppColors.rating_star,
+    // backgroundColor: "#FBAC00",
+    flexDirection: "row",
+  },
+  locationSelectorText: {
+    color: AppColors.white,
+    fontWeight: "bold",
+    fontSize: 13,
+  },
+  internalSeparator: {
+    marginVertical: 10,
+    width: "100%",
+  },
+  locationWrap: {
+    marginVertical: 10,
+    marginHorizontal: "3%",
+    padding: "3%",
     backgroundColor: AppColors.white,
-    width: width(90),
-    justifyContent: "flex-start",
-    paddingVertical: width(3),
-    borderRadius: width(0),
-    alignSelf: "center",
-    paddingHorizontal: height(0),
+    elevation: 0.5,
+    shadowColor: AppColors.border_light,
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowOffset: {
+      height: 1,
+      width: 0,
+    },
+    borderRadius: 6,
+  },
+  mainWrap: {},
+  mandatory: {
+    color: AppColors.red,
+    fontSize: 16,
+  },
+  remainingAdsText: {
+    fontSize: 16,
+    marginVertical: "2%",
+    paddingHorizontal: "3%",
+    textAlign: "center",
+  },
+  routeArrow: {
+    color: AppColors.text_gray,
+  },
+  separator: {
+    width: "100%",
+    backgroundColor: AppColors.border_light,
+    marginTop: 15,
+  },
 
-    ...Platform.select({
-      ios: {
-        shadowColor: "rgba(0, 0, 0, 0.2)",
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0,
-        shadowRadius: 0,
-      },
-      android: {
-        elevation: 0,
-      },
-    }),
+  typePickerFieldWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: 15,
   },
-  texticon: {
-    color: AppColors.black,
-    width: width(80),
-    alignSelf: "flex-start",
+  typePickerOptions: {
+    marginVertical: 8,
   },
-  require: {
-    color: "red",
-    fontSize: height(1.3),
-    paddingHorizontal: width(3),
+  types: {
+    color: AppColors.text_gray,
+    fontSize: 15,
   },
-  required: {
-    borderWidth: 1,
-    borderColor: "red",
-    borderBottomWidth: 1,
+  typePickerWrap: {
+    paddingVertical: 10,
+  },
+  typeTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: AppColors.text_dark,
+  },
+  typeTitleWrap: {
+    paddingTop: 10,
+    paddingBottom: 15,
+  },
+  typeWrap: {
+    paddingHorizontal: "3%",
+    marginHorizontal: "3%",
+    backgroundColor: AppColors.white,
+    borderRadius: 6,
+    elevation: 0.5,
+    shadowColor: AppColors.border_light,
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowOffset: {
+      height: 1,
+      width: 0,
+    },
+  },
+  loading: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    opacity: 0.8,
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 5,
+    flex: 1,
+  },
+  notEligible: {
+    alignItems: "center",
+    marginVertical: "10%",
+  },
+  noUserMessage: {
+    fontSize: 16,
+  },
+  noUserTitle: {
+    fontSize: 20,
+  },
+  noUserTitleWrap: {
+    alignItems: "center",
+  },
+  noUserViewWrap: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  selectedCategory: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+
+    padding: "3%",
+    borderRadius: 3,
+    marginVertical: 5,
+  },
+  selectedCategoryText: {
+    fontSize: 13,
+    fontWeight: "bold",
   },
 });
 export default styles;
