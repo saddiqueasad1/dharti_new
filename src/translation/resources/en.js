@@ -1305,5 +1305,12 @@ newListingScreenTexts: {
   "takePhoto": "Take Photo",
   "fromGallery": "From Gallery"
 },
+"dynamicFilterListPickerTexts": {
+  "selectText": "Select an option"
+},
+
+"dynamicListPickerTexts": {
+  "selectText": "Select a"
+},
 
 };

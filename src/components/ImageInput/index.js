@@ -52,14 +52,14 @@ const ImageInput = ({
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted)
       alert(
-         ("imageInputTexts.ifImageLibraryPermissionDenied" )
+         t("imageInputTexts.ifImageLibraryPermissionDenied" )
       );
     else handleSelectGalleryImage();
   };
   const requestCameraParmission = async () => {
     const { granted } = await ImagePicker.requestCameraPermissionsAsync();
     if (!granted)
-      alert( ("imageInputTexts.ifCameraPermissionDenied" ));
+      alert( t("imageInputTexts.ifCameraPermissionDenied" ));
     else handleSelectCameraImage();
   };
   const handleSelectGalleryImage = async () => {
@@ -113,12 +113,12 @@ const ImageInput = ({
   };
   const handleDelete = () => {
     Alert.alert(
-       ("imageInputTexts.deleteMessageHeader" ),
-       ("imageInputTexts.deletePrompt" ),
+      t ("imageInputTexts.deleteMessageHeader" ),
+       t("imageInputTexts.deletePrompt" ),
       [
-        { text:  ("imageInputTexts.noButton" ) },
+        { text:  t("imageInputTexts.noButton" ) },
         {
-          text:  ("imageInputTexts.yesButton" ),
+          text:  t("imageInputTexts.yesButton" ),
           onPress: () => onChangeImage(null),
         },
       ]
@@ -172,7 +172,7 @@ const ImageInput = ({
           <View style={styles.modalView}>
             <View style={styles.modalTitleWrap}>
               <Text style={styles.modalTitle}>
-                { ("imageInputTexts.addPhoto" )}
+                {t("imageInputTexts.addPhoto" )}
               </Text>
             </View>
             <View style={styles.contentWrap}>
@@ -186,7 +186,7 @@ const ImageInput = ({
                   iconColor={AppColors.primary}
                 />
                 <Text style={styles.libraryText}>
-                  { ("imageInputTexts.takePhoto" )}
+                  { t("imageInputTexts.takePhoto" )}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -199,13 +199,13 @@ const ImageInput = ({
                   iconColor="#2267ED"
                 />
                 <Text style={styles.libraryText}>
-                  { ("imageInputTexts.fromGallery" )}
+                  { t("imageInputTexts.fromGallery" )}
                 </Text>
               </TouchableOpacity>
             </View>
             <AppTextButton
               style={styles.cancelButton}
-              title={ ("imageInputTexts.cancelButtonTitle" )}
+              title={ t("imageInputTexts.cancelButtonTitle" )}
               onPress={() => {
                 setModalVisible((modalVisible) => !modalVisible);
                 closePhotoModal();
