@@ -111,11 +111,13 @@ export default function EditProfile({ navigation, route }) {
                   <View
                     style={{
                       position: "absolute",
-                      top: height(9),
-                      left: height(12),
+                      top: height(12),
+                      left: height(14),
                       backgroundColor: AppColors.primary,
                       padding: width(2),
                       borderRadius: width(5),
+                      borderWidth:height(.2),
+                      borderColor:AppColors.white
                     }}
                   >
                     <FontAwesome

@@ -15,7 +15,7 @@ import {
   selectUserMeta,
   setAdsFav,
 } from "../../../redux/slices/user";
-import { MaterialIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { successMessage } from "../../../utills/Methods";
 
 import ScreenNames from "../../../routes/routes";
@@ -52,7 +52,7 @@ export default function WishList({ navigation, route }) {
     let d = await getFavAds(data);
     if (d) {
       let all = d.map((item) => {
-        return item._id;
+        return item.listing_id;
       });
       dispatch(setAdsFav(all));
       setData(d);
@@ -113,8 +113,8 @@ export default function WishList({ navigation, route }) {
                   height: height(80),
                 }}
               >
-                <MaterialIcons
-                  name="favorite-border"
+                <AntDesign
+                  name="staro"
                   size={width(60)}
                   color={AppColors.bgIcon}
                 />
