@@ -24,3 +24,4 @@ export { default as DStoreScreen } from "./dStore";
 export { default as DStoreDetailsScreen } from "./dStoreDetails";
 export { default as AppSetting } from "./AppSetting";
 export { default as PrivacySafety } from "./privecyandSafety";
+export { default as SelectLocationScreen } from "./SelectLocationScreen";
