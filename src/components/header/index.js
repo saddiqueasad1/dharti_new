@@ -4,8 +4,10 @@ import { Image, TouchableOpacity, View, Text } from "react-native";
 import { height } from "../../utills/Dimension";
 import styles from "./styles";
 import AppColors from "../../utills/AppColors";
+import { useNavigation } from '@react-navigation/native';
 
-export default function Header({ navigation, title }) {
+export default function Header({ title }) {
+  const navigation=useNavigation()
   return (
     <View style={styles.container}>
       <View style={styles.headerTitle}>

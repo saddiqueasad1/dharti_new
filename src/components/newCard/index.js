@@ -104,12 +104,17 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
             <View
               style={{
                 flexDirection: "row",
-                width: width(20),
-                justifyContent: "space-between",
+                justifyContent: 'center',
                 padding: width(2),
+                alignContent:'center',
+                alignItems:'center'
               }}
             >
               <TouchableOpacity
+                style={{
+            
+                  paddingHorizontal: width(2),                 
+                }}
                 onPress={() =>
                   GlobalMethods.onPressShare(
                     `${WebLink}${data?._id}`,
@@ -120,19 +125,20 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
               >
                 <Entypo size={height(2.5)} name="share" color={"grey"} />
               </TouchableOpacity>
-              {!(data?.userId?._id === loginuser?._id) ? (
-                <View>
-                  <TouchableOpacity onPress={onpressfav}>
-                    <AntDesign
-                      size={height(2.5)}
-                      color={fav ? AppColors.primary : "grey"}
-                      name={fav ? "heart" : "hearto"}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <></>
-              )}
+
+              <View
+                style={{
+                  backgroundColor:'black',
+                  paddingHorizontal: height(1.5),
+                  paddingVertical: height(.5),
+                  alignContent: "center",
+                  justifyContent: "center",
+                  alignItems:'center',
+                  borderRadius:height(.5)
+                }}
+              >
+                <Text style={{color:AppColors.white}}>{data?.ad_type}</Text>
+              </View>
             </View>
           </View>
         </Pressable>
@@ -255,63 +261,12 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
       </View>
 
       <View style={styles.icons}>
-         
-          <View style={styles.categoryview}>
-            <Entypo name="location-pin" color={"grey"} size={height(2)} />
-            <Text numberOfLines={2} style={styles.categorytext}>
-              {data?.contact?.address}
-            </Text>
-          </View>
-       
-        {data ? (
-          <View
-            style={{
-              flexDirection: "row",
-              width: width(20),
-              justifyContent: "space-around",
-            }}
-          >
-            <TouchableOpacity
-              disabled={data?.contact.phone ? false : true}
-              onPress={() => {
-                if (!loginuser) {
-                  infoMessage(
-                    t(`flashmsg.loginfavorite`),
-                    t(`flashmsg.authentication`)
-                  );
-                } else {
-                  GlobalMethods.onPressCall(data?.phone);
-                }
-              }}
-            >
-              <Ionicons
-                size={height(2.5)}
-                name="call"
-                color={data?.contact.phone ? "grey" : "lightgrey"}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                if (!loginuser) {
-                  infoMessage(
-                    t(`flashmsg.loginfavorite`),
-                    t(`flashmsg.authentication`)
-                  );
-                } else {
-                  // navigation.navigate(ScreenNames.CHAT, {
-                  //   userRoom: null,
-                  //   usr: data?.author_id,
-                  //   userItem: data,
-                  // });
-                }
-              }}
-            >
-              <Entypo size={height(2.5)} name="chat" color={"grey"} />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <></>
-        )}
+        <View style={styles.categoryview}>
+          <Entypo name="location-pin" color={"grey"} size={height(2)} />
+          <Text numberOfLines={2} style={styles.categorytext}>
+            {data?.contact?.address}
+          </Text>
+        </View>
       </View>
       <Modal
         backdropOpacity={0.5}

@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
 } from "react-native";
-
+import {Head, Header, ScreenWrapper} from '../../../components'
 // Vector Icons
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -396,16 +396,19 @@ const AddPostScreen = ({ navigation }) => {
   };
 
   return user ? (
-    <KeyboardAvoidingView
+    <ScreenWrapper 
+    headerUnScrollable={()=><Header title={"Ad Post"}/>}
+    >  
+        <KeyboardAvoidingView
       behavior={ios ? "padding" : "height"}
       style={{ flex: 1, backgroundColor: "#f8f8f8" }}
       keyboardVerticalOffset={ios ? 20 : -20}
     >
-      <TabScreenHeader
+      {/* <TabScreenHeader
         left={user && newListingScreen}
         onLeftClick={handleGoBack}
         style={{ elevation: 0 }}
-      />
+      /> */}
       {!user?.phone_verified && config?.verification?.post_restriction ? (
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
@@ -725,6 +728,8 @@ const AddPostScreen = ({ navigation }) => {
         </ScrollView>
       )}
     </KeyboardAvoidingView>
+    </ScreenWrapper>
+
   ) : (
     <>
       <TabScreenHeader />

@@ -224,7 +224,7 @@ export default function MyCard({ data }) {
           }}
         >
           <AntDesign name="delete" size={height(2)} color={"red"} />
-          <Text style={{ color: AppColors.primary, fontSize: height(1.5) }}>
+          <Text style={{ color: 'red', fontSize: height(1.5) }}>
             {"   "}
             {t("myad.delete")}
           </Text>

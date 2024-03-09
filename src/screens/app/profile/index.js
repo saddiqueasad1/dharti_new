@@ -125,7 +125,6 @@ export default function Profile({ navigation, route }) {
                 size={height(2.5)}
               />
               <View style={{ marginHorizontal: height(2) }}>
-                <Text style={styles.wtexticon}>{userFav?.length || 0}</Text>
                 <Text style={styles.wtext}> {t("profile.wish")}</Text>
               </View>
             </Pressable>
@@ -142,12 +141,6 @@ export default function Profile({ navigation, route }) {
                 size={height(2.5)}
               />
               <View style={{ marginHorizontal: height(2) }}>
-                <Text style={styles.wtexticon}>
-                  {" "}
-                  {userAds?.length >= 0
-                    ? userAds?.length
-                    : userdata?.adIds?.length}
-                </Text>
                 <Text style={styles.wtext}> {t("profile.listing")}</Text>
               </View>
             </Pressable>
