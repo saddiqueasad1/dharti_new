@@ -24,6 +24,7 @@ import { useSelector } from "react-redux";
 import { Head, ScreenWrapper } from "../../../components";
 
 import styles from "./styles";
+import ScreenNames from "../../../routes/routes";
 
 const chatScreenImagesUrls = {
   fallbackImageUrl: require("../../../asset/images/200X150.png"),
@@ -297,11 +298,10 @@ const ChatView = ({ navigation, route }) => {
           {/* Chat Header Component */}
           {!!route?.params?.from && (
             <TouchableOpacity
-              onPress={() =>
-                navigation.push(routes.listingDetailScreen, {
-                  listingId: route.params.listing_id,
-                })
-              }
+              onPress={() =>{
+                console.log(route.params);
+                // navigation.navigate(ScreenNames.DETAIL, route.params)
+              }}
               style={[
                 {
                   flexDirection: "row",
@@ -484,11 +484,9 @@ const ChatView = ({ navigation, route }) => {
           {/* Chat Header Component */}
           {!!route?.params?.from && (
             <TouchableOpacity
-              onPress={() =>
-                navigation.push(routes.listingDetailScreen, {
-                  listingId: route.params.listing_id,
-                })
-              }
+              // onPress={() =>
+              //   // navigation.push(ScreenNames.DETAIL, route.params)
+              // }
               style={[
                 {
                   flexDirection: "row",

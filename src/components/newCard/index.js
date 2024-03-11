@@ -38,7 +38,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
   const [img, setimg] = useState(data?.images || []);
   const [modal, setModal] = useState(false);
   useEffect(() => {
-    if (isInArray(data.listing_id, favAdIds)) {
+    if (isInArray(data?.listing_id, favAdIds)) {
       setFav(true);
     } else {
       setFav(false);
