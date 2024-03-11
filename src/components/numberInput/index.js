@@ -50,11 +50,11 @@ export default function NumberInput({
               }}
               onChangeFormattedText={(text) => {
                 showBtn && setChangeValue(text);
-                !showBtn && setvalue(text);
+                showBtn && setvalue(text);
               }}
               placeholder={"XX XXX XX XX"}
               filterProps={{ placeholder: t("commmon.cpholder") }}
-              defaultCode={"CH"}
+              defaultCode={"PK"}
               layout="first"
               // value={waNum}
             />
@@ -74,7 +74,7 @@ export default function NumberInput({
                 !editable && { color: "grey" },
               ]}
               keyboardType={keyboardType}
-              placeholder={t("+41 7XXXXXXXX")}
+              placeholder={t("+92 3xxxxxxxxx")}
               multiline={multi}
               value={value}
             />

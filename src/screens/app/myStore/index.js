@@ -189,6 +189,7 @@ const MyStoreScreen = ({ navigation, route }) => {
 
   const getStore = () => {
     console.log("()=> getStore : ");
+    setLoading(true)
     ApiManager.setAuthToken(auth_token);
     try {
       ApiManager.get("my/store").then((res) => {
@@ -206,7 +207,7 @@ const MyStoreScreen = ({ navigation, route }) => {
               res?.opening_hours?.hours || defaultOpeningHours
             );
           }
-          setLoading(false);
+          // setLoading(false);
           ApiManager.removeAuthToken();
              setUserHasNoStore(false);
         } else {
@@ -221,7 +222,7 @@ const MyStoreScreen = ({ navigation, route }) => {
           }
           // TODO handle error
 
-          setLoading(false);
+          // setLoading(false);
           ApiManager.removeAuthToken();
         }
       });

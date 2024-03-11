@@ -139,12 +139,12 @@ export const deleteAdById = async (id) => {
     return []; // or some default value as needed
   }
 };
-export const toggleFavorite = async (id, userId) => {
+export const toggleFavorite = async (listing_id) => {
   try {
-    const response = await ApiManager.put(`ad/setFavorite/${id}/${userId}`);
-    return response?.data?.favAdIds;
+    const response = await ApiManager.post(`my/favourites`,{listing_id:listing_id});
+    return response
   } catch (error) {
-    console.log(error);
+    console.log("--------",error);
     return []; // or some default value as needed
   }
 };

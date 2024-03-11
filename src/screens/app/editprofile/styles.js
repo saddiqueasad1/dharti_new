@@ -11,12 +11,12 @@ const styles = StyleSheet.create({
     padding: width(3),
   },
   avatar: {
-    width: height(14),
-    height: height(14),
+    width: height(17),
+    height: height(17),
     borderRadius: width(30),
     marginLeft: width(5),
-    borderColor: AppColors.primary,
-    borderWidth: height(0.4),
+    borderColor: AppColors.greybackground,
+    borderWidth: height(0.5),
   },
   card: {
     width: width(95),

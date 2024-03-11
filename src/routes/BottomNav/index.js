@@ -8,6 +8,7 @@ import { Platform, View } from "react-native";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../redux/slices/user";
 import {
+  AddPostScreen,
   BikeScreen,
   CategoryScreen,
   ChatScreen,
@@ -163,7 +164,7 @@ const BottomNav = ({ navigation }) => {
           />
           <Tab.Screen
             name="tit"
-            component={CategoryScreen}
+            component={AddPostScreen}
             options={{ headerShown: false }}
           />
           <Tab.Screen

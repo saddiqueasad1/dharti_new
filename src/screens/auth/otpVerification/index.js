@@ -22,16 +22,15 @@ import styles from "./styles";
 import AppButton from "../../../components/AppButton";
 import { selectAppState } from "../../../redux/slices/appConfig/index";
 import { ApiManager } from "../../../backend/ApiManager";
-import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import {
   getAuth,
-  RecaptchaVerifier,
   signInWithPhoneNumber,
   PhoneAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
 import { getApp } from "firebase/app";
 import ScreenNames from "../../../routes/routes";
+import {useFirebaseLogin} from "@itzsunny/firebase-login"
 
 export default function OtpVerification({ navigation, route }) {
   const { width: screenWidth } = Dimensions.get("window");
@@ -51,6 +50,7 @@ export default function OtpVerification({ navigation, route }) {
   const offsetX = useRef(new Animated.Value(0)).current;
   const phoneInput = useRef(null);
   const [verificationId, setVerificationId] = useState();
+  const {recaptcha,recaptchaBanner,sendOtp,verifyOtp} = useFirebaseLogin({auth: auth,  firebaseConfig:app.options});
 
   useEffect(() => {
     auth.useDeviceLanguage();
@@ -60,7 +60,7 @@ export default function OtpVerification({ navigation, route }) {
     setOTP(text);
   };
 
-  const firebaseOTPRequest = async () => {
+  const firebaseOTPRequestOLd = async () => {
     try {
       console.log("()=> firebaseOTPRequest");
       signInWithPhoneNumber(auth, formattedNumber, recaptchaVerifier.current)
@@ -82,6 +82,27 @@ export default function OtpVerification({ navigation, route }) {
       alert(err.message);
     }
   };
+  const firebaseOTPRequest = async () => {
+    try {
+      console.log("()=> firebaseOTPRequest0");
+      const verificationId = await sendOtp(formattedNumber);
+      console.log("Verification ID:", verificationId);
+          console.log("confirmationResult.");
+          console.log(verificationId);
+          setVerificationId(verificationId);
+          Animated.timing(offsetX, {
+            toValue: -screenWidth,
+            duration: 1000,
+            useNativeDriver: false,
+          }).start();
+          setOTPSent(true);
+      
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+
 
   const handleRequestOTP = async () => {
     setOtpLoading(true);
@@ -98,6 +119,7 @@ export default function OtpVerification({ navigation, route }) {
       }
     } catch (error) {
       console.error("An error occurred:", error);
+      Alert.alert(error?.message)
     } finally {
       setOtpLoading(false);
     }
@@ -208,17 +230,10 @@ export default function OtpVerification({ navigation, route }) {
 
   return (
     <ScreenWrapper
-      statusBarColor={AppColors.primary}
-      barStyle="light-content"
       scrollEnabled
-      headerUnScrollable={() => <Head navigation={navigation} />}
+      headerUnScrollable={() => <Head navigation={navigation} headtitle={'Otp Verification'} />}
     >
       <View style={styles.mainViewContainer}>
-        <ImageBackground source={Icons.bglogo} style={styles.bg}>
-          <View style={styles.imageiner}>
-            <Text style={styles.logintext}>Otp Verification</Text>
-          </View>
-        </ImageBackground>
         <View style={{ height: height(70), paddingTop: width(10) }}>
           <View style={styles.container}>
             <Animated.View
@@ -430,10 +445,8 @@ export default function OtpVerification({ navigation, route }) {
                 </View>
               </View>
             </Animated.View>
-            <FirebaseRecaptchaVerifierModal
-              ref={recaptchaVerifier}
-              firebaseConfig={app.options}
-            />
+            {recaptcha}
+            {recaptchaBanner}
           </View>
         </View>
       </View>

@@ -41,6 +41,7 @@ import GlobeIcon from "../../../asset/svgComponents/GlobeIcon";
 import { useTranslation } from "react-i18next";
 import { selectUserMeta } from "../../../redux/slices/user";
 import { useSelector } from "react-redux";
+import { Head, ScreenWrapper } from "../../../components";
 
 const storeDetailsTexts = {
   membershipMomentFormate: "D MMM, YYYY",
@@ -256,13 +257,13 @@ const StoreDetailsScreen = ({ route, navigation }) => {
   const handleEmailLoginAlert = () => {
     Alert.alert(
       "",
-      t("storeDetailsTexts.loginAlert"),
+      t("loginAlert"),
       [
         {
-          text: t("storeDetailsTexts.cancelButtonTitle"),
+          text: t("cancelButtonTitle"),
         },
         {
-          text: t("storeDetailsTexts.loginButtonTitle"),
+          text: t("loginButtonTitle"),
           onPress: () => navigation.navigate(ScreenNames.loginScreen),
         },
       ],
@@ -385,7 +386,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                     />
                   </View>
                   <Text style={[styles.listingCardText, rtlText]}>
-                    {t("storeDetailsTexts.viewsCount")} {item?.view_count}
+                    {t("viewsCount")} {item?.view_count}
                   </Text>
                 </View>
               </View>
@@ -430,7 +431,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
   const getOpenHours = () => {
     if (storeData) {
       if (storeData?.opening_hours?.type === "always") {
-        return "storeDetailsTexts.alwaysOpen";
+        return "alwaysOpen";
       }
       if (storeData?.opening_hours?.type === "selected") {
         const today = weekData[new Date().getDay()];
@@ -440,12 +441,12 @@ const StoreDetailsScreen = ({ route, navigation }) => {
             storeData?.opening_hours?.hours[today]?.open ||
             storeData?.opening_hours?.hours[today]?.close
           ) {
-            return "storeDetailsTexts.openingHourOpen";
+            return "openingHourOpen";
           } else {
-            return "storeDetailsTexts.fullDayOpen";
+            return "fullDayOpen";
           }
         } else {
-          return "storeDetailsTexts.closed";
+          return "closed";
         }
       }
     }
@@ -518,7 +519,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
               rtlTextA,
             ]}
           >
-            {t("storeDetailsTexts.alwaysOpen")}
+            {t("alwaysOpen")}
           </Text>
         </View>
       );
@@ -678,9 +679,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
             }}
           >
             <Text style={[styles.storeTitle, rtlText]} numberOfLines={1}>
-              {storeData?.title
-                ? decodeString(storeData.title)
-                : t("storeDetailsTexts.nullText")}
+              {storeData?.title ? decodeString(storeData.title) : t("nullText")}
             </Text>
           </View>
           {
@@ -707,7 +706,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                     rtlText,
                   ]}
                 >
-                  {t("storeDetailsTexts.verified")}
+                  {t("verified")}
                 </Text>
               </View>
             </View>
@@ -723,7 +722,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                 rtlText,
               ]}
             >
-              {t("storeDetailsTexts.membership")}
+              {t("membership")}
               {" : "}
               <Text style={{ color: AppColors.text_gray }}>
                 {formattedDate(storeData.created_at)}
@@ -760,7 +759,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   >
                     {!!storeData?.phone
                       ? decodeString(storeData.phone)
-                      : t("storeDetailsTexts.nullText")}
+                      : t("nullText")}
                   </Text>
                 </View>
               </View>
@@ -784,7 +783,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   >
                     {!!storeData?.email
                       ? decodeString(storeData.email)
-                      : t("storeDetailsTexts.nullText")}
+                      : t("nullText")}
                   </Text>
                 </View>
               </View>
@@ -804,9 +803,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                     rtlText,
                   ]}
                 >
-                  {!!storeData?.website
-                    ? storeData.website
-                    : t("storeDetailsTexts.nullText")}
+                  {!!storeData?.website ? storeData.website : t("nullText")}
                 </Text>
               </View>
             )}
@@ -897,7 +894,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
                   rtlTextA,
                 ]}
               >
-                {t("storeDetailsTexts.description")}
+                {t("description")}
               </Text>
             </View>
             <View
@@ -1123,7 +1120,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
               rtlText,
             ]}
           >
-            {t("storeDetailsTexts.latestAds")}
+            {t("latestAds")}
           </Text>
         </View>
       </View>
@@ -1157,7 +1154,7 @@ const StoreDetailsScreen = ({ route, navigation }) => {
               rtlText,
             ]}
           >
-            {t("storeDetailsTexts.emptyListing")}
+            {t("emptyListing")}
           </Text>
         </View>
       );
@@ -1200,10 +1197,6 @@ const StoreDetailsScreen = ({ route, navigation }) => {
     setRefreshing(true);
   };
 
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
   const rtlText = rtl_support && {
     writingDirection: "rtl",
   };
@@ -1219,162 +1212,154 @@ const StoreDetailsScreen = ({ route, navigation }) => {
     // {* Loading Component *}
     <View style={styles.loading}>
       <ActivityIndicator size="large" color={AppColors.primary} />
-      <Text style={[styles.text, rtlText]}>
-        {t("storeDetailsTexts.loadingText")}
-      </Text>
+      <Text style={[styles.text, rtlText]}>{t("loadingText")}</Text>
     </View>
   ) : (
-    <View style={styles.container}>
-      {!storeExpired && !!storeData && (
-        <>
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={[styles.screenTitle, rtlText]}>
-              {t("storeDetailsTexts.title")}
-            </Text>
-            
-            <TouchableOpacity
-              style={styles.headerBackButton}
-              onPress={() => navigation.goBack()}
-            >
-              <Feather name="arrow-left" size={24} color={AppColors.white} />
-            </TouchableOpacity>
-          </View>
-          {/* Listing FlatList */}
-          <View style={styles.storeBottom}>
-            <FlatList
-              data={storeListingSData}
-              renderItem={renderListItem}
-              keyExtractor={keyExtractor}
-              horizontal={false}
-              showsVerticalScrollIndicator={false}
-              onEndReached={handleNextPageLoading}
-              onEndReachedThreshold={1}
-              ListFooterComponent={listFooter}
-              onRefresh={onRefresh}
-              refreshing={refreshing}
-              ListHeaderComponent={ListHeader}
-              ListEmptyComponent={EmptyListComponent}
-              ItemSeparatorComponent={ListSeparator}
-              contentContainerStyle={{
-                paddingBottom: 70,
-              }}
-            />
-          </View>
-          {/* Call prompt */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-          >
-            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-              <View style={styles.modalOverlay} />
-            </TouchableWithoutFeedback>
-            {!!storeData.phone && (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "flex-end",
-                  alignItems: "center",
+    <ScreenWrapper
+    scrollEnabled={false}
+    >
+      <View style={styles.container}>
+        {!storeExpired && !!storeData && (
+          <>
+            {/* Header */}
+            <Head headtitle={"Store Detail"} navigation={navigation} />
+
+            {/* Listing FlatList */}
+            <View style={styles.storeBottom}>
+              <FlatList
+                data={storeListingSData}
+                renderItem={renderListItem}
+                keyExtractor={keyExtractor}
+                horizontal={false}
+                showsVerticalScrollIndicator={false}
+                onEndReached={handleNextPageLoading}
+                onEndReachedThreshold={1}
+                ListFooterComponent={listFooter}
+                onRefresh={onRefresh}
+                refreshing={refreshing}
+                ListHeaderComponent={ListHeader}
+                ListEmptyComponent={EmptyListComponent}
+                ItemSeparatorComponent={ListSeparator}
+                contentContainerStyle={{
+                  paddingBottom: 70,
                 }}
-              >
+              />
+            </View>
+            {/* Call prompt */}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+            >
+              <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                <View style={styles.modalOverlay} />
+              </TouchableWithoutFeedback>
+              {!!storeData.phone && (
                 <View
                   style={{
-                    paddingHorizontal: "3%",
-                    padding: 20,
-                    backgroundColor: AppColors.white,
-                    width: "100%",
+                    flex: 1,
+                    justifyContent: "flex-end",
+                    alignItems: "center",
                   }}
                 >
-                  <Text style={[styles.callText, rtlText]}>
-                    {t("storeDetailsTexts.callPrompt")}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => handleCall(storeData.phone)}
-                    style={styles.phone}
+                  <View
+                    style={{
+                      paddingHorizontal: "3%",
+                      padding: 20,
+                      backgroundColor: AppColors.white,
+                      width: "100%",
+                    }}
                   >
-                    <Text style={[styles.phoneText, rtlText]}>
-                      {storeData.phone}
+                    <Text style={[styles.callText, rtlText]}>
+                      {t("callPrompt")}
                     </Text>
-                    <FontAwesome5
-                      name="phone"
-                      size={18}
-                      color={AppColors.primary}
-                    />
-                  </TouchableOpacity>
-                  {/* {ios && (
+                    <TouchableOpacity
+                      onPress={() => handleCall(storeData.phone)}
+                      style={styles.phone}
+                    >
+                      <Text style={[styles.phoneText, rtlText]}>
+                        {storeData.phone}
+                      </Text>
+                      <FontAwesome5
+                        name="phone"
+                        size={18}
+                        color={AppColors.primary}
+                      />
+                    </TouchableOpacity>
+                    {/* {ios && (
                     <AppTextButton
                       title={t(
-                        "storeDetailsTexts.cancelButtonTitle",
+                        "cancelButtonTitle",
                         appSettings.lng
                       )}
                       style={{ marginTop: 20 }}
                       onPress={() => setModalVisible(false)}
                     />
                   )} */}
+                  </View>
                 </View>
-              </View>
-            )}
-          </Modal>
-        </>
-      )}
-      {storeExpired && (
-        <View style={styles.expiredWrap}>
-          <EvilIcons name="exclamation" size={50} color={AppColors.red} />
-          <Text style={[styles.expiredText, rtlText]}>
-            {t("storeDetailsTexts.storeExpired")}
-          </Text>
-          {/* <AppButton
-            title={t("storeDetailsTexts.goBackButtonTitle")}
+              )}
+            </Modal>
+          </>
+        )}
+        {storeExpired && (
+          <View style={styles.expiredWrap}>
+            <EvilIcons name="exclamation" size={50} color={AppColors.red} />
+            <Text style={[styles.expiredText, rtlText]}>
+              {t("storeExpired")}
+            </Text>
+            {/* <AppButton
+            title={t("goBackButtonTitle")}
             onPress={handleGoBack}
             style={styles.goBackButton}
           /> */}
-        </View>
-      )}
-      {(user === null || user?.id !== storeData?.owner_id) &&
-        !config?.disabled?.listing_contact &&
-        (!!storeData?.phone || !!storeData?.email) && (
-          <View
-            style={{
-              paddingVertical: 10,
-              position: "absolute",
-              bottom: 0,
-              width: "100%",
-              paddingHorizontal: "1.5%",
-            }}
-          >
-            <View
-              style={[
-                styles.storeContactWrap,
-                {
-                  justifyContent: "center",
-                },
-              ]}
-            >
-              {!!storeData?.email && (
-                <TouchableOpacity
-                  style={[
-                    styles.storeContactButton,
-                    { backgroundColor: AppColors.primary },
-                  ]}
-                  onPress={handleEmail}
-                >
-                  <Zocial name="email" size={18} color={AppColors.white} />
-                  <Text
-                    style={[
-                      styles.storeContactButtonText,
-                      { color: AppColors.white },
-                    ]}
-                    numberOfLines={1}
-                  >
-                    {t("sellerContactTexts.email")}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
           </View>
         )}
-    </View>
+        {(user === null || user?.id !== storeData?.owner_id) &&
+          !config?.disabled?.listing_contact &&
+          (!!storeData?.phone || !!storeData?.email) && (
+            <View
+              style={{
+                paddingVertical: 10,
+                position: "absolute",
+                bottom: 0,
+                width: "100%",
+                paddingHorizontal: "1.5%",
+              }}
+            >
+              <View
+                style={[
+                  styles.storeContactWrap,
+                  {
+                    justifyContent: "center",
+                  },
+                ]}
+              >
+                {!!storeData?.email && (
+                  <TouchableOpacity
+                    style={[
+                      styles.storeContactButton,
+                      { backgroundColor: AppColors.primary },
+                    ]}
+                    onPress={handleEmail}
+                  >
+                    <Zocial name="email" size={18} color={AppColors.white} />
+                    <Text
+                      style={[
+                        styles.storeContactButtonText,
+                        { color: AppColors.white },
+                      ]}
+                      numberOfLines={1}
+                    >
+                      {t("sellerContactTexts.email")}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          )}
+      </View>
+    </ScreenWrapper>
   );
 };
 

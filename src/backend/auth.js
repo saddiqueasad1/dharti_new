@@ -42,22 +42,20 @@ const getUserByID = async (id) => {
     return []; // or some default value as needed
   }
 };
-async function updateProfile(id, formData) {
+
+async function uploadImage(formData) {
   try {
-    const requestOptions = {
-      method: "PUT",
-      body: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const resp = await fetch(
-      BaseUrl1 + `auth/userProfile/${id}`,
-      requestOptions
-    );
-    let response = await resp.json();
-    console.log(response);
-    return response?.data?.userDetails;
+    const response = await ApiManager.post("my/profile-image", formData);
+    return response;
+  } catch (error) {
+    console.error("crashed", error);
+    throw error; // Re-throw the error to handle it at a higher level if necessary
+  }
+}
+async function updateProfile(values) {
+  try {
+    const response = await ApiManager.post("my", values);
+    return response;
   } catch (error) {
     console.error("crashed", error);
     throw error; // Re-throw the error to handle it at a higher level if necessary
@@ -192,6 +190,7 @@ export {
   getFavAds,
   removeFavAds,
   updateProfile,
+  uploadImage,
   getUserByID,
   changePasswordAPI,
   getShowNumber,

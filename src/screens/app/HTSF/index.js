@@ -10,19 +10,19 @@ export default function HTSF({ navigation, route }) {
   const { t } = useTranslation();
   const data = [
     {
-      image: Icons.htsf1,
+      image: Icons.htsf2,
       id: 1,
       title: "HTSF.title1",
       detail: "HTSF.detail1",
     },
     {
-      image: Icons.htsf2,
+      image: Icons.htsf3,
       id: 2,
       title: "HTSF.title2",
       detail: "HTSF.detail2",
     },
     {
-      image: Icons.htsf3,
+      image: Icons.htsf1,
       id: 3,
       title: "HTSF.title3",
       detail: "HTSF.detail3",

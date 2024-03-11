@@ -1,11 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Network from "expo-network";
-import { getDatabase, off, onValue, ref, get } from "firebase/database";
+import { get, getDatabase, off, onValue, ref } from "firebase/database";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getDataofAdByID, getDataofHomePage } from "../backend/api";
 import { getOwneAd, getUserByID, loginApi } from "../backend/auth";
 import { getCategory } from "../backend/common";
@@ -37,31 +37,31 @@ import {
   BikeScreen,
   CategoryScreen,
   ChatViewScreen,
+  DStoreDetailsScreen,
+  DStoreScreen,
   DetailScreen,
   EditProfile,
   FAQScreen,
   HTSFScreen,
   ListData,
   MyListingScreen,
+  MyStoreScreen,
   OtherProfileScreen,
   PasswordScreens,
   PrivacyPolicyScreen,
   PrivacySafety,
   ProfileScreen,
-  DStoreScreen,
-  DStoreDetailsScreen,
   SearchScreen,
-  SellUsScreen,
   TNCScreen,
   WishScreen,
-  MyStoreScreen
+  SelectLocationScreen
 } from "../screens/app";
 import {
   CPFscreen,
   ForgetPasswordScreen,
   LoginScreen,
-  SignUpScreen,
   OtpVerificationScreen,
+  SignUpScreen,
   verifyScreen,
 } from "../screens/auth";
 import i18n from "../translation";
@@ -144,7 +144,7 @@ export default function Routes() {
   const login = async (data) => {
     try {
       const APIData = { username: data.email, password: data.password };
-  
+
       const response = await loginApi(APIData);
       if (response?.jwt_token) {
         const userDetails = response.user;
@@ -160,9 +160,9 @@ export default function Routes() {
         dispatch(setUserAds(null));
         dispatch(setAdsFav([]));
         await setAuthData(null),
-        Alert.alert(t("flashmsg.alert"), t("flashmsg.reloginMsg"), [
-          { text: "OK", onPress: () => {} },
-        ]);
+          Alert.alert(t("flashmsg.alert"), t("flashmsg.reloginMsg"), [
+            { text: "OK", onPress: () => {} },
+          ]);
       } else {
         let userData = await getAuthAllData();
         if (userData) {
@@ -179,7 +179,7 @@ export default function Routes() {
     } catch (error) {
       dispatch(setAppLoader(false));
     }
-  };  
+  };
 
   const fetchData = useCallback(async (data, id) => {
     const search =
@@ -295,7 +295,10 @@ export default function Routes() {
         />
         <Stack.Screen name={ScreenNames.VERIFY} component={verifyScreen} />
         <Stack.Screen name={ScreenNames.SIGNUP} component={SignUpScreen} />
-        <Stack.Screen name={ScreenNames.OTPVERIFICATIO} component={OtpVerificationScreen} />
+        <Stack.Screen
+          name={ScreenNames.OTPVERIFICATIO}
+          component={OtpVerificationScreen}
+        />
         <Stack.Screen name={ScreenNames.DETAIL} component={DetailScreen} />
         <Stack.Screen name={ScreenNames.LISTDATA} component={ListData} />
         <Stack.Screen name={ScreenNames.CATEGORY} component={CategoryScreen} />
@@ -321,14 +324,17 @@ export default function Routes() {
         <Stack.Screen name={ScreenNames.ABOUTUS} component={AboutUsScreen} />
         <Stack.Screen name={ScreenNames.TNC} component={TNCScreen} />
         <Stack.Screen name={ScreenNames.PP} component={PrivacyPolicyScreen} />
-        <Stack.Screen name={ScreenNames.SNTU} component={SellUsScreen} />
         <Stack.Screen name={ScreenNames.REPAIR} component={DStoreScreen} />
-        <Stack.Screen name={ScreenNames.DStoreDetailsScreen} component={DStoreDetailsScreen} />
+        <Stack.Screen
+          name={ScreenNames.DStoreDetailsScreen}
+          component={DStoreDetailsScreen}
+        />
         <Stack.Screen name={ScreenNames.SETTING} component={AppSetting} />
         <Stack.Screen name={ScreenNames.PANDS} component={PrivacySafety} />
 
         <Stack.Screen name={ScreenNames.CPF} component={CPFscreen} />
         <Stack.Screen name={ScreenNames.MYSTORE} component={MyStoreScreen} />
+        <Stack.Screen name={ScreenNames.SELECTLOCATION} component={SelectLocationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

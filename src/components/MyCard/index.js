@@ -160,18 +160,6 @@ export default function MyCard({ data }) {
           <Entypo size={height(2)} name="dots-three-vertical" />
         </TouchableOpacity>
       </View>
-
-      {!data?.visibility && (
-        <View
-          style={{
-            height: height(18),
-            borderRadius: width(2),
-            width: width(85),
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            position: "absolute",
-          }}
-        />
-      )}
       <Menu visible={isModalVisible} onRequestClose={hideMenu}>
         <MenuItem
           onPress={() => {
@@ -236,7 +224,7 @@ export default function MyCard({ data }) {
           }}
         >
           <AntDesign name="delete" size={height(2)} color={"red"} />
-          <Text style={{ color: AppColors.primary, fontSize: height(1.5) }}>
+          <Text style={{ color: 'red', fontSize: height(1.5) }}>
             {"   "}
             {t("myad.delete")}
           </Text>

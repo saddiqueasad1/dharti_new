@@ -113,23 +113,21 @@ export default function Login({ navigation, route }) {
     try {
       dispatch(setAppLoader(true));
       const APIData = { username: data.email, password: data.password };
-  
       let res = await loginApi(APIData);
       // Adjusting for new response structure:
-      if (!res?.jwt_token) { // Assuming success is determined by presence of jwt_token
+      if (!res?.jwt_token) {
         dispatch(setAppLoader(false));
-        console.log(res?.message); // Adjust if the API provides a specific error message key
         errorMessage(
           t(`flashmsg.error`), // Adjusted due to change in API response
           t("flashmsg.authentication")
         );
       } else {
         const userDetails = res?.user; // Extracting user details from the new response
-        if (!userDetails?.phone_verified) {
-          dispatch(setAppLoader(false));
-          infoMessage("Account not verified");
-          navigation.navigate(ScreenNames.VERIFY, { data: userDetails });
-        } else {
+        // if (!userDetails?.phone_verified) {
+        //   dispatch(setAppLoader(false));
+        //   infoMessage("Account not verified");
+        //   navigation.navigate(ScreenNames.VERIFY, { data: userDetails });
+        // } else {
           if (check) {
             setRememberMe("save");
             save(data);
@@ -142,20 +140,20 @@ export default function Login({ navigation, route }) {
           dispatch(setToken(res?.jwt_token)); // Adjust to use jwt_token
           // Assuming setAdsFav and other state updates are still relevant, adjust if needed
           dispatch(setAdsFav(userDetails?.favAdIds)); // This needs adjustment if favAdIds is still relevant or present
-  
+
           setAuthData(data);
-          setAuthAllData(userDetails); 
+          setAuthAllData(userDetails);
           dispatch(setAppLoader(false));
           successMessage("", t(`flashmsg.sussessloginmsg`));
-          navigation.navigate(ScreenNames.BUTTOM); 
-        }
+          navigation.navigate(ScreenNames.BUTTOM);
+        // }
       }
     } catch (error) {
       console.log(error);
       dispatch(setAppLoader(false));
     }
   };
-  
+
   async function handleRemberMe() {
     setCheck(!check);
   }
@@ -282,7 +280,6 @@ export default function Login({ navigation, route }) {
               onPress={() => {
                 // navigation.navigate(ScreenNames.SIGNUP);
                 navigation.navigate(ScreenNames.OTPVERIFICATIO);
-
               }}
             >
               <Text style={styles.text}> {t("login.registerNow")}</Text>

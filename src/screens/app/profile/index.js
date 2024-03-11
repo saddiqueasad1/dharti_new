@@ -125,7 +125,6 @@ export default function Profile({ navigation, route }) {
                 size={height(2.5)}
               />
               <View style={{ marginHorizontal: height(2) }}>
-                <Text style={styles.wtexticon}>{userFav?.length || 0}</Text>
                 <Text style={styles.wtext}> {t("profile.wish")}</Text>
               </View>
             </Pressable>
@@ -142,12 +141,6 @@ export default function Profile({ navigation, route }) {
                 size={height(2.5)}
               />
               <View style={{ marginHorizontal: height(2) }}>
-                <Text style={styles.wtexticon}>
-                  {" "}
-                  {userAds?.length >= 0
-                    ? userAds?.length
-                    : userdata?.adIds?.length}
-                </Text>
                 <Text style={styles.wtext}> {t("profile.listing")}</Text>
               </View>
             </Pressable>
@@ -178,7 +171,7 @@ export default function Profile({ navigation, route }) {
             }
             iconright={<Ionicons name="chevron-forward" size={height(2)} />}
           />
-          <IconButton
+          {/* <IconButton
             onPress={() => {
               navigation.navigate(ScreenNames.PASSWORD);
             }}
@@ -189,8 +182,8 @@ export default function Profile({ navigation, route }) {
               <Entypo name="key" color={AppColors.primary} size={height(2)} />
             }
             iconright={<Ionicons name="chevron-forward" size={height(2)} />}
-          />
-          <IconButton
+          /> */}
+          {/* <IconButton
             title={"profile.privacy"}
             onPress={() => {
               navigation.navigate(ScreenNames.PANDS);
@@ -205,8 +198,8 @@ export default function Profile({ navigation, route }) {
               />
             }
             iconright={<Ionicons name="chevron-forward" size={height(2)} />}
-          />
-          <IconButton
+          /> */}
+          {/* <IconButton
             onPress={() => {
               navigation.navigate(ScreenNames.SETTING);
             }}
@@ -221,7 +214,7 @@ export default function Profile({ navigation, route }) {
               />
             }
             iconright={<Ionicons name="chevron-forward" size={height(2)} />}
-          />
+          /> */}
           <IconButton
             onPress={() => {
               navigation.navigate(ScreenNames.ACCOUNT);

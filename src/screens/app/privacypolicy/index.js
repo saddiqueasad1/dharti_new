@@ -70,7 +70,7 @@ export default function PP({ navigation, route }) {
     >
       <View style={styles.mainViewContainer}>
         <View style={styles.imageview}>
-          <Image source={Icons.pp} style={styles.image} />
+          <Image source={Icons.tnc} style={styles.image} />
         </View>
         {data.map((item, index) => (
           <PPPara key={index} data={item} />

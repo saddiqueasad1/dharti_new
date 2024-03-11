@@ -83,20 +83,13 @@ export default function SignUp({ navigation, route }) {
       if (r?.verification_mail) {
         alert("An email is sent to your mail address with a verification link. Please verify your email address before logging in.");
       }
-      console.log(r);
-      if (!r?.success) {
-        dispatch(setAppLoader(false));
-        errorMessage(t(`flashmsg.${r?.message}`), t(`flashmsg.error`));
-      } else if (r) {
         successMessage(t(`flashmsg.sussessloginmsg`), t(`flashmsg.success`));
         dispatch(setAppLoader(false));
         // navigation.navigate(ScreenNames.VERIFY, { data: r?.data });
         successMessage("Verified login now", "Success");
         navigation.navigate(ScreenNames.LOGIN);
-      } else {
-        errorMessage(t(`flashmsg.signuperrormsg`), t(`flashmsg.success`));
-      }
     } catch (error) {
+      errorMessage(t(`flashmsg.${r?.message}`), t(`flashmsg.error`));
       dispatch(setAppLoader(false));
     }
   };
