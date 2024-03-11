@@ -1326,6 +1326,13 @@ newListingScreenTexts: {
   "loginButtonTitle": "Log in / Sign up",
   "scrollToRefresh": "Scroll to refresh chat list"
 },
+"chatScreenTexts": {
+  "loadingMessage": "Getting conversation data from server",
+  "dactivatedMessage": "Receiver has deleted the conversation",
+  "placeholder": {
+    "message": "Type a message"
+  }
+},
 
 
 };
