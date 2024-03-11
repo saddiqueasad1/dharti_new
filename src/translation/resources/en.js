@@ -1312,5 +1312,20 @@ newListingScreenTexts: {
 "dynamicListPickerTexts": {
   "selectText": "Select a"
 },
+"chatListScreenTexts": {
+  "noChatTitleMessage": "Currently you have no chats",
+  "noChatMessage": "Start buying and selling!",
+  "deletePromptMessage": "Do you really want to delete this conversation?",
+  "cancelButtonTitle": "Cancel",
+  "deleteButtonTitle": "Delete",
+  "noUserMessage": "Currently you're not logged in\nPlease log in or sign up to get your chat data",
+  "loadingMessage": "Getting conversation list from server",
+  "chatDeleteSuccessText": "Successfully deleted",
+  "chatDeleteErrorText": "Error! Please try again",
+  "offlineNoticeText": "You are offline",
+  "loginButtonTitle": "Log in / Sign up",
+  "scrollToRefresh": "Scroll to refresh chat list"
+},
+
 
 };
