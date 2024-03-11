@@ -21,6 +21,8 @@ import { useTranslation } from "react-i18next";
 import { ApiManager } from "../../../backend/ApiManager";
 import { selectToken, selectUserMeta } from "../../../redux/slices/user";
 import { useSelector } from "react-redux";
+import { Head, ScreenWrapper } from "../../../components";
+
 import styles from "./styles";
 
 const chatScreenImagesUrls = {
@@ -283,323 +285,159 @@ const ChatView = ({ navigation, route }) => {
     flexDirection: "row-reverse",
   };
 
-  return !ios ? (
-    <View style={{ flex: 1, backgroundColor: "#ededed" }}>
-      {/* Chat Header Component */}
-      {!!route?.params?.from && (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.push(routes.listingDetailScreen, {
-              listingId: route.params.listing_id,
-            })
-          }
-          style={[
-            {
-              flexDirection: "row",
-              backgroundColor: AppColors.white,
-              alignItems: "center",
-              paddingVertical: 10,
-              paddingHorizontal: "3%",
-            },
-            rtlView,
-          ]}
-          disabled={
-            route.params.from === "listing" || route.params.from === undefined
-          }
-        >
-          <View
-            style={{
-              height: 50,
-              width: 50,
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "hidden",
-              borderRadius: 25,
-            }}
-          >
-            <Image
-              style={{
-                height: 50,
-                width: 50,
-                resizeMode: "cover",
-              }}
-              source={
-                listingData.images.length
-                  ? {
-                      uri: listingData.images[0].sizes.medium.src,
-                    }
-                  : chatScreenImagesUrls.fallbackImageUrl
+  return (
+    <ScreenWrapper
+      showStatusBar={false}
+      statusBarColor={AppColors.white}
+      barStyle="dark-content"
+    >
+       <Head headtitle={"Chat"} navigation={navigation} />
+      {!ios ? (
+        <View style={{ flex: 1, backgroundColor: "#ededed" }}>
+          {/* Chat Header Component */}
+          {!!route?.params?.from && (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.push(routes.listingDetailScreen, {
+                  listingId: route.params.listing_id,
+                })
               }
-            />
-          </View>
-          <View
-            style={{
-              marginLeft: rtl_support ? 0 : 10,
-              marginRight: rtl_support ? 10 : 0,
-              flex: 1,
-              // flexDirection: "column-reverse",
-            }}
-          >
-            <Text
               style={[
                 {
-                  fontWeight: "bold",
-                  fontSize: 16,
-                  color: AppColors.text_dark,
-                  textAlign: rtl_support ? "right" : "left",
+                  flexDirection: "row",
+                  backgroundColor: AppColors.white,
+                  alignItems: "center",
+                  paddingVertical: 10,
+                  paddingHorizontal: "3%",
                 },
+                rtlView,
               ]}
-              numberOfLines={1}
+              disabled={
+                route.params.from === "listing" ||
+                route.params.from === undefined
+              }
             >
-              {decodeString(listingData.title)}
-            </Text>
-            <View
-              style={[{ flexDirection: "row", alignItems: "center" }, rtlView]}
-            >
-              <View style={styles.view}>
-                {rtl_support ? (
-                  <FontAwesome name="tag" size={14} color={AppColors.primary} />
-                ) : (
-                  <Ionicons
-                    name="pricetag"
-                    size={14}
-                    color={AppColors.primary}
-                  />
-                )}
-              </View>
-              <View style={{ paddingHorizontal: 5 }}>
-                <Text
+              <View
+                style={{
+                  height: 50,
+                  width: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  borderRadius: 25,
+                }}
+              >
+                <Image
                   style={{
-                    color: AppColors.primary,
-                    textAlign: rtl_support ? "right" : "left",
+                    height: 50,
+                    width: 50,
+                    resizeMode: "cover",
                   }}
+                  source={
+                    listingData.images.length
+                      ? {
+                          uri: listingData.images[0].sizes.medium.src,
+                        }
+                      : chatScreenImagesUrls.fallbackImageUrl
+                  }
+                />
+              </View>
+              <View
+                style={{
+                  marginLeft: rtl_support ? 0 : 10,
+                  marginRight: rtl_support ? 10 : 0,
+                  flex: 1,
+                  // flexDirection: "column-reverse",
+                }}
+              >
+                <Text
+                  style={[
+                    {
+                      fontWeight: "bold",
+                      fontSize: 16,
+                      color: AppColors.text_dark,
+                      textAlign: rtl_support ? "right" : "left",
+                    },
+                  ]}
                   numberOfLines={1}
                 >
-                  {handleLocationNCategoryData()}
+                  {decodeString(listingData.title)}
                 </Text>
+                <View
+                  style={[
+                    { flexDirection: "row", alignItems: "center" },
+                    rtlView,
+                  ]}
+                >
+                  <View style={styles.view}>
+                    {rtl_support ? (
+                      <FontAwesome
+                        name="tag"
+                        size={14}
+                        color={AppColors.primary}
+                      />
+                    ) : (
+                      <Ionicons
+                        name="pricetag"
+                        size={14}
+                        color={AppColors.primary}
+                      />
+                    )}
+                  </View>
+                  <View style={{ paddingHorizontal: 5 }}>
+                    <Text
+                      style={{
+                        color: AppColors.primary,
+                        textAlign: rtl_support ? "right" : "left",
+                      }}
+                      numberOfLines={1}
+                    >
+                      {handleLocationNCategoryData()}
+                    </Text>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      )}
-      {/* Loading Component */}
-      {loading && (
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color={AppColors.primary} />
-          <Text style={styles.text}>{t("chatScreenTexts.loadingMessage")}</Text>
-        </View>
-      )}
-      {!loading && (
-        <View style={{ flex: 1, backgroundColor: "#ededed" }}>
-          {/* Chat List Component */}
-          <ScrollView
-            ref={scrollView}
-            onContentSizeChange={() => scrollView.current.scrollToEnd()}
-            contentContainerStyle={{
-              paddingHorizontal: "2%",
-            }}
-          >
-            {conversationData.map((item) => {
-              const is_read = !!parseInt(item.is_read);
-              if (!is_read && item.source_id != user.id) {
-                handleMessageReadStatus(item);
-              }
-
-              return (
-                // {* Individual Message Component *}
-                <Message
-                  key={item.message_id}
-                  text={item.message}
-                  time={item.created_at}
-                  sender={item.source_id === user.id.toString()}
-                  is_read={is_read}
-                />
-              );
-            })}
-          </ScrollView>
-        </View>
-      )}
-      {(user.id === isConDeleted.sender_id &&
-        isConDeleted.recipient_delete == 0) ||
-      (user.id !== isConDeleted.sender_id &&
-        isConDeleted.sender_delete == 0) ? (
-        <Formik
-          initialValues={{ message: "" }}
-          onSubmit={handleMessageSending}
-          validationSchema={validationSchema}
-        >
-          {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-            <View style={styles.chatBoxWrap}>
-              {/* Message Input Component */}
-              <TextInput
-                onChangeText={handleChange("message")}
-                onBlur={handleBlur("message")}
-                value={values.message}
-                multiline={true}
-                placeholder={t("chatScreenTexts.placeholder.message")}
-                style={[styles.chatInput, rtlTextA]}
-                textAlignVertical="center"
-              />
-              {/* Send Button Component */}
-              <TouchableOpacity
-                style={styles.sendButton}
-                onPress={handleSubmit}
-                disabled={!!errors.message || !values.message.trim().length}
-              >
-                <SendIcon fillColor={AppColors.red} />
-              </TouchableOpacity>
+            </TouchableOpacity>
+          )}
+          {/* Loading Component */}
+          {loading && (
+            <View style={styles.loading}>
+              <ActivityIndicator size="large" color={AppColors.primary} />
+              <Text style={styles.text}>
+                {t("chatScreenTexts.loadingMessage")}
+              </Text>
             </View>
           )}
-        </Formik>
-      ) : (
-        // {* Message Deleted Cpmponent *}
-        <View style={styles.deletedMessageWrap}>
-          <Text style={styles.deletedMessage}>
-            {t("chatScreenTexts.dactivatedMessage")}
-          </Text>
-        </View>
-      )}
-    </View>
-  ) : (
-    <View style={{ flex: 1, backgroundColor: "#ededed" }}>
-      {/* Chat Header Component */}
-      {!!route?.params?.from && (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.push(routes.listingDetailScreen, {
-              listingId: route.params.listing_id,
-            })
-          }
-          style={[
-            {
-              flexDirection: "row",
-              backgroundColor: AppColors.white,
-              alignItems: "center",
-              paddingVertical: 10,
-              paddingHorizontal: "3%",
-            },
-            rtlView,
-          ]}
-          disabled={
-            route.params.from === "listing" || route.params.from === undefined
-          }
-        >
-          <View
-            style={{
-              height: 50,
-              width: 50,
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "hidden",
-              borderRadius: 25,
-            }}
-          >
-            <Image
-              style={{
-                height: 50,
-                width: 50,
-                resizeMode: "cover",
-              }}
-              source={
-                listingData.images.length
-                  ? {
-                      uri: listingData.images[0].sizes.medium.src,
-                    }
-                  : chatScreenImagesUrls.fallbackImageUrl
-              }
-            />
-          </View>
-          <View
-            style={{
-              marginLeft: rtl_support ? 0 : 10,
-              marginRight: rtl_support ? 10 : 0,
-              flex: 1,
-              // flexDirection: "column-reverse",
-            }}
-          >
-            <Text
-              style={[
-                {
-                  fontWeight: "bold",
-                  fontSize: 16,
-                  color: AppColors.text_dark,
-                  textAlign: rtl_support ? "right" : "left",
-                },
-              ]}
-              numberOfLines={1}
-            >
-              {decodeString(listingData.title)}
-            </Text>
-            <View
-              style={[{ flexDirection: "row", alignItems: "center" }, rtlView]}
-            >
-              <View style={styles.view}>
-                {rtl_support ? (
-                  <FontAwesome name="tag" size={14} color={AppColors.primary} />
-                ) : (
-                  <Ionicons
-                    name="pricetag"
-                    size={14}
-                    color={AppColors.primary}
-                  />
-                )}
-              </View>
-              <View style={{ paddingHorizontal: 5 }}>
-                <Text
-                  style={{
-                    color: AppColors.primary,
-                    textAlign: rtl_support ? "right" : "left",
-                  }}
-                  numberOfLines={1}
-                >
-                  {handleLocationNCategoryData()}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      )}
-      {/* Loading Component */}
-      {loading && (
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color={AppColors.primary} />
-          <Text style={[styles.text, rtlText]}>
-            {t("chatScreenTexts.loadingMessage")}
-          </Text>
-        </View>
-      )}
-      {!loading && (
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior="padding"
-          keyboardVerticalOffset={100}
-        >
-          {/* Chat List Component */}
-          <ScrollView
-            ref={scrollView}
-            onContentSizeChange={() => scrollView.current.scrollToEnd()}
-            contentContainerStyle={{
-              paddingHorizontal: "2%",
-            }}
-          >
-            {conversationData.map((item) => {
-              const is_read = !!parseInt(item.is_read);
-              if (!is_read && item.source_id != user.id) {
-                handleMessageReadStatus(item);
-              }
+          {!loading && (
+            <View style={{ flex: 1, backgroundColor: "#ededed" }}>
+              {/* Chat List Component */}
+              <ScrollView
+                ref={scrollView}
+                onContentSizeChange={() => scrollView.current.scrollToEnd()}
+                contentContainerStyle={{
+                  paddingHorizontal: "2%",
+                }}
+              >
+                {conversationData.map((item) => {
+                  const is_read = !!parseInt(item.is_read);
+                  if (!is_read && item.source_id != user.id) {
+                    handleMessageReadStatus(item);
+                  }
 
-              return (
-                // {* Individual Message Component *}
-                <Message
-                  key={item.message_id}
-                  text={item.message}
-                  time={item.created_at}
-                  sender={item.source_id === user.id.toString()}
-                  is_read={is_read}
-                />
-              );
-            })}
-          </ScrollView>
+                  return (
+                    // {* Individual Message Component *}
+                    <Message
+                      key={item.message_id}
+                      text={item.message}
+                      time={item.created_at}
+                      sender={item.source_id === user.id.toString()}
+                      is_read={is_read}
+                    />
+                  );
+                })}
+              </ScrollView>
+            </View>
+          )}
           {(user.id === isConDeleted.sender_id &&
             isConDeleted.recipient_delete == 0) ||
           (user.id !== isConDeleted.sender_id &&
@@ -618,7 +456,7 @@ const ChatView = ({ navigation, route }) => {
                     value={values.message}
                     multiline={true}
                     placeholder={t("chatScreenTexts.placeholder.message")}
-                    style={[styles.chatInput, rtlText]}
+                    style={[styles.chatInput, rtlTextA]}
                     textAlignVertical="center"
                   />
                   {/* Send Button Component */}
@@ -640,9 +478,208 @@ const ChatView = ({ navigation, route }) => {
               </Text>
             </View>
           )}
-        </KeyboardAvoidingView>
+        </View>
+      ) : (
+        <View style={{ flex: 1, backgroundColor: "#ededed" }}>
+          {/* Chat Header Component */}
+          {!!route?.params?.from && (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.push(routes.listingDetailScreen, {
+                  listingId: route.params.listing_id,
+                })
+              }
+              style={[
+                {
+                  flexDirection: "row",
+                  backgroundColor: AppColors.white,
+                  alignItems: "center",
+                  paddingVertical: 10,
+                  paddingHorizontal: "3%",
+                },
+                rtlView,
+              ]}
+              disabled={
+                route.params.from === "listing" ||
+                route.params.from === undefined
+              }
+            >
+              <View
+                style={{
+                  height: 50,
+                  width: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  borderRadius: 25,
+                }}
+              >
+                <Image
+                  style={{
+                    height: 50,
+                    width: 50,
+                    resizeMode: "cover",
+                  }}
+                  source={
+                    listingData.images.length
+                      ? {
+                          uri: listingData.images[0].sizes.medium.src,
+                        }
+                      : chatScreenImagesUrls.fallbackImageUrl
+                  }
+                />
+              </View>
+              <View
+                style={{
+                  marginLeft: rtl_support ? 0 : 10,
+                  marginRight: rtl_support ? 10 : 0,
+                  flex: 1,
+                  // flexDirection: "column-reverse",
+                }}
+              >
+                <Text
+                  style={[
+                    {
+                      fontWeight: "bold",
+                      fontSize: 16,
+                      color: AppColors.text_dark,
+                      textAlign: rtl_support ? "right" : "left",
+                    },
+                  ]}
+                  numberOfLines={1}
+                >
+                  {decodeString(listingData.title)}
+                </Text>
+                <View
+                  style={[
+                    { flexDirection: "row", alignItems: "center" },
+                    rtlView,
+                  ]}
+                >
+                  <View style={styles.view}>
+                    {rtl_support ? (
+                      <FontAwesome
+                        name="tag"
+                        size={14}
+                        color={AppColors.primary}
+                      />
+                    ) : (
+                      <Ionicons
+                        name="pricetag"
+                        size={14}
+                        color={AppColors.primary}
+                      />
+                    )}
+                  </View>
+                  <View style={{ paddingHorizontal: 5 }}>
+                    <Text
+                      style={{
+                        color: AppColors.primary,
+                        textAlign: rtl_support ? "right" : "left",
+                      }}
+                      numberOfLines={1}
+                    >
+                      {handleLocationNCategoryData()}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+          {/* Loading Component */}
+          {loading && (
+            <View style={styles.loading}>
+              <ActivityIndicator size="large" color={AppColors.primary} />
+              <Text style={[styles.text, rtlText]}>
+                {t("chatScreenTexts.loadingMessage")}
+              </Text>
+            </View>
+          )}
+          {!loading && (
+            <KeyboardAvoidingView
+              style={styles.container}
+              behavior="padding"
+              keyboardVerticalOffset={100}
+            >
+              {/* Chat List Component */}
+              <ScrollView
+                ref={scrollView}
+                onContentSizeChange={() => scrollView.current.scrollToEnd()}
+                contentContainerStyle={{
+                  paddingHorizontal: "2%",
+                }}
+              >
+                {conversationData.map((item) => {
+                  const is_read = !!parseInt(item.is_read);
+                  if (!is_read && item.source_id != user.id) {
+                    handleMessageReadStatus(item);
+                  }
+
+                  return (
+                    // {* Individual Message Component *}
+                    <Message
+                      key={item.message_id}
+                      text={item.message}
+                      time={item.created_at}
+                      sender={item.source_id === user.id.toString()}
+                      is_read={is_read}
+                    />
+                  );
+                })}
+              </ScrollView>
+              {(user.id === isConDeleted.sender_id &&
+                isConDeleted.recipient_delete == 0) ||
+              (user.id !== isConDeleted.sender_id &&
+                isConDeleted.sender_delete == 0) ? (
+                <Formik
+                  initialValues={{ message: "" }}
+                  onSubmit={handleMessageSending}
+                  validationSchema={validationSchema}
+                >
+                  {({
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    values,
+                    errors,
+                  }) => (
+                    <View style={styles.chatBoxWrap}>
+                      {/* Message Input Component */}
+                      <TextInput
+                        onChangeText={handleChange("message")}
+                        onBlur={handleBlur("message")}
+                        value={values.message}
+                        multiline={true}
+                        placeholder={t("chatScreenTexts.placeholder.message")}
+                        style={[styles.chatInput, rtlText]}
+                        textAlignVertical="center"
+                      />
+                      {/* Send Button Component */}
+                      <TouchableOpacity
+                        style={styles.sendButton}
+                        onPress={handleSubmit}
+                        disabled={
+                          !!errors.message || !values.message.trim().length
+                        }
+                      >
+                        <SendIcon fillColor={AppColors.red} />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </Formik>
+              ) : (
+                // {* Message Deleted Cpmponent *}
+                <View style={styles.deletedMessageWrap}>
+                  <Text style={styles.deletedMessage}>
+                    {t("chatScreenTexts.dactivatedMessage")}
+                  </Text>
+                </View>
+              )}
+            </KeyboardAvoidingView>
+          )}
+        </View>
       )}
-    </View>
+    </ScreenWrapper>
   );
 };
 
