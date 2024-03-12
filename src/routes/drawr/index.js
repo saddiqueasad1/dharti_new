@@ -13,7 +13,7 @@ function MyDrawer() {
       screenOptions={{
         headerShown: false,
         drawerStyle: {
-          backgroundColor: '#000000',
+          backgroundColor: '#ffffff',
           width: width(80),
         },
         sceneContainerStyle: {

@@ -285,7 +285,7 @@ const ChatView = ({ navigation, route }) => {
   const rtlView = rtl_support && {
     flexDirection: "row-reverse",
   };
-
+console.log("Cat screnenen",listingData?.id);
   return (
     <ScreenWrapper
       showStatusBar={false}
@@ -300,7 +300,7 @@ const ChatView = ({ navigation, route }) => {
             <TouchableOpacity
               onPress={() =>{
                 console.log(route.params);
-                // navigation.navigate(ScreenNames.DETAIL, route.params)
+                navigation.navigate(ScreenNames.DETAIL,listingData)
               }}
               style={[
                 {

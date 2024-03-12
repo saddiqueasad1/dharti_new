@@ -45,20 +45,19 @@ import { formatDistanceToNow } from "date-fns";
 import { ApiManager } from "../../../backend/ApiManager";
 export default function Detail({ navigation, route }) {
   const { t } = useTranslation();
-  const dat = route?.params;
+  const dat = route?.params?.listing_id || route?.params?.id;
   const token = useSelector(selectToken);
   const loginuser = useSelector(selectUserMeta);
   const islogin = useSelector(selectIsLoggedIn);
   const mapRef = useRef(null);
   const dispatch = useDispatch();
-  const [data, setDat] = useState(route?.params);
+  const [data, setDat] = useState();
   const favAdIds = useSelector(selectFavAds);
   const [fav, setFav] = useState(false);
   const [img, setimg] = useState([]);
   const [load, setload] = useState(false);
   const [fload, setfload] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
   useEffect(() => {
     if (isInArray(data?.listing_id, favAdIds)) {
       setFav(true);
@@ -96,12 +95,12 @@ export default function Detail({ navigation, route }) {
   };
   useEffect(() => {
     getData();
-  }, [dat?.listing_id != data?.listing_id]);
+  }, [dat != data?.listing_id]);
   const getData = async () => {
     try {
       setload(true);
 
-      let d = await getDataofAdByID(dat?.listing_id);
+      let d = await getDataofAdByID(dat);
       // setload(false);
       console.log("here");
       // console.log("deydisndu",d);
@@ -110,7 +109,7 @@ export default function Detail({ navigation, route }) {
         setDat(d);
         setimg(d?.images);
         if (d.userId.listing_id != loginuser?.listing_id) {
-          await adView(dat?.listing_id);
+          await adView(dat);
         }
       } else {
         // setDat({}), navigation.goBack();
@@ -282,7 +281,8 @@ export default function Detail({ navigation, route }) {
               >
                 <Entypo name="location-pin" color={"grey"} size={height(2)} />
                 <Text style={{ fontSize: height(1.5) }}>
-                  {data?.author?.address}
+                  {data?.contact?.address ||
+                    data?.contact?.locations.map((m) => m.name + " ")}
                 </Text>
               </View>
               <Text

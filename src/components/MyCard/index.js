@@ -100,7 +100,6 @@ export default function MyCard({ data }) {
       dispatch(setAppLoader(false));
     }
   };
-
   return (
     <View style={styles.main}>
       <View style={styles.imageview}>
@@ -146,19 +145,10 @@ export default function MyCard({ data }) {
         </View> */}
         {!isNullOrNullOrEmpty(data?.price) && (
           <View style={styles.detailinerview}>
-            {checkPrice(data?.price) ? (
+            {checkPrice(data?.raw_price) && (
               <View style={{ width: width(50) }}>
                 <Text numberOfLines={1} style={styles.chf}>
-                  CHF {formatPrice(parsePrice(data?.price))}
-                </Text>
-                <Text numberOfLines={1} style={styles.eur}>
-                  EUR {formatPriceE(Math.round(data?.price * 1.06))}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.cfpview}>
-                <Text numberOfLines={1} style={styles.cfp}>
-                  {t(`addPost.${data?.price}`)}
+                  PKR {formatPrice(parsePrice(data?.raw_price))}
                 </Text>
               </View>
             )}

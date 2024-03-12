@@ -402,20 +402,21 @@ export function shouldRenderField(field, category, sub_category) {
 }
 
 export const formatPrice = (price) => {
-  const priceString = price.toString();
-  const groups = [];
-  let remainingDigits = priceString.length;
+  // const priceString = price.toString();
+  // const groups = [];
+  // let remainingDigits = priceString.length;
 
-  while (remainingDigits > 0) {
-    const groupSize = Math.min(3, remainingDigits);
-    const group = priceString.substr(remainingDigits - groupSize, groupSize);
-    groups.unshift(group);
-    remainingDigits -= groupSize;
-  }
+  // while (remainingDigits > 0) {
+  //   const groupSize = Math.min(3, remainingDigits);
+  //   const group = priceString.substr(remainingDigits - groupSize, groupSize);
+  //   groups.unshift(group);
+  //   remainingDigits -= groupSize;
+  // }
 
-  const formattedPrice = groups.join("'");
+  // const formattedPrice = groups.join("'");
 
-  return formattedPrice + ".-";
+  // return formattedPrice;
+ return price.toLocaleString("en-US")
 };
 export const formatPriceE = (price) => {
   const priceString = price.toString();
