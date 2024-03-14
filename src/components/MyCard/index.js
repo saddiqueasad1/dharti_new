@@ -1,6 +1,6 @@
 import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View, Alert } from "react-native";
 import Dialog from "react-native-dialog";
 import { Menu, MenuItem } from "react-native-material-menu";
 import styles from "./styles";
@@ -24,6 +24,8 @@ import GlobalMethods, {
   isNullOrNullOrEmpty,
   successMessage,
 } from "../../utills/Methods";
+import { ApiManager } from "../../backend/ApiManager";
+import { decodeString } from "../../utills/helper";
 
 export default function MyCard({ data }) {
   const navigation = useNavigation();
@@ -39,14 +41,14 @@ export default function MyCard({ data }) {
     if (d) dispatch(setUserAds(d));
     else dispatch(setUserAds([]));
   });
-  const [publish, setPublish] = useState(data?.status === 'publish');
+  const [publish, setPublish] = useState(data?.status === "publish");
   const [isModalVisible, setModalVisible] = useState(false);
   const hideMenu = () => setModalVisible(false);
 
   const showMenu = () => setModalVisible(true);
 
   const parsePrice = (price) => {
-    return parseInt(price.replace(/,/g, ''), 10);
+    return parseInt(price.replace(/,/g, ""), 10);
   };
   const deleteAd = async (id) => {
     dispatch(setAppLoader(true));
@@ -59,31 +61,42 @@ export default function MyCard({ data }) {
       dispatch(setAppLoader(false));
     }
   };
-  const refreshAd = async () => {
-    dispatch(setAppLoader(true));
-    try {
-      const d = await refreshApi(data?.listing_id);
-      if (d?.success) {
-        await getData(userid);
-        successMessage(t("flashmsg.Ad Refresh"), t("flashmsg.success"));
-      } else {
-        errorMessage(t("flashmsg.refreshAdMsg"), t("flashmsg.error"));
-      }
 
-      dispatch(setAppLoader(false));
-    } catch (error) {
-      console.log("Error:", error);
-      dispatch(setAppLoader(false));
-    }
+  const handleSoldAlert = (listing) => {
+    Alert.alert(
+      "",
+      `${t("myListingsScreenTexts.soldPromptMessage")} ${decodeString(
+        listing.title
+      )} ${
+        listing.badges.includes("is-sold")
+          ? t("myListingsScreenTexts.asUnsold")
+          : t("myListingsScreenTexts.asSold")
+      } ?`,
+      [
+        {
+          text: t("myListingsScreenTexts.cancelButtonTitle"),
+        },
+        {
+          text: t("myListingsScreenTexts.okayButtonTitle"),
+          onPress: () => handleSoldMarking(listing),
+        },
+      ],
+      { cancelable: false }
+    );
   };
-  const publishAd = async () => {
-    let r = await togglePublish(data.listing_id);
+
+  const handleSoldMarking = (item) => {
     dispatch(setAppLoader(true));
     try {
-      await getData(userid);
-      dispatch(setAppLoader(false));
+      ApiManager.setAuthToken(auth_token);
+      ApiManager.post("my/mark-as-sold", { listing_id: item.listing_id }).then(
+        async (res) => {
+          ApiManager.removeAuthToken();
+          await getData(userid);
+        }
+      );
     } catch (error) {
-      console.log("Error:", error);
+    } finally {
       dispatch(setAppLoader(false));
     }
   };
@@ -93,7 +106,11 @@ export default function MyCard({ data }) {
         <Image
           resizeMode="cover"
           style={styles.image}
-          source={data?.images[0]?.src ? { uri: data.images[0]?.src  } : require("../../asset/images/200X150.png")}
+          source={
+            data?.images[0]?.src
+              ? { uri: data.images[0]?.src }
+              : require("../../asset/images/200X150.png")
+          }
         />
       </View>
       <View style={styles.detail}>
@@ -128,19 +145,10 @@ export default function MyCard({ data }) {
         </View> */}
         {!isNullOrNullOrEmpty(data?.price) && (
           <View style={styles.detailinerview}>
-            {checkPrice(data?.price) ? (
+            {checkPrice(data?.raw_price) && (
               <View style={{ width: width(50) }}>
                 <Text numberOfLines={1} style={styles.chf}>
-                  CHF {formatPrice(parsePrice(data?.price))}
-                </Text>
-                <Text numberOfLines={1} style={styles.eur}>
-                  EUR {formatPriceE(Math.round(data?.price * 1.06))}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.cfpview}>
-                <Text numberOfLines={1} style={styles.cfp}>
-                  {t(`addPost.${data?.price}`)}
+                  PKR {formatPrice(parsePrice(data?.raw_price))}
                 </Text>
               </View>
             )}
@@ -173,48 +181,7 @@ export default function MyCard({ data }) {
             {t("myad.edit")}
           </Text>
         </MenuItem>
-        {publish && (
-          <MenuItem
-            onPress={() => {
-              hideMenu();
-              refreshAd();
-            }}
-          >
-            <FontAwesome name="refresh" size={height(2)} />
-            <Text style={{ fontSize: height(1.5), color: AppColors.black }}>
-              {" "}
-              {t("myad.refresh")}
-            </Text>
-          </MenuItem>
-        )}
 
-        {publish ? (
-          <MenuItem
-            onPress={() => {
-              hideMenu();
-              publishAd();
-            }}
-          >
-            <FontAwesome name="pause" size={height(1.8)} />
-            <Text style={{ fontSize: height(1.5), color: AppColors.black }}>
-              {" "}
-              {"  "} {t("myad.muteButton")}
-            </Text>
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onPress={() => {
-              hideMenu();
-              publishAd();
-            }}
-          >
-            <AntDesign name="play" size={height(2)} />
-            <Text style={{ fontSize: height(1.5), color: AppColors.black }}>
-              {"  "}
-              {t("myad.promote")} 
-            </Text>
-          </MenuItem>
-        )}
         <MenuItem
           onPress={() => {
             hideMenu(),
@@ -224,17 +191,15 @@ export default function MyCard({ data }) {
           }}
         >
           <AntDesign name="delete" size={height(2)} color={"red"} />
-          <Text style={{ color: 'red', fontSize: height(1.5) }}>
+          <Text style={{ color: "red", fontSize: height(1.5) }}>
             {"   "}
             {t("myad.delete")}
           </Text>
         </MenuItem>
         <MenuItem
           onPress={() => {
-            hideMenu(),
-              setTimeout(() => {
-                setVisible(true);
-              }, 600);
+            hideMenu();
+            handleSoldAlert(data);
           }}
         >
           <AntDesign name="file-markdown" size={height(2)} />

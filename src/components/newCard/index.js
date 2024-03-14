@@ -38,7 +38,7 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
   const [img, setimg] = useState(data?.images || []);
   const [modal, setModal] = useState(false);
   useEffect(() => {
-    if (isInArray(data.listing_id, favAdIds)) {
+    if (isInArray(data?.listing_id, favAdIds)) {
       setFav(true);
     } else {
       setFav(false);
@@ -104,16 +104,15 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: 'center',
+                justifyContent: "center",
                 padding: width(2),
-                alignContent:'center',
-                alignItems:'center'
+                alignContent: "center",
+                alignItems: "center",
               }}
             >
               <TouchableOpacity
                 style={{
-            
-                  paddingHorizontal: width(2),                 
+                  paddingHorizontal: width(2),
                 }}
                 onPress={() =>
                   GlobalMethods.onPressShare(
@@ -128,16 +127,16 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
 
               <View
                 style={{
-                  backgroundColor:'black',
+                  backgroundColor: "black",
                   paddingHorizontal: height(1.5),
-                  paddingVertical: height(.5),
+                  paddingVertical: height(0.5),
                   alignContent: "center",
                   justifyContent: "center",
-                  alignItems:'center',
-                  borderRadius:height(.5)
+                  alignItems: "center",
+                  borderRadius: height(0.5),
                 }}
               >
-                <Text style={{color:AppColors.white}}>{data?.ad_type}</Text>
+                <Text style={{ color: AppColors.white }}>{data?.ad_type}</Text>
               </View>
             </View>
           </View>
@@ -264,7 +263,8 @@ const Card = React.memo(({ data, onPresshide, map = false }) => {
         <View style={styles.categoryview}>
           <Entypo name="location-pin" color={"grey"} size={height(2)} />
           <Text numberOfLines={2} style={styles.categorytext}>
-            {data?.contact?.address}
+            {data?.contact?.address ||
+              data?.contact?.locations.map((m) => m.name+" ")}
           </Text>
         </View>
       </View>

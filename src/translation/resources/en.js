@@ -1312,5 +1312,58 @@ newListingScreenTexts: {
 "dynamicListPickerTexts": {
   "selectText": "Select a"
 },
+"chatListScreenTexts": {
+  "noChatTitleMessage": "Currently you have no chats",
+  "noChatMessage": "Start buying and selling!",
+  "deletePromptMessage": "Do you really want to delete this conversation?",
+  "cancelButtonTitle": "Cancel",
+  "deleteButtonTitle": "Delete",
+  "noUserMessage": "Currently you're not logged in\nPlease log in or sign up to get your chat data",
+  "loadingMessage": "Getting conversation list from server",
+  "chatDeleteSuccessText": "Successfully deleted",
+  "chatDeleteErrorText": "Error! Please try again",
+  "offlineNoticeText": "You are offline",
+  "loginButtonTitle": "Log in / Sign up",
+  "scrollToRefresh": "Scroll to refresh chat list"
+},
+"chatScreenTexts": {
+  "loadingMessage": "Getting conversation data from server",
+  "dactivatedMessage": "Receiver has deleted the conversation",
+  "placeholder": {
+    "message": "Type a message"
+  }
+},
+
+"myListingsScreenTexts": {
+  "loggedOut": "You are not logged in.",
+  "deletePromptMessage": "Do You want to delete",
+  "editPromptMessage": "Do You want to edit",
+  "promotePromptMessage": "Do You want to promote",
+  "soldPromptMessage": "Do You want to mark",
+  "asUnsold": "as unsold",
+  "asSold": "as sold",
+  "cancelButtonTitle": "Cancel",
+  "okayButtonTitle": "Ok",
+  "deleteButtonTitle": "Delete",
+  "editButtonTitle": "Edit",
+  "promoteButtonTitle": "Promote",
+  "noAdTitle": "Currently you don't have any ad!",
+  "postAdButtonTitle": "Create new ad!",
+  "loadingMessage": "Getting user's ad",
+  "listingDeleteSuccessText": "Successfully deleted",
+  "listingDeleteErrorText": "Error! Please try again",
+  "actionMenuButtons": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "promote": "Promote",
+    "sold": "Mark as sold",
+    "unsold": "Mark as unsold"
+  },
+
+  "promoteLink": "https://dhartipak.com/",
+  "customServerErrorMessage": "Error gettion data from server.",
+  "noInternet": "No Internet"
+},
+
 
 };

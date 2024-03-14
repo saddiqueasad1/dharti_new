@@ -134,7 +134,8 @@ export const getModel = async (type, value) => {
 };
 export const deleteAdById = async (id) => {
   try {
-    const response = await ApiManager.delete(`ad/deleteAd/${id}`);
+    const response = await ApiManager.delete("my/listings", { listing_id: id });
+    return response
   } catch (error) {
     return []; // or some default value as needed
   }

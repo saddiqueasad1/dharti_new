@@ -1,747 +1,684 @@
-import { get, getDatabase, onValue, push, ref, set } from "firebase/database";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
-  Alert,
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
+  Text,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  KeyboardAvoidingView,
 } from "react-native";
-import {
-  Actions,
-  Bubble,
-  Day,
-  GiftedChat,
-  MessageText,
-  Send,
-  Time,
-} from "react-native-gifted-chat";
-import { useDispatch, useSelector } from "react-redux";
-import { AdView, DropDownMenu } from "../../../components";
-import {
-  selectChatRooms,
-  selectUserMeta,
-  setChatRooms,
-} from "../../../redux/slices/user";
-import { height, width } from "../../../utills/Dimension";
-
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import {
-  getDownloadURL,
-  getStorage,
-  ref as storageRef,
-  uploadBytes,
-} from "@firebase/storage";
-import { useNavigation } from "@react-navigation/native";
-import * as ImagePicker from "expo-image-picker";
-import { useTranslation } from "react-i18next";
-import Modal from "react-native-modal";
-import { Button, ScreenWrapper } from "../../../components";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import moment from "moment";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { decodeString } from "../../../utills/helper";
+import SendIcon from "../../../asset/svgComponents/SendIcon";
 import AppColors from "../../../utills/AppColors";
-function ChatView({ route }) {
-  const { t } = useTranslation();
-  const database = getDatabase();
-  const [messages, setMessages] = useState([]);
-  const [receiver, setReceiver] = useState();
-  const [roomID, setRoomID] = useState(route?.params.userRoom);
-  const [items, setItems] = useState();
-  const [selectedItem, setSelectedItem] = useState(route?.params.userItem);
-  const [online, setOnline] = useState();
-  const [image, setImage] = useState([]);
-  const [imageModal, setImageModal] = useState(false);
-  const [imgModal, setImgModal] = useState(false);
+import { useTranslation } from "react-i18next";
+import { ApiManager } from "../../../backend/ApiManager";
+import { selectToken, selectUserMeta } from "../../../redux/slices/user";
+import { useSelector } from "react-redux";
+import { Head, ScreenWrapper } from "../../../components";
 
-  const navigation = useNavigation();
+import styles from "./styles";
+import ScreenNames from "../../../routes/routes";
 
-  const dispatch = useDispatch();
+const chatScreenImagesUrls = {
+  fallbackImageUrl: require("../../../asset/images/200X150.png"),
+};
 
-  const usrData = route.params?.usr;
+const validationSchema = Yup.object().shape({
+  message: Yup.string().required(),
+});
+
+const ChatView = ({ navigation, route }) => {
+  const [listingData] = useState(route?.params?.listing || null);
+  const [conversationData, setConversationData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
+  const [autoload, setAutoload] = useState(false);
+
   const user = useSelector(selectUserMeta);
-  const data = useSelector(selectChatRooms);
-  let f = async () => {
-    if (roomID) {
-      const lastReadRef = ref(
-        database,
-        `chatrooms/${roomID}/lastRead/${user?._id}`
-      );
-      await set(lastReadRef, Date.now());
-    }
-  };
-  useEffect(() => {
-    f();
-  }, []);
-  useEffect(() => {
-    myfuntion();
-  }, [roomID]);
-  useEffect(() => {
-    if (!(route?.params?.userRoom == null)) {
-      setRoomID(route?.params?.userRoom);
-    } else {
-      setRoomID(
-        `${user?._id}_${route.params.usr?._id}_${route.params?.userItem._id}`
-      );
-    }
-    setReceiver(route.params?.usr);
-  }, []);
-  useEffect(() => {
-    const userStatusRef = ref(
-      database,
-      `users/${route.params.usr?._id}/online`
-    );
-    onValue(userStatusRef, (snapshot) => {
-      const status = snapshot.val();
-      setOnline(status);
-    });
-  }, [user?._id]);
+  const auth_token = useSelector(selectToken);
+  const ios = false;
+  const rtl_support = false;
 
+  const [con_id, setConId] = useState(route.params.con_id);
+  const [isConDeleted, setIsConDeleted] = useState({
+    sendr_id: parseInt(route.params.sender_id) || 0,
+    recipient_delete: parseInt(route.params.recipient_delete) || 0,
+    sender_delete: parseInt(route.params.sender_delete) || 0,
+    recipient_id: parseInt(route.params.recipient_id) || 0,
+  });
+  const { t } = useTranslation();
+
+  const scrollView = useRef();
+  // scroll to end effect
   useEffect(() => {
-    if (!selectedItem) {
-      Alert.alert(t("flashmsg.alert"), t("flashmsg.Ad deleted"), [
-        { text: "OK", onPress: () => {} },
-      ]);
+    if (loading) return;
+    scrollView.current.scrollToEnd();
+  }, [loading]);
+
+  // auto refresh effect
+  useEffect(() => {
+    handleLoadMessages();
+    const interval = setInterval(handleLoadMessages, 15000);
+    if (
+      isConDeleted.recipient_delete === 1 ||
+      isConDeleted.sender_delete === 1
+    ) {
+      clearInterval(interval);
+      return;
     }
-  }, []);
-  const myfuntion = async () => {
-    if (roomID) {
-      const messagesRef = ref(
-        database,
-        `chatrooms/${
-          route?.params?.userRoom != null ? route?.params?.userRoom : roomID
-        }/messages`
-      );
-      onValue(messagesRef, (snapshot) => {
-        const messageData = snapshot.val();
-        if (messageData) {
-          // Convert the message data to an array and sort it in descending order
-          const messageList = Object.values(messageData)
-            .map((message) => {
-              if (message.images) {
-                return {
-                  _id: message.timestamp, // Use a unique identifier for each message
-                  image: message.images,
-                  createdAt: new Date(message.timestamp),
-                  user: {
-                    _id: message.senderId, // Use the sender's user ID here
-                  },
-                };
-              } else {
-                return {
-                  _id: message.timestamp, // Use a unique identifier for each message
-                  text: message.text,
-                  createdAt: new Date(message.timestamp),
-                  user: {
-                    _id: message.senderId, // Use the sender's user ID here
-                  },
-                };
-              }
-            })
-            .reverse(); // Reverse the order to display the newest messages at the bottom
-          setMessages(messageList);
+    handleCheckHasConversation();
+    return () => clearInterval(interval);
+  }, [con_id]);
+
+  const handleCheckHasConversation = () => {
+    if (con_id) return;
+    ApiManager.setAuthToken(auth_token);
+    ApiManager.get("my/chat/check", {
+      listing_id: route.params.listing_id,
+    }).then((res) => {
+      if (res) {
+        if (res && res.con_id) {
+          setConversationData(res.messages || []);
+          setConId(res.con_id);
+        } else {
+          setConversationData([]);
         }
-      });
+        ApiManager.removeAuthToken();
+        setLoading(false);
+      } else {
+        // print error
+        // TODO Error handling
+        ApiManager.removeAuthToken();
+        setLoading(false);
+      }
+    });
+  };
 
-      const lastReadRef = ref(
-        database,
-        `chatrooms/${roomID}/lastRead/${user?._id}`
+  const handleLoadMessages = () => {
+    if (autoload || !con_id || sending) {
+      return;
+    }
+    setAutoload(true);
+    ApiManager.setAuthToken(auth_token);
+    ApiManager.get("my/chat/conversation", { con_id: con_id }).then((res) => {
+      if (res) {
+        setConversationData(res.messages);
+        setIsConDeleted((isConDeleted) => {
+          return {
+            ...isConDeleted,
+            ["sender_id"]: res.sender_id,
+            ["sender_delete"]: res.sender_delete,
+            ["recipient_delete"]: res.recipient_delete,
+          };
+        });
+        ApiManager.removeAuthToken();
+        setLoading(false);
+        setAutoload(false);
+      } else {
+        // print error
+        // TODO Error handling
+        ApiManager.removeAuthToken();
+        setLoading(false);
+        setAutoload(false);
+      }
+    });
+  };
+
+  const handleLocationNCategoryData = () => {
+    if (listingData.location.length) {
+      if (listingData.category.length) {
+        return decodeString(
+          listingData.location[listingData.location.length - 1].name +
+            ", " +
+            listingData.category[listingData.category.length - 1].name
+        );
+      } else {
+        return decodeString(
+          listingData.location[listingData.location.length - 1].name
+        );
+      }
+    } else {
+      return decodeString(
+        listingData.category[listingData.category.length - 1].name
       );
-      await set(lastReadRef, Date.now());
     }
   };
-  const renderBubble = (props) => {
-    // Customize the style of the message bubble
-    return (
-      <Bubble
-        key={props.index}
-        {...props}
-        wrapperStyle={{
-          backgroundColor: "red",
-          alignItems: "center",
-          justifyContent: "center",
-          right: {
-            backgroundColor: "#FAD0D0",
-            marginVertical: width(1), // Change the background color for sent messages
-          },
-          left: {
-            backgroundColor: "lightgray",
-            marginVertical: width(1), // Change the background color for received messages
-          },
-        }}
-      />
-    );
-  };
-  const renderMessageText = (props) => {
-    return (
-      <MessageText
-        {...props}
-        textStyle={{
-          right: {
-            color: "black",
-            // Change the text color for sent messages
-          },
-          left: {
-            color: "black", // Change the text color for received messages
-          },
-        }}
-      />
-    );
-  };
-  const renderAvatar = (props) => {
-    return (
-      <View {...props}>
-        <Image
-          source={{ uri: receiver?.image }}
-          style={{
-            width: height(5),
-            height: height(5),
-            borderRadius: width(10),
-          }}
-        />
-      </View>
-    );
+
+  //TODO need to check
+  const handleMessageReadStatus = (item) => {
+    ApiManager.setAuthToken(auth_token);
+    ApiManager.put("my/chat/message", {
+      con_id: item.con_id,
+      message_id: item.message_id,
+    }).then((res) => {
+      if (res) {
+        ApiManager.removeAuthToken();
+      } else {
+        ApiManager.removeAuthToken();
+      }
+    });
   };
 
-  const renderTime = (props) => {
-    return (
-      <Time
-        {...props}
-        timeFormat="HH:mm"
-        timeTextStyle={{
-          right: {
-            color: "black", // Change the text color for sent message times
-          },
-          left: {
-            color: "black", // Change the text color for received message times
-          },
-        }}
-      />
-    );
+  const handleMessageSending = (values, { resetForm }) => {
+    setSending(true);
+    const newMessage = {
+      message_id: new Date().getTime(),
+      source_id: user.id.toString(),
+      message: values.message,
+      created_at: moment().format("YYYY-MM-DD HH:mm:ss"),
+      con_id: route.params.con_id,
+      is_read: 0,
+    };
+    setConversationData((conversationData) => [
+      ...conversationData,
+      newMessage,
+    ]);
+    resetForm({ values: "" });
+    ApiManager.setAuthToken(auth_token);
+    const url = con_id ? "my/chat/message" : "my/chat/conversation";
+    ApiManager.post(url, {
+      listing_id: route.params.listing_id,
+      text: values.message,
+      con_id: con_id || 0,
+    })
+      .then((res) => {
+        if (res) {
+          ApiManager.removeAuthToken();
+          if (!con_id && res.con_id) {
+            setConId(res.con_id);
+          }
+        } else {
+          const newConversation = [...conversationData].filter(
+            (message) => message.message_id !== newMessage.message_id
+          );
+          setConversationData([...newConversation, res]);
+        }
+      })
+      .then(() => {
+        ApiManager.removeAuthToken();
+        setSending(false);
+      });
   };
 
-  const renderActions = (props) => (
-    <Actions
-      {...props}
-      containerStyle={{
-        position: "absolute",
-        right: height(7),
-        ...Platform.select({
-          ios: {
-            bottom: height(0),
-          },
-          android: {
-            bottom: height(0),
-          },
-        }),
-        zIndex: 9999,
-        width: height(4),
-        height: height(4),
+  const Message = ({ text, time, sender, is_read }) => (
+    <View
+      style={{
+        width: "100%",
+        marginVertical: 15,
+        alignItems: sender ? "flex-end" : "flex-start",
+        paddingHorizontal: "3%",
       }}
-      onPressActionButton={() => {
-        selectedItem && setImgModal(true);
-      }}
-      icon={() => (
-        <Ionicons name="camera" size={height(4)} color={AppColors.primary} />
-      )}
-    />
-  );
-
-  const renderSend = (props) => (
-    <Send
-      disabled={!selectedItem}
-      {...props}
-      containerStyle={{ paddingRight: width(2) }}
     >
-      <View style={{ marginRight: width(3), marginBottom: height(1.2),paddingLeft:height(7) }}>
-        <Ionicons name="send" color={AppColors.primary} size={height(3)} />
+      <View style={styles.messageBubble}>
+        {sender ? (
+          <View
+            style={{
+              height: 0,
+              width: 0,
+              borderBottomWidth: 20,
+              borderBottomColor: AppColors.white,
+              borderRightWidth: 15,
+              borderRightColor: "transparent",
+              position: "absolute",
+              right: -7,
+              bottom: 0,
+              backgroundColor: "transparent",
+            }}
+          />
+        ) : (
+          <View
+            style={{
+              height: 0,
+              width: 0,
+              borderBottomWidth: 20,
+              borderBottomColor: AppColors.white,
+              borderLeftWidth: 15,
+              borderLeftColor: "transparent",
+              position: "absolute",
+              left: -7,
+              bottom: 0,
+              backgroundColor: "transparent",
+            }}
+          />
+        )}
+        <Text>{decodeString(text)}</Text>
       </View>
-    </Send>
-  );
-  const renderMessageImage = (props) => {
-    if (props.currentMessage.image) {
-      return (
-        <View
+      <View
+        style={{
+          flexDirection: "row",
+        }}
+      >
+        <Text
           style={{
-            flexWrap: "wrap",
-            flexDirection: "row",
+            fontSize: 12,
+            color: AppColors.text_gray,
+            paddingHorizontal: sender ? 5 : 12,
           }}
         >
-          {props.currentMessage.image &&
-            props.currentMessage.image.map((item, index) => {
-              return (
-                <View
-                  style={{
-                    width: width(47),
-                    height: width(47),
-                    borderRadius: width(2),
-                    padding: width(1),
-                  }}
-                >
-                  <Image
-                    key={index}
-                    source={{
-                      uri: item,
-                    }}
-                    style={{
-                      flex: 1,
-                      borderRadius: width(2),
-                      backgroundColor: "white",
-                    }}
-                    resizeMode="contain"
-                  />
-                </View>
-              );
-            })}
-        </View>
-      );
-    }
-    return null;
+          {moment(time).format("D MMM, h:m a")}
+        </Text>
+        {sender && (
+          <MaterialCommunityIcons
+            name={is_read ? "check-all" : "check"}
+            size={15}
+            color={AppColors.gray}
+          />
+        )}
+      </View>
+    </View>
+  );
+
+  const rtlText = rtl_support && {
+    writingDirection: "rtl",
   };
-
-  const openCamera = async () => {
-    try {
-      let result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [4, 4],
-        quality: .5,
-      })
-        .then((a) => {
-          const selectedImages = a?.assets.map((imageUri) => {
-            if (image?.length < 5) {
-              return Platform.OS === "android"
-                ? imageUri.uri
-                : imageUri.uri.replace("file://", "");
-            }
-          });
-
-          setImage([...image, ...selectedImages]);
-          setImageModal(true);
-        })
-        .catch((e) => console.log("my log", e));
-    } catch (error) {
-      console.error("Image picker error:", error);
-    }
+  const rtlTextA = rtl_support && {
+    // writingDirection: "rtl",
+    textAlign: "right",
   };
-
-  const openGallery = async () => {
-    setTimeout(async () => {
-      await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true,
-        allowsEditing: true,
-        selectionLimit: 1,
-        quality: .5,
-      })
-        .then((a) => {
-          const selectedImages = a?.assets.map((imageUri) => {
-            if (image?.length < 5) {
-              return Platform.OS === "android"
-                ? imageUri.uri
-                : imageUri.uri.replace("file://", "");
-            }
-          });
-
-          setImage([...image, ...selectedImages]);
-          setImageModal(true);
-        })
-        .catch((e) => console.log("my log", e));
-    }, 1000);
+  const rtlView = rtl_support && {
+    flexDirection: "row-reverse",
   };
-
-  function openPicker(type = 0) {
-    setImgModal(false);
-    setTimeout(type == 0 ? openCamera : openGallery, 1000);
-  }
-
-  const setRooms = async (roomId, id) => {
-    const dataRef = ref(database, `users/${id}`);
-    lst = [`${roomId}`];
-    await get(dataRef)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const roomsFromData = data.rooms;
-          const newRooms = roomsFromData.filter((room) => !lst.includes(room));
-          lst = lst.concat(newRooms);
-        } else {
-          console.log("No data available");
-        }
-      })
-      .catch((error) => {
-        console.error("Error getting data:", error);
-      });
-
-    const userRef = ref(database, `users/${id}`);
-
-    const updateData = {
-      online: false,
-      rooms: lst, // Update the 'rooms' field with the 'lst' object
-    };
-
-    set(userRef, updateData)
-      .then(() => {
-        dispatch(setChatRooms(roomID));
-
-        console.log("Update successful");
-      })
-      .catch((error) => {
-        console.error("Update failed", error);
-      });
-  };
-
-  //Simple message acurate code
-
-  const onSend = useCallback(async (messages = []) => {
-    console.log("Sending");
-    const newMessage = messages[0];
-
-    if (user?._id == route.params.usr?._id) {
-      //flash msg
-    } else {
-      if (
-        (route.params?.userRoom == null ||
-          route.params?.userRoom == undefined) &&
-        roomID == null
-      ) {
-        let roomNew = `${user?._id}_${route.params.usr?._id}_${route.params?.userItem?._id}`;
-        setRoomID(roomNew);
-        const newMessageRef = push(
-          ref(database, `chatrooms/${roomNew}/messages`)
-        );
-
-        set(newMessageRef, {
-          text: newMessage.text,
-          timestamp: Date.now(),
-          senderId: user?._id, // Set the sender's user ID here
-        });
-        const lastReadRef = ref(
-          database,
-          `chatrooms/${roomNew}/lastRead/${user?._id}`
-        );
-        await set(lastReadRef, Date.now());
-
-        // const lastRead = ref(
-        //   database,
-        //   `chatrooms/${roomNew}/lastRead/${route.params.usr?._id}`
-        // );
-        // await set(lastRead, Date.now());
-
-        await setRooms(roomNew, route.params.usr?._id);
-        await setRooms(roomNew, user?._id);
-      } else {
-        const newMessageRef = push(
-          ref(database, `chatrooms/${roomID}/messages`)
-        );
-
-        set(newMessageRef, {
-          text: newMessage.text,
-          timestamp: Date.now(),
-          senderId: user?._id, // Set the sender's user ID here
-        });
-        const lastReadRef = ref(
-          database,
-          `chatrooms/${roomID}/lastRead/${user?._id}`
-        );
-        await set(lastReadRef, Date.now());
-        await setRooms(roomID, route.params.usr?._id);
-        await setRooms(roomID, user?._id);
-      }
-    }
-  });
-  async function getBlobFromFile(imageUri) {
-    return (await fetch(imageUri)).blob();
-  }
-  const saveImages = async () => {
-    const imageUrls = [];
-    if (
-      (route.params?.userRoom == null || route.params?.userRoom == undefined) &&
-      roomID == null
-    ) {
-      let roomNew = `${user?._id}_${route.params.usr?._id}_${route.params?.userItem?._id}`;
-      setRoomID(roomNew);
-    }
-    const storage = getStorage();
-    const newMessageRef = push(ref(database, `chatrooms/${roomID}/messages`));
-
-    for (const imageUri of image) {
-      const split = imageUri.split("/");
-      const name = split.pop();
-      const imageRef = storageRef(
-        storage,
-        `chatrooms/${roomID}/images/${name}`
-      );
-
-      const metadata = {
-        contentType: "image/jpeg",
-      };
-
-      // // Get the blob from the image URI
-      try {
-        const imageBlob = await getBlobFromFile(imageUri);
-
-        const uploadTask = await uploadBytes(
-          imageRef,
-          imageBlob,
-          metadata
-        ).catch((err) => {
-          console.log("Error uploading images:", err);
-        });
-        const snapshot = await uploadTask;
-
-        if (snapshot) {
-          const downloadUrl = await getDownloadURL(imageRef);
-          if (downloadUrl) {
-            imageUrls.push(downloadUrl);
-          }
-        }
-      } catch (error) {
-        console.log("Error uploading images:", error);
-      }
-    }
-
-    if (imageUrls.length > 0) {
-      set(newMessageRef, {
-        images: imageUrls,
-        timestamp: Date.now(),
-        senderId: user?._id,
-      });
-      await setRooms(roomID, route.params.usr?._id);
-      await setRooms(roomID, user?._id);
-    }
-
-    setImageModal(false);
-    setImage([]);
-  };
-  const handleBack = () => {
-    navigation.goBack();
-  };
-
-  const closeModal = () => {
-    setImageModal(false);
-    setImage([]);
-  };
-  const renderDay = (props) => <Day {...props} dateFormat={"DD/MM/ YYYY"} />;
+console.log("Cat screnenen",listingData?.id);
   return (
     <ScreenWrapper
       showStatusBar={false}
       statusBarColor={AppColors.white}
       barStyle="dark-content"
     >
-      <View style={styles.container}>
-        <View style={styles.account_View}>
-          <TouchableOpacity style={styles.icon_Style} onPress={handleBack}>
-            <MaterialIcons name="arrow-back-ios" size={height(3)} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={{ uri: usrData?.image }}
-              style={styles.image_Style}
-              resizeMode="cover"
-            />
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.account_Text}>{usrData?.firstName}</Text>
-            {/* {online ? (
-              <View style={styles.online_View}>
-                <View style={styles.online_Indicator}></View>
-                <Text style={styles.online_Text}>Online</Text>
-              </View>
-            ) : (
-              <View style={styles.online_View}>
-                <View
-                  style={{ ...styles.online_Indicator, backgroundColor: "red" }}
-                ></View>
-                <Text style={styles.online_Text}>Offline</Text>
-              </View>
-            )} */}
-          </View>
-        </View>
-        {selectedItem && (
-          <View>
-            <AdView detail={selectedItem} />
-          </View>
-        )}
-
-        <GiftedChat
-          onSend={onSend}
-          renderSend={renderSend}
-          // messages={messages}
-          messages={messages.map((message) => ({
-            ...message,
-            _id: message._id.toString(), // Ensure that _id is a string
-          }))}
-          placeholder={t("chat.placeholder")}
-          user={{
-            _id: user?._id,
-          }}
-          renderAvatar={renderAvatar}
-          renderDay={renderDay}
-          renderActions={renderActions}
-          renderMessageImage={renderMessageImage}
-          renderMessageText={renderMessageText}
-          renderTime={renderTime}
-          renderBubble={renderBubble}
-          textInputProps={{ editable: selectedItem && usrData ? true : false }}
-        />
-
-        <View>
-          <Modal
-            visible={imageModal}
-            animationIn="fadeInUpBig"
-            animationInTiming={500}
-            backdropColor="black"
-            transparent={true}
-            hasBackdrop={true}
-          >
-            <View style={styles.modalContainer}>
-              {/* <Button title="Close" onPress={closeModal} /> */}
-              <TouchableOpacity
-                onPress={closeModal}
+       <Head headtitle={"Chat"} navigation={navigation} />
+      {!ios ? (
+        <View style={{ flex: 1, backgroundColor: "#ededed" }}>
+          {/* Chat Header Component */}
+          {!!route?.params?.from && (
+            <TouchableOpacity
+              onPress={() =>{
+                console.log(route.params);
+                navigation.navigate(ScreenNames.DETAIL,listingData)
+              }}
+              style={[
+                {
+                  flexDirection: "row",
+                  backgroundColor: AppColors.white,
+                  alignItems: "center",
+                  paddingVertical: 10,
+                  paddingHorizontal: "3%",
+                },
+                rtlView,
+              ]}
+              disabled={
+                route.params.from === "listing" ||
+                route.params.from === undefined
+              }
+            >
+              <View
                 style={{
-                  margin: width(5),
-                  width: width(90),
-                  alignItems: "flex-end",
+                  height: 50,
+                  width: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  borderRadius: 25,
                 }}
               >
-                <MaterialIcons name="close" size={height(4)} color="white" />
-              </TouchableOpacity>
-              {image &&
-                image.map((img, index) => {
-                  return (
-                    <Image
-                      key={index}
-                      source={{
-                        uri: img,
-                        width: width(90),
-                        height: height(70),
-                        alignSelf: "center",
+                <Image
+                  style={{
+                    height: 50,
+                    width: 50,
+                    resizeMode: "cover",
+                  }}
+                  source={
+                    listingData.images.length
+                      ? {
+                          uri: listingData.images[0].sizes.medium.src,
+                        }
+                      : chatScreenImagesUrls.fallbackImageUrl
+                  }
+                />
+              </View>
+              <View
+                style={{
+                  marginLeft: rtl_support ? 0 : 10,
+                  marginRight: rtl_support ? 10 : 0,
+                  flex: 1,
+                  // flexDirection: "column-reverse",
+                }}
+              >
+                <Text
+                  style={[
+                    {
+                      fontWeight: "bold",
+                      fontSize: 16,
+                      color: AppColors.text_dark,
+                      textAlign: rtl_support ? "right" : "left",
+                    },
+                  ]}
+                  numberOfLines={1}
+                >
+                  {decodeString(listingData.title)}
+                </Text>
+                <View
+                  style={[
+                    { flexDirection: "row", alignItems: "center" },
+                    rtlView,
+                  ]}
+                >
+                  <View style={styles.view}>
+                    {rtl_support ? (
+                      <FontAwesome
+                        name="tag"
+                        size={14}
+                        color={AppColors.primary}
+                      />
+                    ) : (
+                      <Ionicons
+                        name="pricetag"
+                        size={14}
+                        color={AppColors.primary}
+                      />
+                    )}
+                  </View>
+                  <View style={{ paddingHorizontal: 5 }}>
+                    <Text
+                      style={{
+                        color: AppColors.primary,
+                        textAlign: rtl_support ? "right" : "left",
                       }}
-                      resizeMode="contain"
+                      numberOfLines={1}
+                    >
+                      {handleLocationNCategoryData()}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+          {/* Loading Component */}
+          {loading && (
+            <View style={styles.loading}>
+              <ActivityIndicator size="large" color={AppColors.primary} />
+              <Text style={styles.text}>
+                {t("chatScreenTexts.loadingMessage")}
+              </Text>
+            </View>
+          )}
+          {!loading && (
+            <View style={{ flex: 1, backgroundColor: "#ededed" }}>
+              {/* Chat List Component */}
+              <ScrollView
+                ref={scrollView}
+                onContentSizeChange={() => scrollView.current.scrollToEnd()}
+                contentContainerStyle={{
+                  paddingHorizontal: "2%",
+                }}
+              >
+                {conversationData.map((item) => {
+                  const is_read = !!parseInt(item.is_read);
+                  if (!is_read && item.source_id != user.id) {
+                    handleMessageReadStatus(item);
+                  }
+
+                  return (
+                    // {* Individual Message Component *}
+                    <Message
+                      key={item.message_id}
+                      text={item.message}
+                      time={item.created_at}
+                      sender={item.source_id === user.id.toString()}
+                      is_read={is_read}
                     />
                   );
                 })}
-
-              <Button
-                containerStyle={{ marginTop: height(3) }}
-                title="Send"
-                onPress={saveImages}
-              />
+              </ScrollView>
             </View>
-          </Modal>
+          )}
+          {(user.id === isConDeleted.sender_id &&
+            isConDeleted.recipient_delete == 0) ||
+          (user.id !== isConDeleted.sender_id &&
+            isConDeleted.sender_delete == 0) ? (
+            <Formik
+              initialValues={{ message: "" }}
+              onSubmit={handleMessageSending}
+              validationSchema={validationSchema}
+            >
+              {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+                <View style={styles.chatBoxWrap}>
+                  {/* Message Input Component */}
+                  <TextInput
+                    onChangeText={handleChange("message")}
+                    onBlur={handleBlur("message")}
+                    value={values.message}
+                    multiline={true}
+                    placeholder={t("chatScreenTexts.placeholder.message")}
+                    style={[styles.chatInput, rtlTextA]}
+                    textAlignVertical="center"
+                  />
+                  {/* Send Button Component */}
+                  <TouchableOpacity
+                    style={styles.sendButton}
+                    onPress={handleSubmit}
+                    disabled={!!errors.message || !values.message.trim().length}
+                  >
+                    <SendIcon fillColor={AppColors.red} />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </Formik>
+          ) : (
+            // {* Message Deleted Cpmponent *}
+            <View style={styles.deletedMessageWrap}>
+              <Text style={styles.deletedMessage}>
+                {t("chatScreenTexts.dactivatedMessage")}
+              </Text>
+            </View>
+          )}
         </View>
-        <DropDownMenu
-          isVisible={imgModal}
-          firstBtnText={t("addPost.takephoto")}
-          secondBtnText={t("addPost.choosefromgallery")}
-          onPressFirstBtn={() => {
-            openPicker(0);
-          }}
-          onPressSecondBtn={() => {
-            openPicker(1);
-          }}
-          onClose={() => setImgModal(false)}
-        />
-      </View>
+      ) : (
+        <View style={{ flex: 1, backgroundColor: "#ededed" }}>
+          {/* Chat Header Component */}
+          {!!route?.params?.from && (
+            <TouchableOpacity
+              // onPress={() =>
+              //   // navigation.push(ScreenNames.DETAIL, route.params)
+              // }
+              style={[
+                {
+                  flexDirection: "row",
+                  backgroundColor: AppColors.white,
+                  alignItems: "center",
+                  paddingVertical: 10,
+                  paddingHorizontal: "3%",
+                },
+                rtlView,
+              ]}
+              disabled={
+                route.params.from === "listing" ||
+                route.params.from === undefined
+              }
+            >
+              <View
+                style={{
+                  height: 50,
+                  width: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  borderRadius: 25,
+                }}
+              >
+                <Image
+                  style={{
+                    height: 50,
+                    width: 50,
+                    resizeMode: "cover",
+                  }}
+                  source={
+                    listingData.images.length
+                      ? {
+                          uri: listingData.images[0].sizes.medium.src,
+                        }
+                      : chatScreenImagesUrls.fallbackImageUrl
+                  }
+                />
+              </View>
+              <View
+                style={{
+                  marginLeft: rtl_support ? 0 : 10,
+                  marginRight: rtl_support ? 10 : 0,
+                  flex: 1,
+                  // flexDirection: "column-reverse",
+                }}
+              >
+                <Text
+                  style={[
+                    {
+                      fontWeight: "bold",
+                      fontSize: 16,
+                      color: AppColors.text_dark,
+                      textAlign: rtl_support ? "right" : "left",
+                    },
+                  ]}
+                  numberOfLines={1}
+                >
+                  {decodeString(listingData.title)}
+                </Text>
+                <View
+                  style={[
+                    { flexDirection: "row", alignItems: "center" },
+                    rtlView,
+                  ]}
+                >
+                  <View style={styles.view}>
+                    {rtl_support ? (
+                      <FontAwesome
+                        name="tag"
+                        size={14}
+                        color={AppColors.primary}
+                      />
+                    ) : (
+                      <Ionicons
+                        name="pricetag"
+                        size={14}
+                        color={AppColors.primary}
+                      />
+                    )}
+                  </View>
+                  <View style={{ paddingHorizontal: 5 }}>
+                    <Text
+                      style={{
+                        color: AppColors.primary,
+                        textAlign: rtl_support ? "right" : "left",
+                      }}
+                      numberOfLines={1}
+                    >
+                      {handleLocationNCategoryData()}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+          {/* Loading Component */}
+          {loading && (
+            <View style={styles.loading}>
+              <ActivityIndicator size="large" color={AppColors.primary} />
+              <Text style={[styles.text, rtlText]}>
+                {t("chatScreenTexts.loadingMessage")}
+              </Text>
+            </View>
+          )}
+          {!loading && (
+            <KeyboardAvoidingView
+              style={styles.container}
+              behavior="padding"
+              keyboardVerticalOffset={100}
+            >
+              {/* Chat List Component */}
+              <ScrollView
+                ref={scrollView}
+                onContentSizeChange={() => scrollView.current.scrollToEnd()}
+                contentContainerStyle={{
+                  paddingHorizontal: "2%",
+                }}
+              >
+                {conversationData.map((item) => {
+                  const is_read = !!parseInt(item.is_read);
+                  if (!is_read && item.source_id != user.id) {
+                    handleMessageReadStatus(item);
+                  }
+
+                  return (
+                    // {* Individual Message Component *}
+                    <Message
+                      key={item.message_id}
+                      text={item.message}
+                      time={item.created_at}
+                      sender={item.source_id === user.id.toString()}
+                      is_read={is_read}
+                    />
+                  );
+                })}
+              </ScrollView>
+              {(user.id === isConDeleted.sender_id &&
+                isConDeleted.recipient_delete == 0) ||
+              (user.id !== isConDeleted.sender_id &&
+                isConDeleted.sender_delete == 0) ? (
+                <Formik
+                  initialValues={{ message: "" }}
+                  onSubmit={handleMessageSending}
+                  validationSchema={validationSchema}
+                >
+                  {({
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    values,
+                    errors,
+                  }) => (
+                    <View style={styles.chatBoxWrap}>
+                      {/* Message Input Component */}
+                      <TextInput
+                        onChangeText={handleChange("message")}
+                        onBlur={handleBlur("message")}
+                        value={values.message}
+                        multiline={true}
+                        placeholder={t("chatScreenTexts.placeholder.message")}
+                        style={[styles.chatInput, rtlText]}
+                        textAlignVertical="center"
+                      />
+                      {/* Send Button Component */}
+                      <TouchableOpacity
+                        style={styles.sendButton}
+                        onPress={handleSubmit}
+                        disabled={
+                          !!errors.message || !values.message.trim().length
+                        }
+                      >
+                        <SendIcon fillColor={AppColors.red} />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </Formik>
+              ) : (
+                // {* Message Deleted Cpmponent *}
+                <View style={styles.deletedMessageWrap}>
+                  <Text style={styles.deletedMessage}>
+                    {t("chatScreenTexts.dactivatedMessage")}
+                  </Text>
+                </View>
+              )}
+            </KeyboardAvoidingView>
+          )}
+        </View>
+      )}
     </ScreenWrapper>
   );
-}
+};
 
 export default ChatView;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingBottom: height(1),
-  },
-  account_View: {
-    width: width(90),
-    height: width(13),
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "center",
-    marginTop: height(1),
-    marginBottom: height(1),
-  },
-  icon_Style: {
-    fontSize: 20,
-    width: width(10),
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  image_Style: {
-    width: width(13),
-    height: width(13),
-    borderRadius: width(20),
-    borderWidth: width(0.3),
-    borderColor: AppColors.primary,
-  },
-  account_Text: {
-    marginLeft: width(5),
-    fontSize: 20,
-    fontWeight: "600",
-    color: AppColors.black,
-  },
-  online_View: {
-    marginLeft: width(5),
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  online_Text: {
-    fontSize: 12,
-    paddingLeft: 5,
-  },
-  online_Indicator: {
-    width: 7,
-    height: 7,
-    borderRadius: 10,
-    backgroundColor: "green",
-  },
-  item_View: {
-    width: width(95),
-    marginLeft: width(2),
-    backgroundColor: "white",
-    borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    ...Platform.select({
-      ios: {
-        shadowColor: "black",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 5,
-      },
-    }),
-  },
-  ad_Btn: {
-    width: width(20),
-    height: height(4),
-    backgroundColor: "#13E890",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 30,
-  },
-  title_Text: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  price_Text: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#13E890",
-  },
-
-  modalContainer: {
-    alignSelf: "center",
-    width: width(100),
-    height: height(100),
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-  },
-});

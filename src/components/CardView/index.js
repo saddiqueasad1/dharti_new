@@ -99,7 +99,8 @@ export default function CardView({ data }) {
             <View style={styles.categoryview}>
               <Entypo name="location-pin" color={"grey"} size={height(2)} />
               <Text numberOfLines={2} style={styles.detailtext}>
-                {data?.contact?.address}
+                {data?.contact?.address ||
+                  data?.contact?.locations.map((m) => m.name + " ")}
               </Text>
             </View>
             <View style={styles.categoryview}>
@@ -116,14 +117,13 @@ export default function CardView({ data }) {
               </Text>
             </View>
           </View>
-          {checkPrice(data?.price) && 
+          {checkPrice(data?.price) && (
             <View>
               <Text numberOfLines={1} style={styles.chf}>
                 PKR {formatPrice(data?.price)}
               </Text>
-             
             </View>
-        }
+          )}
         </View>
       </TouchableOpacity>
       {!(data?.userId?._id === loginuser?._id) ? (
@@ -139,7 +139,6 @@ export default function CardView({ data }) {
       ) : (
         <></>
       )}
-
     </View>
   );
 }
