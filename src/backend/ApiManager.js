@@ -64,7 +64,7 @@ export const ApiManager = {
     } catch (error) {
       console.log('error',error);
       console.error("Error occurred in post ", endpoint);
-      throw error;
+      return error;
     }
   },
   put: async (endpoint, body, params = {}) => {

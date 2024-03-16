@@ -11,6 +11,7 @@ const signupApi = async (data) => {
     return response
   } catch (error) {
     console.error("Signup API crashed",error);
+    return error
   }
 };
 const loginApi = async (data) => {

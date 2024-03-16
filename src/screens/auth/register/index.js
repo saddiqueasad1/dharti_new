@@ -1,10 +1,6 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import {
-  Text,
-   TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import CheckBox from "react-native-check-box";
 import { useDispatch } from "react-redux";
@@ -24,7 +20,7 @@ import { height, width } from "../../../utills/Dimension";
 import { errorMessage, successMessage } from "../../../utills/Methods";
 import styles from "./styles";
 export default function SignUp({ navigation, route }) {
-  const  verifiedPhone  = route.params.phone
+  const verifiedPhone = route.params.phone;
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [check, setCheck] = useState(false);
@@ -79,22 +75,24 @@ export default function SignUp({ navigation, route }) {
 
       dispatch(setAppLoader(true));
       let r = await signupApi(data_);
-
       if (r?.verification_mail) {
-        alert("An email is sent to your mail address with a verification link. Please verify your email address before logging in.");
+        alert(
+          "An email is sent to your mail address with a verification link. Please verify your email address before logging in."
+        );
       }
+      if (r.code === "400") {
+        errorMessage(r?.error_message[0], t(`flashmsg.error`));
+      } else {
         successMessage(t(`flashmsg.sussessloginmsg`), t(`flashmsg.success`));
-        dispatch(setAppLoader(false));
-        // navigation.navigate(ScreenNames.VERIFY, { data: r?.data });
         successMessage("Verified login now", "Success");
         navigation.navigate(ScreenNames.LOGIN);
+      }
+      dispatch(setAppLoader(false));
     } catch (error) {
-      errorMessage(t(`flashmsg.${r?.message}`), t(`flashmsg.error`));
+      errorMessage('INVALID_USER_DATA', t(`flashmsg.error`));
       dispatch(setAppLoader(false));
     }
   };
-
-
 
   return (
     <ScreenWrapper
@@ -142,7 +140,7 @@ export default function SignUp({ navigation, route }) {
           secure={true}
           require={passwordr}
         />
-          <Input
+        <Input
           value={phoneNumber}
           setvalue={setPhoneNumber}
           title={"signup.phoneNumberTitle"}
