@@ -75,6 +75,7 @@ import {
 } from "../utills/Methods";
 import MyDrawer from "./drawr";
 import ScreenNames from "./routes";
+import mobileAds from 'react-native-google-mobile-ads';
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +87,13 @@ export default function Routes() {
   const [user, setUser] = useState();
   const [countMsg, setCountMsg] = useState(0);
   useEffect(() => {
+    mobileAds()
+    .initialize()
+    .then(adapterStatuses => {
+      console.log("---adapterStatuses--");
+      console.log(adapterStatuses);
+      // Initialization complete!
+    });
     if (countMsg > 0) {
       dispatch(setNewChat(true));
     } else {
@@ -93,7 +101,7 @@ export default function Routes() {
     }
   }, [countMsg]);
   useEffect(() => {
-    dispatch(setAppLoader(true));
+        dispatch(setAppLoader(true));
     getNetwork();
     languageset();
   }, []);

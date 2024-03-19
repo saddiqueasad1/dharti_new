@@ -57,14 +57,15 @@
             "config": {
                 "googleMaps": {
                     "apiKey": "mjo8H878ON7o7YN78NYH87HNYB87B87"
-                }
+                },
+                "googleMobileAdsAppId": "ca-app-pub-3435692875430492~4170553372"
             },
             "adaptiveIcon": {
                 "foregroundImage": "./assets/icon.jpeg",
                 "backgroundColor": "#ffffff"
             },
             "package": "com.dhartipak",
-            "versionCode": 34
+            "versionCode": 35
         },
         "web": {
             "favicon": "./assets/favicon.png"
@@ -102,5 +103,8 @@
                 "projectId": "65432b9a-4fe9-45a7-a465-a90efdc7e105"
             }
         }
-    }
+    },
+    "react-native-google-mobile-ads": {
+        "android_app_id": "ca-app-pub-3435692875430492~4170553372"
+      }
 }

@@ -1364,6 +1364,10 @@ newListingScreenTexts: {
   "customServerErrorMessage": "Error gettion data from server.",
   "noInternet": "No Internet"
 },
+"adMobTexts": {
+  "okButton": "OK",
+  "appDisabledAlert": "This app delivers you ads using google AdMob. You need to enable tracking permission in order to get personalised ads. Go to permission settings and allow tracking for this app if you want to enable personalised ads."
+},
 
 
 };
