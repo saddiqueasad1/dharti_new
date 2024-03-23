@@ -121,6 +121,17 @@ export default function Detail({ navigation, route }) {
 
     // dispatch(setAppLoader(false));
   };
+
+  const handleCall = (number) => {
+
+    let phoneNumber = "";
+    if (false) {//case forr iso
+      phoneNumber = `telprompt:${number}`;
+    } else {
+      phoneNumber = `tel:${number}`;
+    }
+    Linking.openURL(phoneNumber);
+  };
   return (
     <ScreenWrapper
       showStatusBar={false}
@@ -142,17 +153,25 @@ export default function Detail({ navigation, route }) {
         data &&
         islogin && (
           <DetailFooter
-            pNumber={data?.author?.phone_verified && data?.author?.phone}
+            pNumber={true}
             eMail={data?.author?.email}
-            onPressCall={() =>
-              GlobalMethods.onPressCall(data?.userId?.phoneNumber)
-            }
+            onPressCall={() =>{
+              handleCall(data?.contact?.phone)
+            }}
             onPressChat={() => {
-              // navigation.navigate(ScreenNames.CHAT, {
-              //   userRoom: null,
-              //   usr: data?.userId,
-              //   userItem: data,
-              // });
+
+              const dataLList = {
+                id: data.listing_id,
+                title: data.title,
+                images: data.images,
+                category: data.categories,
+                location: data.contact.locations,
+              };
+              navigation.navigate(ScreenNames.CHAT, {
+                listing: dataLList,
+                from: "listing",
+                listing_id: data.listing_id,
+              });
             }}
             onPressMail={() =>
               GlobalMethods.onPressEmail(
