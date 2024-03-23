@@ -98,6 +98,7 @@
                 }
             ]
         ],
+        "scheme": "dharti",
         "extra": {
             "eas": {
                 "projectId": "65432b9a-4fe9-45a7-a465-a90efdc7e105"

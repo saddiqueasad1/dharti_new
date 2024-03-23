@@ -13,6 +13,22 @@ const AdmobBanner = (props) => {
     <BannerAd
       unitId={adUnitId}
       size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+      onAdOpened={e => {
+        console.log("onAdOpened");
+        console.log(e);
+      }}
+      onAdFailedToLoad={e => {
+        console.log("onAdFailedToLoad");
+        console.log(e);
+      }}
+      onAdLoaded={e => {
+        console.log("onAdLoaded");
+        console.log(e);
+      }}
+      onAdClosed={e => {
+        console.log("onAdClosed");
+        console.log(e);
+      }}
     />
   );
 };

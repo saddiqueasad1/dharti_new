@@ -76,6 +76,10 @@ import {
 import MyDrawer from "./drawr";
 import ScreenNames from "./routes";
 import mobileAds from 'react-native-google-mobile-ads';
+import * as Linking from 'expo-linking';
+
+
+const prefix = Linking.createURL('/');
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +90,23 @@ export default function Routes() {
   const [isConnected, setIsConnected] = useState(true);
   const [user, setUser] = useState();
   const [countMsg, setCountMsg] = useState(0);
+
+  // const linking = {
+  //   prefixes: [prefix],
+  // };
+
+  const linking = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        DetailScreen: "DetailScreen",
+        Login: "Login",
+      },
+    },
+  };
+
+  console.log('useUrl---- : ',linking);
+
   useEffect(() => {
     mobileAds()
     .initialize()
@@ -294,7 +315,7 @@ export default function Routes() {
   return (
     <NavigationContainer>
       <Loader />
-      <Stack.Navigator screenOptions={{ header: () => false }}>
+      <Stack.Navigator linking={linking}  screenOptions={{ header: () => false }}>
         <Stack.Screen name={"drawr"} component={MyDrawer} />
         <Stack.Screen name={ScreenNames.LOGIN} component={LoginScreen} />
         <Stack.Screen
