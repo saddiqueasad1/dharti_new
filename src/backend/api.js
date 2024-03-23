@@ -97,8 +97,8 @@ export async function addPostAd(formData) {
 export const geVehicleMakes = async (type) => {
   console.log("type", type);
   try {
-    const response = await ApiManager.get(`ad/findVehicleMake/${type}`);
-    if (response?.data?.make) return response?.data?.make;
+    const response = await ApiManager.get("listings", args);
+    if (response) return response;
     return [];
   } catch (error) {
     return []; // or some default value as needed

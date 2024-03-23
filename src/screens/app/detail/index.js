@@ -101,15 +101,11 @@ export default function Detail({ navigation, route }) {
       setload(true);
 
       let d = await getDataofAdByID(dat);
-      // setload(false);
-      console.log("here");
-      // console.log("deydisndu",d);
       if (d) {
-        // console.log(d?.images);
         setDat(d);
         setimg(d?.images);
-        if (d.userId.listing_id != loginuser?.listing_id) {
-          await adView(dat);
+        if (d.listing_id != loginuser?.listing_id) {
+          // await adView(dat);
         }
       } else {
         // setDat({}), navigation.goBack();
@@ -175,7 +171,7 @@ export default function Detail({ navigation, route }) {
             }}
             onPressMail={() =>
               GlobalMethods.onPressEmail(
-                data?.userId?.email,
+                data?.email,
                 loginuser?.email,
                 data?.title + `${WebLink}${data?.listing_id}`
               )
@@ -405,7 +401,7 @@ export default function Detail({ navigation, route }) {
                     }}
                   >
                     Member since{"  "}
-                    {new Date(data?.userId?.createdAt).toLocaleString("en-US", {
+                    {new Date(data?.created_at).toLocaleString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
