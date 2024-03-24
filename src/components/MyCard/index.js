@@ -172,7 +172,7 @@ export default function MyCard({ data }) {
         <MenuItem
           onPress={() => {
             hideMenu();
-            navigation.navigate(ScreenNames.ADDPOST, { data: data });
+            navigation.navigate(ScreenNames.EDITLISTINGSCREEN, { item: data });
           }}
         >
           <AntDesign name="edit" size={height(2)} />

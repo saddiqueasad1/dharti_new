@@ -40,5 +40,6 @@ const ScreenNames = {
   ISEARCH: "InerSearch",
   MYSTORE: "MyStore",
   SELECTLOCATION: "SelectLocationScreen",
+  EDITLISTINGSCREEN: "EditListingScreen",
 };
 export default ScreenNames;
