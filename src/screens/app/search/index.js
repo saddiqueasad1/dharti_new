@@ -111,7 +111,7 @@ export default function Search({ navigation, route }) {
                   navigation={navigation}
                   cardStyle={styles.card}
                   title={item?.name}
-                  image={item?.image}
+                  image={item?.icon.url}
                   textStyle={styles.textStyle}
                   imageStyle={styles.imageStyle}
                   onPress={() => {

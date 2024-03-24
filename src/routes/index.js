@@ -1,29 +1,26 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as Network from "expo-network";
-import { get, getDatabase, off, onValue, ref } from "firebase/database";
+import { getDatabase } from "firebase/database";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
-import { getDataofAdByID, getDataofHomePage } from "../backend/api";
-import { getOwneAd, getUserByID, loginApi } from "../backend/auth";
+import { getDataofHomePage } from "../backend/api";
+import { loginApi } from "../backend/auth";
 import { getCategory } from "../backend/common";
 import { Loader } from "../components";
 // import * as Notifications from "expo-notifications";
+import * as Linking from "expo-linking";
+import mobileAds from "react-native-google-mobile-ads";
 import {
   setAppLoader,
   setCategoryList,
   setNewChat,
-  setShowViber,
-  setShowWhatsapp,
   setTopAds,
 } from "../redux/slices/config";
 import { setLanguage } from "../redux/slices/language";
 import {
   setAdsFav,
-  setChatRedux,
-  setChatRooms,
   setIsLoggedIn,
   setToken,
   setUserAds,
@@ -40,6 +37,7 @@ import {
   DStoreDetailsScreen,
   DStoreScreen,
   DetailScreen,
+  EditListingScreen,
   EditProfile,
   FAQScreen,
   HTSFScreen,
@@ -52,10 +50,9 @@ import {
   PrivacySafety,
   ProfileScreen,
   SearchScreen,
+  SelectLocationScreen,
   TNCScreen,
   WishScreen,
-  SelectLocationScreen,
-  EditListingScreen
 } from "../screens/app";
 import {
   CPFscreen,
@@ -66,21 +63,11 @@ import {
   verifyScreen,
 } from "../screens/auth";
 import i18n from "../translation";
-import {
-  getAuthAllData,
-  getAuthData,
-  getDatav,
-  getDataw,
-  getlangData,
-  setAuthData,
-} from "../utills/Methods";
+import { getAuthData, getlangData, setAuthData } from "../utills/Methods";
 import MyDrawer from "./drawr";
 import ScreenNames from "./routes";
-import mobileAds from 'react-native-google-mobile-ads';
-import * as Linking from 'expo-linking';
 
-
-const prefix = Linking.createURL('/');
+const prefix = Linking.createURL("/");
 
 const Stack = createNativeStackNavigator();
 
@@ -106,16 +93,16 @@ export default function Routes() {
     },
   };
 
-  console.log('useUrl---- : ',linking);
+  console.log("useUrl---- : ", linking);
 
   useEffect(() => {
     mobileAds()
-    .initialize()
-    .then(adapterStatuses => {
-      console.log("---adapterStatuses--");
-      console.log(adapterStatuses);
-      // Initialization complete!
-    });
+      .initialize()
+      .then((adapterStatuses) => {
+        console.log("---adapterStatuses--");
+        console.log(adapterStatuses);
+        // Initialization complete!
+      });
     if (countMsg > 0) {
       dispatch(setNewChat(true));
     } else {
@@ -123,8 +110,7 @@ export default function Routes() {
     }
   }, [countMsg]);
   useEffect(() => {
-        dispatch(setAppLoader(true));
-    getNetwork();
+    dispatch(setAppLoader(true));
     languageset();
   }, []);
   useEffect(() => {
@@ -150,10 +136,7 @@ export default function Routes() {
       dispatch(setAppLoader(false));
     }
   });
-  const getNetwork = async () => {
-    let a = await Network.getNetworkStateAsync();
-    setIsConnected(a);
-  };
+
   const getuser = async () => {
     try {
       let data = await getAuthData();
@@ -161,12 +144,6 @@ export default function Routes() {
         dispatch(setIsLoggedIn(true));
         login(data);
       }
-      const w = await getDataw();
-      const v = await getDatav();
-      if (w) {
-        dispatch(setShowWhatsapp(w == 1 ? true : false));
-      }
-      if (v) dispatch(setShowViber(v == 1 ? true : false));
     } catch (error) {
       dispatch(setAppLoader(false));
     }
@@ -178,7 +155,6 @@ export default function Routes() {
       const response = await loginApi(APIData);
       if (response?.jwt_token) {
         const userDetails = response.user;
-        await fetchRoomsData(userDetails.id);
         setUser(userDetails);
         dispatch(setUserMeta(userDetails));
         dispatch(setToken(response.jwt_token));
@@ -194,120 +170,17 @@ export default function Routes() {
             { text: "OK", onPress: () => {} },
           ]);
       } else {
-        let userData = await getAuthAllData();
-        if (userData) {
-          dispatch(setIsLoggedIn(true));
-          dispatch(setUserMeta(userData));
-          await fetchRoomsData(userData.id);
-          const userAd = await getOwneAd(userData.id);
-          setUser(userData);
-          dispatch(setUserAds(userAd));
-          dispatch(setAdsFav(userData.favAdIds));
-        }
-        // Handle other cases if needed
       }
     } catch (error) {
       dispatch(setAppLoader(false));
     }
   };
-
-  const fetchData = useCallback(async (data, id) => {
-    const search =
-      id === data.split("_")[0] ? data.split("_")[1] : data.split("_")[0];
-    const fetchedUser = await getUserByID(search);
-    return fetchedUser;
-  });
-  const myFunction = useCallback(async (data, id) => {
-    let lastmsg = {};
-    const lastReadRef = await ref(db, `chatrooms/${data}/lastRead/${id}`);
-
-    // Assuming you're using Firebase Realtime Database
-    const snapshot = await get(lastReadRef);
-    let lastReadTimestamp = await snapshot.val();
-    const messagesRef = ref(db, `chatrooms/${data}/messages`);
-    onValue(messagesRef, (snapshot) => {
-      const messageData = snapshot.val();
-
-      if (messageData) {
-        const messageList = Object.values(messageData);
-        lastmsg = messageList[messageList.length - 1];
-      }
-    });
-    return { lastmsg, readd: lastReadTimestamp < lastmsg?.timestamp };
-  });
-
-  const getItems = useCallback(async (data) => {
-    const response = await getDataofAdByID(data.split("_")[2]);
-    return response;
-  });
 
   async function getCategorylist() {
     const d = await getCategory();
     if (d) dispatch(setCategoryList(d));
   }
-  const fetchRoomsData = useCallback(async (userId) => {
-    try {
-      roomRef = ref(db, `users/${userId}/rooms`);
 
-      const handleRoomUpdate = async (snapshot) => {
-        const room = snapshot.val() || [];
-        dispatch(setChatRooms(room));
-        if (userId) {
-          await promisFuntion(room, userId);
-        }
-      };
-
-      onValue(roomRef, handleRoomUpdate);
-
-      // Clean up the listener when the component is unmounted or the user logs out
-      return () => {
-        if (roomRef) {
-          off(roomRef, handleRoomUpdate);
-        }
-      };
-    } catch (error) {
-      console.error("Error fetching room data:", error);
-    }
-  });
-
-  // async function schedulePushNotification() {
-  //   await Notifications.scheduleNotificationAsync({
-  //     content: {
-  //       title: "Dharti",
-  //       body: "New message",
-  //     },
-  //     trigger: { seconds: 0.2 },
-  //   });
-  // }
-
-  const promisFuntion = async (allRooms, id) => {
-    try {
-      const promises = allRooms.map(async (element) => {
-        let u = await fetchData(element, id);
-        let l = await myFunction(element, id);
-        let i = await getItems(element);
-        return {
-          roomId: element,
-          user: u,
-          lastmsg: l?.lastmsg,
-          product: i,
-          read: l?.readd,
-        };
-      });
-
-      const newData = await Promise.all(promises);
-      if (newData.find((item) => item?.read == true)) {
-        // await schedulePushNotification();
-        dispatch(setNewChat(true));
-      } else {
-        dispatch(setNewChat(false));
-      }
-      dispatch(setChatRedux(newData));
-      dispatch(setAppLoader(false));
-    } catch (e) {
-      dispatch(setAppLoader(false));
-    }
-  };
   const languageset = async () => {
     let lang = await getlangData();
     i18n.changeLanguage(lang);
@@ -316,7 +189,10 @@ export default function Routes() {
   return (
     <NavigationContainer>
       <Loader />
-      <Stack.Navigator linking={linking}  screenOptions={{ header: () => false }}>
+      <Stack.Navigator
+        linking={linking}
+        screenOptions={{ header: () => false }}
+      >
         <Stack.Screen name={"drawr"} component={MyDrawer} />
         <Stack.Screen name={ScreenNames.LOGIN} component={LoginScreen} />
         <Stack.Screen
@@ -364,8 +240,14 @@ export default function Routes() {
 
         <Stack.Screen name={ScreenNames.CPF} component={CPFscreen} />
         <Stack.Screen name={ScreenNames.MYSTORE} component={MyStoreScreen} />
-        <Stack.Screen name={ScreenNames.SELECTLOCATION} component={SelectLocationScreen} />
-        <Stack.Screen name={ScreenNames.EDITLISTINGSCREEN} component={EditListingScreen} />
+        <Stack.Screen
+          name={ScreenNames.SELECTLOCATION}
+          component={SelectLocationScreen}
+        />
+        <Stack.Screen
+          name={ScreenNames.EDITLISTINGSCREEN}
+          component={EditListingScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

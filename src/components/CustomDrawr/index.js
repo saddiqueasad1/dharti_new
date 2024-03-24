@@ -139,36 +139,6 @@ const CustomDrawer = ({ navigation }) => {
               <AntDesign name="contacts" style={styles.icon} size={height(2)} />
             }
           />
-          <IconButton
-            title={"drawr.appSetting"}
-            containerStyle={styles.container}
-            textStyle={styles.text}
-            icon={
-              <Ionicons name="settings" style={styles.icon} size={height(2)} />
-            }
-            onPress={() => {
-              navigation.navigate(ScreenNames.SETTING),
-                navigation.closeDrawer();
-            }}
-          />
-
-          {/* <IconButton
-            title={"drawr.SNTU"}
-            onPress={() => {
-              navigation.navigate(ScreenNames.SNTU), navigation.closeDrawer();
-            }}
-            containerStyle={styles.container}
-            textStyle={styles.text}
-            icon={<AntDesign name="car" style={styles.icon} size={height(2)} />}
-          /> */}
-        
-          {/* <IconButton
-          title={"drawr.share"}
-          onPress={shareContent}
-          containerStyle={styles.container}
-          textStyle={styles.text}
-          icon={<Entypo name="share" style={styles.icon}  size={height(2)} />}
-        /> */}
           <View style={styles.bottomview}>
             <Text style={styles.textbuttom}>
               Copyright © 2023. All rights reserved by
