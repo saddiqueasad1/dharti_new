@@ -101,15 +101,11 @@ export default function Detail({ navigation, route }) {
       setload(true);
 
       let d = await getDataofAdByID(dat);
-      // setload(false);
-      console.log("here");
-      // console.log("deydisndu",d);
       if (d) {
-        // console.log(d?.images);
         setDat(d);
         setimg(d?.images);
-        if (d.userId.listing_id != loginuser?.listing_id) {
-          await adView(dat);
+        if (d.listing_id != loginuser?.listing_id) {
+          // await adView(dat);
         }
       } else {
         // setDat({}), navigation.goBack();
@@ -120,6 +116,17 @@ export default function Detail({ navigation, route }) {
     }
 
     // dispatch(setAppLoader(false));
+  };
+
+  const handleCall = (number) => {
+
+    let phoneNumber = "";
+    if (false) {//case forr iso
+      phoneNumber = `telprompt:${number}`;
+    } else {
+      phoneNumber = `tel:${number}`;
+    }
+    Linking.openURL(phoneNumber);
   };
   return (
     <ScreenWrapper
@@ -142,21 +149,29 @@ export default function Detail({ navigation, route }) {
         data &&
         islogin && (
           <DetailFooter
-            pNumber={data?.author?.phone_verified && data?.author?.phone}
+            pNumber={true}
             eMail={data?.author?.email}
-            onPressCall={() =>
-              GlobalMethods.onPressCall(data?.userId?.phoneNumber)
-            }
+            onPressCall={() =>{
+              handleCall(data?.contact?.phone)
+            }}
             onPressChat={() => {
-              // navigation.navigate(ScreenNames.CHAT, {
-              //   userRoom: null,
-              //   usr: data?.userId,
-              //   userItem: data,
-              // });
+
+              const dataLList = {
+                id: data.listing_id,
+                title: data.title,
+                images: data.images,
+                category: data.categories,
+                location: data.contact.locations,
+              };
+              navigation.navigate(ScreenNames.CHAT, {
+                listing: dataLList,
+                from: "listing",
+                listing_id: data.listing_id,
+              });
             }}
             onPressMail={() =>
               GlobalMethods.onPressEmail(
-                data?.userId?.email,
+                data?.email,
                 loginuser?.email,
                 data?.title + `${WebLink}${data?.listing_id}`
               )
@@ -386,7 +401,7 @@ export default function Detail({ navigation, route }) {
                     }}
                   >
                     Member since{"  "}
-                    {new Date(data?.userId?.createdAt).toLocaleString("en-US", {
+                    {new Date(data?.created_at).toLocaleString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",

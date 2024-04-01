@@ -27,6 +27,7 @@ const ImageInputList = ({
         onChangeImage={() => onRemoveImage(item)}
         drag={drag}
         active={isActive}
+        closePhotoModal={() => setPhotoModalVisible(false)}
         display={true}
         index={index}
       />

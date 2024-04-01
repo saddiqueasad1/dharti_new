@@ -32,8 +32,6 @@ import SelectDropdown from "react-native-select-dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import Icons from "../../../asset/images";
 import {
-  backEndDataAPi,
-  geVehicleCategory,
   geVehicleMakes,
   getAllData,
   getModel,
@@ -45,13 +43,12 @@ import CheckBox from "react-native-check-box";
 import ScreenNames from "../../../routes/routes";
 import { sortList } from "../../../utills/Data";
 import { height, width } from "../../../utills/Dimension";
-import { showType } from "../../../utills/Methods";
-import styles from "./styles";
+import styles from "./styles"; 
 
 export default function ListData({ navigation }) {
   const route = useRoute();
   const { t } = useTranslation();
-  const cat = route?.params?.category.name;
+  const cat = route?.params?.category?.name;
   const find = route?.params?.find;
   const ti = route?.params?.search;
   const refRBSheet = useRef();
@@ -97,9 +94,9 @@ export default function ListData({ navigation }) {
   let uniqueEntries = {};
   const queryParams = {
     address: address.trim() || "",
-    categories: [route?.params?.category.term_id] || "",
+    categories: [route?.params?.category?.term_id] || "",
     condition: condition || "",
-    title: title.trim() || "",
+    search: title.trim() || "",
     brand: brand || "",
     model: model || "",
     year: year || "",
@@ -165,51 +162,14 @@ export default function ListData({ navigation }) {
     getData();
   };
   useEffect(() => {
-    getvehicleMake();
-    getFeilds();
+    // getvehicleMake();
   }, [category]);
-  const getFeilds = async () => {
-    let data = await backEndDataAPi({
-      type: findValue,
-    });
-    setFeild(data);
-  };
-  const getvehicleMake = async () => {
-    setLoder(true);
-    let vehicledata = await geVehicleMakes(findValue);
-    if (vehicledata) {
-      setLoder(false);
-      setVcompanies(vehicledata);
-    } else {
-      setLoder(false);
-      setVcompanies([]);
-    }
-    setLoder(false);
-  };
-
-  const getSubcategoriesByName = (categories, categoryName) => {
-    const matchedCategory = categories.find(
-      (category) => category.name === categoryName
-    );
-
-    if (matchedCategory) {
-      return matchedCategory;
-    }
-
-    // Return an empty array if no match is found
-    return [];
-  };
+ 
 
   const getData = async () => {
     try {
       onRefresh(true);
-
       let d = await getAllData(queryParams);
-  
-  
-      console.log("pppppp---000");
-      console.log(d);
-      console.log(d?.length);
       if (d?.length == 0) { 
         setempty(true);
       }

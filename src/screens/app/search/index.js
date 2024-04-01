@@ -111,14 +111,14 @@ export default function Search({ navigation, route }) {
                   navigation={navigation}
                   cardStyle={styles.card}
                   title={item?.name}
-                  image={item?.image}
+                  image={item?.icon.url}
                   textStyle={styles.textStyle}
                   imageStyle={styles.imageStyle}
                   onPress={() => {
-                    navigation.navigate(ScreenNames.BIKECATEGORY, {
+                    navigation.navigate(ScreenNames.LISTDATA, {
                       category: item,
                       find: item?.name,
-                      show: true,
+                      subcategory: item?.name,
                       search: search || "",
                     });
                   }}

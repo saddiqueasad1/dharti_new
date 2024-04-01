@@ -8,7 +8,6 @@ import { height, width } from "../../../utills/Dimension";
 import styles from "./styles";
 
 export default function BikeCategory({ navigation, route }) {
-  const subCategories = route?.params?.subCategories;
   const search = route?.params?.search;
   const { t } = useTranslation();
   const cat = route?.params?.category;
@@ -17,7 +16,7 @@ export default function BikeCategory({ navigation, route }) {
     <ScreenWrapper
       showStatusBar={false}
       headerUnScrollable={() => (
-        <Head headtitle={t(`category.${cat?.name}`)} navigation={navigation} />
+        <Head headtitle={t(`${cat?.name.replace(/&amp;/g, '&')}`)} navigation={navigation} />
       )}
     >
       <View
