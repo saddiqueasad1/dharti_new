@@ -22,7 +22,7 @@ export const getDataofHomePage = async () => {
     return data.data; // Return the parsed data
   } catch (error) {
     console.error("Error fetching home data:", error);
-    alert("Home data API crashed");
+    // alert("Home data API crashed");
     throw error; // Re-throw the error so that it can be caught by the caller
   }
 };

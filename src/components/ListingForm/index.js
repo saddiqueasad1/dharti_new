@@ -820,13 +820,13 @@ const ListingForm = ({ catId, type, goBack, osmOverlay, changeOsmOverlay }) => {
       }).then((res) => {
         if (res) {
           ApiManager.removeMultipartHeader();
-          ApiManager.ApiManager.removeAuthToken();
+          ApiManager.removeAuthToken();
           setHasImage(false);
           setSuccess(true);
         } else {
           // TODO add error storing
           ApiManager.removeMultipartHeader();
-          ApiManager.ApiManager.removeAuthToken();
+          ApiManager.removeAuthToken();
           setHasImage(false);
           setError(true);
           // setSubmitLoading((submitLoading) => false);
