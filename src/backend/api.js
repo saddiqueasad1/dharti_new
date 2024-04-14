@@ -14,7 +14,11 @@ var requestOptions = {
 
 export const getDataofHomePage = async () => {
   try {
+    console.log("getDataofHomePage => getDataofHomePage");
     const response = await fetch(BaseUrl + "listings", requestOptions);
+    console.log("response of getDataofHomePage----");
+    console.log(response);
+
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }

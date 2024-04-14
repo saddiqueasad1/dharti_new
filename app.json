@@ -65,7 +65,7 @@
                 "backgroundColor": "#ffffff"
             },
             "package": "com.dhartipak",
-            "versionCode": 35
+            "versionCode": 36
         },
         "web": {
             "favicon": "./assets/favicon.png"

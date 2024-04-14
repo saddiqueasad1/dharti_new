@@ -45,6 +45,9 @@ export const ApiManager = {
   
       // Making a GET request with optional parameters.
       const response = await axiosInstance.get(endpoint, config);
+      console.log("get res......");
+      console.log(response);
+      console.log("response------end");
       return response;
     } catch (error) {
       console.error("Error occurred in get", endpoint);

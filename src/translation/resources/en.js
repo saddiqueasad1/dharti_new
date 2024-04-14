@@ -1428,4 +1428,20 @@ export default {
     requiredFieldNotice: "*** Fields marked with red star are required ***",
     socialProfileTitle: "Social Profiles",
   },
+
+  accountScreenTexts: {
+    loginButtonText: "Log in / Sign up",
+    logOutButtonText: "Log out",
+    successMessage: "SuccessFully logged out",
+    loginTitle: "You must login to continue",
+    deleteAccountBtn: "Delete Account",
+    deleteAccountPrompt: "Do you want to delete your account?",
+    okBtnTitle: "Ok",
+    deleteAccountMessageTitle: "Warning!",
+    deleteAccountMessage:
+      "Are you sure you want to delete your account? This action can not be undone.",
+    cancelBtnTitle: "Cancel",
+    confirmBtnTitle: "Conform Delete Action",
+    shareBtn: "Share with Friends",
+  },
 };

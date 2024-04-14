@@ -63,7 +63,9 @@ export default function Home({}) {
   const getData = useCallback(async () => {
     // dispatch(setAppLoader(true));
     try {
-      const data = await getDataofHomePage();
+      const data = await getDataofHomePage().catch(error => {
+        console.error("Error in the getDataofHomePage function:", error);
+      });
       if (data) {
         dispatch(setTopAds(data));
       } else {

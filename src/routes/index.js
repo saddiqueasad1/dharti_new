@@ -116,7 +116,7 @@ export default function Routes() {
   useEffect(() => {
     if (isConnected) {
       getuser();
-      getData();
+      // getData();
       getCategorylist();
     } else {
       dispatch(setAppLoader(true));
@@ -177,7 +177,10 @@ export default function Routes() {
   };
 
   async function getCategorylist() {
+    console.log("()=> getCategorylist");
     const d = await getCategory();
+    console.log("res on cat");
+      console.log(d);
     if (d) dispatch(setCategoryList(d));
   }
 
