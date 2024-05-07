@@ -60,28 +60,7 @@ export default function OtpVerification({ navigation, route }) {
     setOTP(text);
   };
 
-  const firebaseOTPRequestOLd = async () => {
-    try {
-      console.log("()=> firebaseOTPRequest");
-      signInWithPhoneNumber(auth, formattedNumber, recaptchaVerifier.current)
-        .then((confirmationResult) => {
-          console.log("confirmationResult.");
-          console.log(confirmationResult.verificationId);
-          setVerificationId(confirmationResult.verificationId);
-          Animated.timing(offsetX, {
-            toValue: -screenWidth,
-            duration: 1000,
-            useNativeDriver: false,
-          }).start();
-          setOTPSent(true);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } catch (err) {
-      alert(err.message);
-    }
-  };
+
   const firebaseOTPRequest = async () => {
     try {
       console.log("()=> firebaseOTPRequest0");
@@ -99,12 +78,14 @@ export default function OtpVerification({ navigation, route }) {
       
     } catch (err) {
       alert(err.message);
+      navigation.goBack()
     }
   };
 
 
 
   const handleRequestOTP = async () => {
+    console.log("handleRequestOTP =>");
     setOtpLoading(true);
     try {
       const requestData = {
@@ -112,12 +93,16 @@ export default function OtpVerification({ navigation, route }) {
         gateway: "firebase",
       };
       const res = await ApiManager.post("verification/send-otp", requestData);
+      console.log("otp.......");
       if (res.status === "success") {
         firebaseOTPRequest();
       } else {
-        alert(res?.data?.message || res?.data?.data?.error);
+        alert(res?.message || res?.data?.error);
+        navigation.goBack()
       }
     } catch (error) {
+      navigation.goBack()
+      console.log("====_____++++____=====");
       console.error("An error occurred:", error);
       Alert.alert(error?.message)
     } finally {
@@ -161,6 +146,7 @@ export default function OtpVerification({ navigation, route }) {
         .catch((err) => alert(err.message))
         .finally(() => setVerifying(false));
     } catch (err) {
+      navigation.goBack()
       alert(err.message);
     } finally {
       setVerifying(false);
@@ -204,6 +190,7 @@ export default function OtpVerification({ navigation, route }) {
             },
           ]
         );
+        navigation.goBack()
       })
       .finally(() => {
         if (user) removeAuthToken();

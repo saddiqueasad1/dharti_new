@@ -21,8 +21,8 @@ export default function CategoryList({ navigation, search }) {
   const renderItem = ({ item }) => {
     return (
       <CategoryIcon
-        navigation={navigation}
-        title={item?.name}
+        navigation={navigation.name}
+        title={item?.name.replace(/&amp;/g, '&')}
         image={item?.icon?.url} 
         onPress={() => {
           navigation.navigate(ScreenNames.LISTDATA, {

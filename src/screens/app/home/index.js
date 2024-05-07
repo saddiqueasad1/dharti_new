@@ -27,6 +27,7 @@ import { getCategory } from "../../../backend/common";
 import { Card } from "../../../components";
 import { selectCurrentLanguage } from "../../../redux/slices/language";
 import styles from "./styles";
+import AdmobBanner from "../../../components/AdmobBanner";
 export default function Home({}) {
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
@@ -56,14 +57,15 @@ export default function Home({}) {
   );
   async function getCategorylist() {
     const d = await getCategory();
-    console.log("d",d);
+    console.log("d", d);
     if (d) dispatch(setCategoryList(d));
   }
   const getData = useCallback(async () => {
     // dispatch(setAppLoader(true));
     try {
-      
-      const data = await getDataofHomePage();
+      const data = await getDataofHomePage().catch(error => {
+        console.error("Error in the getDataofHomePage function:", error);
+      });
       if (data) {
         dispatch(setTopAds(data));
       } else {
@@ -118,6 +120,13 @@ export default function Home({}) {
       <View style={styles.mainViewContainer}>
         <CategoryList navigation={navigation} search={searchString} />
 
+        <View style={{ flex: 1, margin: 10 , alignItems: "center",
+                    justifyContent: "center",
+                    height: 100,
+                    marginBottom: 20,}}>
+          <AdmobBanner/>
+        </View>
+
         <View style={styles.titleview}>
           <Text
             style={{
@@ -132,7 +141,11 @@ export default function Home({}) {
         <View style={{ salignItems: "center" }}>
           {data?.length === 0 ? (
             <View style={styles.notfoundview}>
-                 <Ionicons name="reload-circle-outline" size={width(60)} color={AppColors.bgIcon}/>
+              <Ionicons
+                name="reload-circle-outline"
+                size={width(60)}
+                color={AppColors.bgIcon}
+              />
               <Text
                 style={{
                   fontWeight: "bold",
@@ -146,7 +159,6 @@ export default function Home({}) {
                 tintColor={AppColors.primary}
                 style={{ height: width(60), width: width(60) }}
               /> */}
-           
             </View>
           ) : (
             data.map((item, index) => (

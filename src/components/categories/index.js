@@ -41,7 +41,7 @@ export default function CategoryIcon({
         />
       </View>
       <Text style={[styles.text, textStyle, { color: textcolor }]}>
-        {t(`${title}`)}
+        {t(`${title.replace(/&amp;/g, '&')}`)}
       </Text>
       {children}
     </TouchableOpacity>

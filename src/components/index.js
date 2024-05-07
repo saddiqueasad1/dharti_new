@@ -15,7 +15,6 @@ export { default as IconButton } from "./Iconbutton";
 export { default as Input } from "./InputText";
 export { default as NumberInput } from "./numberInput";
 export { default as CustomDrawer } from "./CustomDrawr";
-export { default as DrawerSceneWrapper } from "./DrawarWrapper";
 export { default as DropDownMenu } from "./dorpdownmenu";
 export { default as SmallText } from "./text";
 export { default as FilePickerModal } from "./filepikermodal";

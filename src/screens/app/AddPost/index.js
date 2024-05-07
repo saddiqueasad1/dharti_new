@@ -34,13 +34,17 @@ import { useSelector } from "react-redux";
 import { ApiManager } from "../../../backend/ApiManager";
 import styles from "./styles";
 import ScreenNames from "../../../routes/routes";
-import { selectAppState } from "../../../redux/slices/appConfig";
+import { selectAppState, updateAppState } from "../../../redux/slices/appConfig";
+import { useDispatch } from "react-redux";
+
 
 const AddPostScreen = ({ navigation }) => {
   const { t } = useTranslation();
   const auth_token = useSelector(selectToken);
   const appState = useSelector(selectAppState);
   const searchLocations = appState.search_locations;
+  const dispatch = useDispatch();
+
 
   const user = useSelector(selectUserMeta);
   const listing_locations = searchLocations;
@@ -124,11 +128,7 @@ const AddPostScreen = ({ navigation }) => {
     setCurrentCategories([]);
     setNoSubCat(false);
     setNewListingConfig({});
-
-    // dispatch({
-    //   type: "SET_LISTING_LOCATIONS",
-    //   listing_locations: null,
-    // });
+    dispatch(updateAppState({ search_locations: [] }));
   };
 
   const handleBackButtonClick = () => {
@@ -354,10 +354,9 @@ const AddPostScreen = ({ navigation }) => {
   };
 
   const handleChangeLocationButtonPress = () => {
-    // dispatch({
-    //   type: "SET_LISTING_LOCATIONS",
-    //   listing_locations: [],
-    // });
+    console.log("()=> handleChangeLocationButtonPress");
+    dispatch(updateAppState({ search_locations: [] }));
+
   };
 
   const handleMembership = () => {
@@ -369,13 +368,8 @@ const AddPostScreen = ({ navigation }) => {
     handleBackButtonClick();
   };
   const handleGoBackonSuccess = () => {
-    // handleBackButtonClick();
-    // dispatch({
-    //   type: "SET_NEW_LISTING_SCREEN",
-    //   listing_locations: null,
-    // });
-    // navigation.replace(routes.drawerNavigator);
-
+    handleBackButtonClick();
+    dispatch(updateAppState({ search_locations: [] }));
     navigation.navigate(ScreenNames.HOME)
 
   };

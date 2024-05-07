@@ -99,17 +99,7 @@ const BottomNav = ({ navigation }) => {
                 justifyContent: "center",
               }}
             >
-              {route.name === "myChat" && msg && (
-                <View
-                  style={{
-                    backgroundColor: "red",
-                    height: height(1),
-                    width: height(1),
-                    borderRadius: height(3),
-                    marginLeft: height(3),
-                  }}
-                />
-              )}
+       
               <Ionicons
                 name={iconName}
                 size={focused ? height(3) : height(2.2)}

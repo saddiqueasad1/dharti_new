@@ -14,7 +14,11 @@ var requestOptions = {
 
 export const getDataofHomePage = async () => {
   try {
+    console.log("getDataofHomePage => getDataofHomePage");
     const response = await fetch(BaseUrl + "listings", requestOptions);
+    console.log("response of getDataofHomePage----");
+    console.log(response);
+
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -22,7 +26,7 @@ export const getDataofHomePage = async () => {
     return data.data; // Return the parsed data
   } catch (error) {
     console.error("Error fetching home data:", error);
-    alert("Home data API crashed");
+    // alert("Home data API crashed");
     throw error; // Re-throw the error so that it can be caught by the caller
   }
 };
@@ -97,8 +101,8 @@ export async function addPostAd(formData) {
 export const geVehicleMakes = async (type) => {
   console.log("type", type);
   try {
-    const response = await ApiManager.get(`ad/findVehicleMake/${type}`);
-    if (response?.data?.make) return response?.data?.make;
+    const response = await ApiManager.get("listings", args);
+    if (response) return response;
     return [];
   } catch (error) {
     return []; // or some default value as needed
